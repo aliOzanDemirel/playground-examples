@@ -5,7 +5,10 @@
 
 **/node_modules/
 **/target/
+**/.terraform
 
 simple-forecast-estimation/frontend/frontend/yarn-error.log
 simple-forecast-estimation/frontend/frontend/build/
 simple-forecast-estimation/mounted/
+
+!simple-aws-infrastructure/network/*/init-state-bucket/.terraform

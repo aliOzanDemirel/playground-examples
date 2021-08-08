@@ -5,4 +5,4 @@ Playground repository as a workspace to explore and learn language/library/frame
 > Some projects are created as pre-interview assignments, then worked on top of such basic projects to try out different technologies and build more complicated examples.
 
 1. **simple-forecast-estimation**, 2019 &#8594; React/Antd, Spring Boot, Websockets
-
+2. **simple-aws-infrastructure**, 2019 &#8594; Terraform, AWS, CloudCraft

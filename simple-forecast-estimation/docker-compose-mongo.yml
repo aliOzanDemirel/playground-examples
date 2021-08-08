@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  mongodb:
+    container_name: local-database
+    image: mongo:3.6
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./mounted/mongo-data:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth --bind_ip_all --wiredTigerCacheSizeGB 1.25 --logpath=/dev/null

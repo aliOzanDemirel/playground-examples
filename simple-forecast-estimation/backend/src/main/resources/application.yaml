@@ -1,0 +1,51 @@
+spring:
+  data:
+    mongodb:
+      host: ${DB_HOST:localhost}
+      port: ${DB_PORT:27017}
+      database: estimation-db
+      authentication-database: admin
+
+app:
+  history:
+    limit: 24
+  score:
+    limit: 10
+  price:
+    mwhczk: 1313.54
+
+---
+spring:
+  profiles: live
+
+server:
+  port: 8080
+
+logging:
+  file: /opt/logs/app.log
+
+app:
+  schedule:
+    rate: 5000
+  ws:
+    client:
+      origin: http://localhost:8080
+
+---
+spring:
+  profiles: local
+
+server:
+  port: 8443
+  ssl:
+    key-store: classpath:keystore/localhost.p12
+    key-store-password: localhost
+    keyStoreType: PKCS12
+    keyAlias: local
+
+app:
+  schedule:
+    rate: 500
+  ws:
+    client:
+      origin: http://localhost:3000

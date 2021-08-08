@@ -1,0 +1,178 @@
+html, body, #root, #root > div {
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    line-height: normal;
+    /*background-color: rgb(232, 240, 254) !important;*/
+    /*color: #FF9400 !important*/
+}
+
+#footer {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 18px;
+    font-size: 10px;
+    color: white;
+    background-color: #052F43 !important;
+}
+
+#header {
+    padding: 4px !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: white;
+    background-color: #052F43 !important;
+}
+
+#header .navbar-brand {
+    font-size: 1.3em !important;
+}
+
+.logged-in-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+}
+
+.hide-overflow-x {
+    overflow-x: hidden;
+}
+
+.form-centered {
+    margin: 2px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#not-found {
+    text-align: center;
+    margin: auto;
+    width: 300px;
+    height: 150px;
+}
+
+#signUpForm .ant-row {
+    margin-bottom: 10px !important;
+}
+
+#signUpForm .ant-form-item-control {
+    line-height: 26px !important;
+}
+
+#estimationTableId th, td {
+    padding: .3em !important;
+    font-size: smaller;
+    /*font-weight: normal;*/
+}
+
+.nested-table-font {
+    font-size: smaller;
+}
+
+#main-content {
+    padding: 8px 6px;
+    /*margin-bottom: -20px;*/
+}
+
+@media only screen and (min-width: 768px) {
+
+    .main-content {
+        padding: 14px 20px;
+    }
+
+    .nested-table-font {
+        font-size: medium;
+    }
+
+    #estimationTableId th {
+        font-weight: bold;
+    }
+
+    #estimationTableId th, td {
+        padding: .7em;
+        font-size: medium;
+    }
+
+    #footer {
+        height: 24px;
+        font-size: 14px;
+    }
+
+    .logged-in-header {
+        font-size: 16px;
+    }
+}
+
+#gdprConsentText {
+    font-size: 12px !important;
+    font-weight: normal;
+}
+
+.no-margin-in-nested-table {
+    margin-bottom: 0 !important;
+}
+
+.no-padding-no-margin {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.centered-text {
+    display: inline-block;
+    alignment: center;
+    text-align: center;
+    width: 120px;
+}
+
+.metrics-header-text {
+    margin: 10px 4px;
+}
+
+.high-score-header-text {
+    margin-top: 4px;
+}
+
+.metrics-table-day-column {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end !important;
+    padding-right: 0 !important;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.metrics-real-values-row {
+    margin: 30px 30px 40px 30px;
+}
+
+.align-content-to-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.metrics-cell-table th, td {
+    text-align: center;
+}
+
+.metrics-forecast-row {
+    margin: 20px 6px;
+}
+
+.metrics-icon-size {
+    font-size: 40px;
+}
+
+.progress-bar-align-to-end {
+    height: 24px !important;
+}

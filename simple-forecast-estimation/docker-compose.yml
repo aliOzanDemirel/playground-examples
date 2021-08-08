@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  mongodb:
+    container_name: forecast-estimation-database
+    image: mongo:3.6
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./mounted/mongo-data:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth --bind_ip_all --wiredTigerCacheSizeGB 1.25 --logpath=/dev/null
+  app:
+    container_name: forecast-estimation-backend
+    build:
+      context: backend
+    image: forecast-estimation-backend:latest
+    environment:
+      DB_HOST: forecast-estimation-database
+      DB_PORT: 27017
+      SPRING_PROFILES_ACTIVE: live
+#    command: [ "/bin/ash", "-c", "sleep infinity" ]
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+    volumes:
+      - ./mounted/logs:/opt/logs

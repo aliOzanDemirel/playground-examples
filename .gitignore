@@ -1,0 +1,11 @@
+.idea
+*.iws
+*.iml
+*.ipr
+
+**/node_modules/
+**/target/
+
+simple-forecast-estimation/frontend/frontend/yarn-error.log
+simple-forecast-estimation/frontend/frontend/build/
+simple-forecast-estimation/mounted/

@@ -1,0 +1,78 @@
+html, body, #root, #root > div {
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    line-height: normal;
+}
+
+.align-content-to-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-text {
+    color: antiquewhite;
+    display: inline-block;
+    alignment: center;
+    text-align: center;
+    width: 400px;
+}
+
+.row-margin {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.header-row {
+    flex: 1;
+}
+
+#footer {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 18px;
+    font-size: 10px;
+    background-color: #052F43 !important;
+}
+
+#header {
+    display: flex;
+    padding: 4px !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: #052F43 !important;
+}
+
+.hide-overflow-x {
+    overflow-x: hidden;
+}
+
+.bottom-padding-8 {
+    padding: 0 0 8px;
+}
+
+.no-padding-no-margin {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#not-found {
+    text-align: center;
+    margin: auto;
+    width: 300px;
+    height: 150px;
+}
+
+#main-content {
+    padding: 8px 6px;
+}

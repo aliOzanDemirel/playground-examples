@@ -3,12 +3,18 @@
 *.iml
 *.ipr
 
-**/node_modules/
 **/target/
 **/.terraform
 
-simple-forecast-estimation/frontend/frontend/yarn-error.log
+**/node_modules/
+**/yarn-error.log
+
 simple-forecast-estimation/frontend/frontend/build/
 simple-forecast-estimation/mounted/
 
 !simple-aws-infrastructure/network/*/init-state-bucket/.terraform
+
+simple-disk-viewer/build/
+simple-disk-viewer/frontend/build/
+simple-disk-viewer/backend/build/
+simple-disk-viewer/backend/src/main/resources/static/

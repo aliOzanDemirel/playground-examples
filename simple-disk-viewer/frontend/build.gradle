@@ -1,0 +1,16 @@
+plugins {
+    id "com.github.node-gradle.node" version "3.1.0"
+}
+
+description = "This script is created to build and use frontend sources while building fat jar of application."
+
+// plugin docs: https://github.com/node-gradle/gradle-node-plugin/blob/master/docs/usage.md
+node {
+    download = true
+    version = "14.17.4"
+    yarnVersion = "1.22.5"
+}
+
+task buildFrontend(type: YarnTask) {
+    args = ['build']
+}

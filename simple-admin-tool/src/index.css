@@ -1,0 +1,99 @@
+body {
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    /*overflow: hidden;*/
+}
+
+html, #root, #root > div {
+    height: 100%;
+    width: 100%;
+}
+
+.block {
+    text-align: center;
+    margin: 200px;
+}
+
+.block:before {
+    content: '';
+    margin-left: -0.25em;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.centered {
+    display: inline-block;
+    vertical-align: middle;
+    width: 300px;
+    padding: 10px 15px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.login-form-button {
+    background-color: darkslategrey;
+}
+
+.row-margin {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.row-padding {
+    padding: 4px 8px;
+}
+
+.col-margin {
+    margin: 0 3px;
+}
+
+.col-margin-6 {
+    margin: 0 6px;
+}
+
+.row-margin-10 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.admin-footer {
+    font-size: smaller;
+    text-align: center;
+    position: fixed;
+    clear: both;
+    margin-top: -16px;
+    height: 16px;
+    bottom: 0;
+    width: 100%;
+    color: whitesmoke;
+    background-color: black;
+}
+
+.header-text {
+    text-align: left;
+    color: whitesmoke;
+}
+
+.center-div {
+    text-align: center;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 150px;
+    border-radius: 3px;
+}
+
+.dropbox {
+    height: 180px;
+    line-height: 1.5;
+}

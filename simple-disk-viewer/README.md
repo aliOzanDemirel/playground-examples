@@ -1,4 +1,4 @@
-## Simple Disk Viewer
+## Kotlin/Ktor Example
 
 - Used ktor/kotlin (netty is the web server), gradle, cucumber, javascript/react/mobx/antd and yarn.
     - Environment configuration is discarded for this project, everything is hardcoded.

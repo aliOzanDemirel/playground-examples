@@ -1,4 +1,4 @@
-## Simple Forecast Estimation
+## Spring Boot/React/Websocket Example
 
 * Example application to build react frontend and serve from tomcat server.
     * Docker image for application binary is built from base zulu alpine jre image.

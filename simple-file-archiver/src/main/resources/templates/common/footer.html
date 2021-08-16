@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="footer" th:align="center">
+    <span>Ali Ozan Demirel &copy;</span>
+    <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2018</span>
+</div>
+
+</body>
+</html>
+

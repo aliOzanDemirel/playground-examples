@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<section id="list-categories" class="main-container" role="application" th:fragment="list-categories">
+
+    <h5 class="padding-left-50" role="heading">Categories for Files</h5>
+    <hr>
+
+    <!--may be populated after an AJAX request-->
+    <div id="responseBlock">
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <table id="categoriesTable" class="table table-bordered" role="table" width="100%">
+                <thead>
+                <tr>
+                    <th width="70px">ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Approved</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${categories == null or categories.empty}">
+                    <td colspan="4">No Categories</td>
+                </tr>
+                <tr th:unless="${categories == null or categories.empty}" th:each="cat : ${categories}">
+                    <td width="70px" th:text="${cat.id}"></td>
+                    <td th:text="${cat.categoryName}"></td>
+                    <td th:text="${cat.categoryDescription}"></td>
+                    <td th:text="${cat.approvalDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-4">
+            <th:block th:insert="~{category/category-buttons :: category-buttons}">
+            </th:block>
+
+            <th:block th:insert="~{category/category-form :: category-form}">
+            </th:block>
+        </div>
+    </div>
+
+    <th:block th:fragment="scripts">
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var DELETE_CATEGORY_URL = /*[[${T(archiver.app.common.Mappings).DELETE_CATEGORY()}]]*/ '';
+            /*]]>*/
+        </script>
+
+        <script th:src="@{/webjars/datatables/1.10.19/js/jquery.dataTables.js}"></script>
+        <script th:src="@{/webjars/datatables/1.10.19/js/dataTables.bootstrap4.js}"></script>
+        <script th:src="@{/static/js/list-categories.js}"></script>
+    </th:block>
+
+</section>

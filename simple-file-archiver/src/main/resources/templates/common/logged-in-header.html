@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div id="user-header" th:fragment="user-header"
+     class="collapse navbar-collapse padding-left-50" role="complementary">
+    <ul class="navbar-nav mr-auto" role="tablist">
+        <li class="nav-item active" role="listitem">
+            <a class="nav-link" th:href="${T(archiver.app.common.Mappings).ALL_FILES()}">List Files</a>
+        </li>
+        <li class="nav-item active" role="listitem">
+            <a class="nav-link" th:href="${T(archiver.app.common.Mappings).ALL_CATEGORIES()}">List Categories</a>
+        </li>
+        <li class="nav-item" role="listitem" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <a class="nav-link" th:href="${T(archiver.app.common.Mappings).ADMIN()}">Admin</a>
+        </li>
+        <li class="nav-item" role="listitem" th:if="${@securityConf.enableInMemAuth() and
+                                    #authorization.expression('hasRole(''ADMIN'') and hasRole(''DBA'')')}">
+            <a class="nav-link" th:href="${T(archiver.app.common.Mappings).H2_CONSOLE()}">H2 Console</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+            <button id="logout-button" class="long-button" th:onclick="'javascript:$(\'#logout-form\').submit();'">
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                <span>Logout</span>
+            </button>
+            <form style="visibility: hidden" id="logout-form" method="post" action="#" th:action="@{/logout}"></form>
+        </li>
+    </ul>
+</div>

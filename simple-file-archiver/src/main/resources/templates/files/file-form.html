@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<section id="file-form" class="main-container" role="application" th:fragment="file-form">
+
+    <form role="form" action="#" method="post" enctype="multipart/form-data"
+          th:action="${T(archiver.app.common.Mappings).SAVE_FILE()}" th:object="${file}">
+
+        <th:block th:with="valError = ${validationError != null ? validationError : false}">
+            <div role="alert" class="alert alert-dismissible"
+                 th:classappend="|${valError ? 'alert-danger':''} ${!valError ? 'd-none':''}|">
+                <ul role="list">
+                    <li role="listitem" class="error" th:if="${#fields.hasErrors('fileName')}" th:errors="*{fileName}">
+                        File Name Error
+                    </li>
+                    <li role="listitem" th:if="${#fields.hasErrors('filePath')}" th:errors="*{filePath}">
+                        File Path Error
+                    </li>
+                    <li role="listitem" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">
+                        Category ID Error
+                    </li>
+                    <li role="listitem" th:if="${#fields.hasErrors('selectedFilePermissions')}"
+                        th:errors="*{selectedFilePermissions}">File Permissions Error
+                    </li>
+                    <li role="listitem" th:if="${#fields.hasErrors('multipartFile')}" th:errors="*{multipartFile}">
+                        Uploaded File Error
+                    </li>
+                </ul>
+            </div>
+        </th:block>
+
+        <fieldset>
+            <div class="form-group row">
+
+                <h4 class="col-4">Edit File</h4>
+                <div class="col-8">
+                    <div class="btn-group float-right">
+                        <button type="reset" class="btn btn-outline-primary long-button">Reset</button>
+                        <button type="submit" class="btn btn-outline-primary long-button">Save File</button>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="form-group row">
+                <label for="fileName" class="col-3 col-form-label">File Name</label>
+                <div class="col-9">
+                    <input th:field="*{fileName}" id="fileName" placeholder="No more than 40 characters"
+                           class="form-control" type="text"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="filePath" class="col-3 col-form-label">Path to the File</label>
+                <div class="col-9">
+                    <input th:field="*{filePath}" id="filePath" class="form-control" type="text" th:readonly="true"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="category" class="col-3 col-form-label">Pick Category</label>
+                <div class="col-9">
+                    <select id="category" class="form-control" th:field="*{categoryId}" role="listbox">
+                        <option role="option" value="0">Select Category</option>
+                        <option th:each="cat : ${allCategories}" role="option"
+                                th:value="${cat.id}" th:text="${cat.categoryName}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="multipartFile" class="col-3 col-form-label">Select File</label>
+                <div class="col-9">
+                    <input th:field="*{multipartFile}" id="multipartFile" class="form-control" type="file"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="permissionCheckboxes" class="col-3 col-form-label">Select File Permissions</label>
+                <ul id="permissionCheckboxes">
+                    <li th:each="filePerm : ${allFilePermissions}">
+                        <input type="checkbox" class="form-check-input"
+                               th:field="*{selectedFilePermissions}" th:value="${filePerm}"/>
+                        <label th:for="${#ids.prev('selectedFilePermissions')}" th:text="${filePerm}"
+                               class="form-check-label"></label>
+                    </li>
+                </ul>
+            </div>
+
+        </fieldset>
+    </form>
+
+</section>

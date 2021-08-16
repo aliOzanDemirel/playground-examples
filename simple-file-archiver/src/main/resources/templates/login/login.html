@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<section id="login-form" th:fragment="login">
+
+    <th:block th:if="${param.error != null}">
+        <div th:replace="common/alert :: alert (type='danger',
+         message='Username or password is wrong, please try again.')"></div>
+    </th:block>
+
+    <form role="form" method="POST" th:action="${T(archiver.app.common.Mappings).LOGIN_ACTION_ENDPOINT()}">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <hr>
+            </div>
+        </div>
+
+        <!--it is automatically inserted by spring-->
+        <!--<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group has-danger">
+                    <label class="sr-only" for="username">E-Mail Address</label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                        <input type="text" id="username" class="form-control" placeholder="Username"
+                               required autofocus th:name="${T(archiver.app.common.Mappings).LOGIN_USER_PARAM_NAME()}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="sr-only" for="password">Password</label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <input type="password" id="password" class="form-control" placeholder="Password" required
+                               th:name="${T(archiver.app.common.Mappings).LOGIN_PASSWORD_PARAM_NAME()}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 1rem">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 justify-content-center" style="display: flex">
+                <button type="submit" class="btn btn-primary" style="width: 100px">
+                    <i class="fa fa-sign-in"></i> Login
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <hr>
+            </div>
+        </div>
+    </form>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head">
+    <title th:if="${title}" th:text="${title}"></title>
+
+    <meta charset="utf-8"/>
+    <meta name="description" content="Example Archiver App"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:unless="${_csrf == null}" th:content="${_csrf.headerName}"/>
+    <!--<meta name="robots" content="noindex, nofollow"/>-->
+
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.1.0/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.1.1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/core.css}"/>
+
+</head>
+
+<body>
+
+<nav id="header-navbar" class="navbar navbar-expand-lg navbar-light" role="navigation">
+
+    <a class="navbar-brand" href="/" aria-hidden="true">
+        <img src="/static/img/folder.svg" width="30" height="30" class="d-inline-block align-top" alt="App Icon">
+        Simple Archiver Example
+    </a>
+
+    <div th:switch="${#authorization.expression('isAuthenticated()')}" th:remove="tag">
+        <div th:case="true" th:insert="~{common/logged-in-header :: user-header}" th:remove="tag"></div>
+        <span th:case="false" class="padding-left-50">Login with either "ozan - ozan" or "admin - admin"</span>
+    </div>
+
+</nav>
+
+<script th:src="@{/webjars/jquery/3.3.1-1/jquery.js}"></script>
+
+</body>
+</html>

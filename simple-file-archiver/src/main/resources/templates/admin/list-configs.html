@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<section id="list-configs" class="main-container" th:fragment="configs">
+
+    <h5 class="padding-left-50" role="heading">Some Configurations</h5>
+    <hr>
+
+    <div>
+        <ul class="list-group" role="list">
+            <li role="listitem" class="list-group-item">
+                CSRF protection is => <span th:text="${csrfEnabled} ? 'enabled.' : 'disabled.'">
+            </span></li>
+            <li role="listitem" class="list-group-item">
+                In memory authentication is => <span th:text="${inMemAuthEnabled} ? 'enabled.' : 'disabled.'">
+            </span></li>
+            <li role="listitem" class="list-group-item">
+                Location of resources is => <span th:text="${resourceLocationPath}">
+            </span></li>
+            <li role="listitem" class="list-group-item">
+                Prefix of thymeleaf templates is => <span th:text="${thymeleafPrefixPath}">
+            </span></li>
+            <li role="listitem" class="list-group-item">
+                Keystore path is => <span th:text="${serverKeyStorePath}">
+            </span></li>
+            <li role="listitem" class="list-group-item">
+                Log directory is => <span th:text="${logDirectory}">
+            </span></li>
+        </ul>
+    </div>
+</section>

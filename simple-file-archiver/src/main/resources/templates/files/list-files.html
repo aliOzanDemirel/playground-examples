@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<section id="list-files" class="main-container" role="application" th:fragment="list-files">
+
+    <h5 class="padding-left-50" role="heading">Uploaded Files (double click to edit)</h5>
+    <hr>
+
+    <!--may be populated after an AJAX request-->
+    <div id="responseBlock">
+    </div>
+
+    <table id="filesTable" class="table table-striped" role="table" cellspacing="0" width="100%">
+    </table>
+    <div style="clear:both"></div>
+
+    <th:block th:fragment="scripts">
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var tableData = /*[[${files}]]*/ [];
+            var DELETE_FILE_URL = /*[[${T(archiver.app.common.Mappings).DELETE_FILE()}]]*/ '';
+            var DOWNLOAD_FILE_URL = /*[[${T(archiver.app.common.Mappings).DOWNLOAD_FILE()}]]*/ '';
+            var GET_FORM_URL = /*[[${T(archiver.app.common.Mappings).FILE_FORM()}]]*/ '';
+            /*]]>*/
+
+            // convert boolean value to a meaningful string
+            if (tableData) {
+                tableData.forEach(function (file) {
+                    file.isRemoved = file.isRemoved ?
+                        "<span class='label text-danger'>Removed</span>" :
+                        "<span class='label text-success'>Alive</span>";
+                })
+            }
+        </script>
+
+        <script th:src="@{/webjars/datatables/1.10.19/js/jquery.dataTables.js}"></script>
+        <script th:src="@{/webjars/datatables/1.10.19/js/dataTables.bootstrap4.js}"></script>
+        <script th:src="@{/static/js/list-files.js}"></script>
+    </th:block>
+
+</section>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]>
+<html class="no-js ie lt-ie10 lt-ie9 lt-ie8" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie lt-ie10 lt-ie9" lang="en">
+<![endif]-->
+<!--[if IE 9]>
+<html class="no-js ie lt-ie10" lang="en">
+<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="no-js modern" lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+
+<head th:replace="common/header :: head">
+</head>
+
+<body>
+
+<a href="#main" class="skip-link" role="link" name="skip-to-main-content">Skip to Main Content</a>
+
+<div id="wrap-main">
+    <header id="header" class="header" role="banner" th:insert="common/header.html"></header>
+
+    <!--this can be avoided by using thymeleaf-layout-dialect to specifically decorate main template-->
+    <div id="main" role="main" class="container"
+         th:insert="${#authorization.expression('isAuthenticated()') and mainPage != null and fragmentId != null} ?
+         ~{__${mainPage}__  :: __${fragmentId}__} : ~{ login/login.html :: login }"></div>
+
+    <div id="push"></div>
+</div>
+
+<footer id="footer" class="footer" role="contentinfo" th:insert="common/footer.html"></footer>
+
+<script th:src="@{/webjars/bootstrap/4.1.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+<script th:src="@{/static/js/commons.js}"></script>
+
+<!--this can be avoided by using thymeleaf-layout-dialect to decorate scripts layout instead of this style-->
+<script aria-describedby="page specific scripts" th:replace="${mainPage != null} and
+        ~{__${mainPage}__  :: 'scripts'} != null ? ~{__${mainPage}__  :: 'scripts'} : ~{}"></script>
+
+</body>
+</html>

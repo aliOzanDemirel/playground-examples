@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div class="row" id="category-buttons" role="complementary" th:fragment="category-buttons">
+
+    <div class="col">
+        <div class="w-75 mx-auto">
+            <button id="removeCategoryButton" type="button" class="btn btn-outline-danger">Remove Selected</button>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="w-75 mx-auto">
+            <button id="addCategoryButton" th:form="category-form" type="submit" class="btn btn-outline-primary">Save
+                Category
+            </button>
+        </div>
+    </div>
+
+</div>

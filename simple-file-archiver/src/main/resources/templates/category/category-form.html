@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div class="row" id="category-form-row" th:fragment="category-form">
+
+    <div class="col">
+        <form role="form" id="category-form" action="#" method="post" th:object="${category}"
+              th:action="${T(archiver.app.common.Mappings).SAVE_CATEGORY()}">
+
+            <fieldset>
+                <legend>Create New Category</legend>
+
+                <input type="hidden" th:field="*{id}"/>
+
+                <div class="form-group row">
+                    <label for="categoryName" class="col-form-label">Category Name</label>
+                    <input th:field="*{categoryName}" type="text" placeholder="No more than 40 characters"
+                           id="categoryName" class="form-control"/>
+                    <span role="alert" class="text-danger" th:if="${#fields.hasErrors('categoryName')}"
+                          th:errors="*{categoryName}">Category Name Error
+                    </span>
+                </div>
+
+                <div class="form-group row">
+                    <label for="categoryDescription" class="col-form-label">Category Description</label>
+                    <textarea th:field="*{categoryDescription}" type="text" placeholder="No more than 255 characters"
+                              rows="5" id="categoryDescription" class="form-control"></textarea>
+                    <span role="alert" class="text-danger" th:if="${#fields.hasErrors('categoryDescription')}"
+                          th:errors="*{categoryDescription}">Category Description Error
+                    </span>
+                </div>
+
+                <div class="form-group row">
+                    <label for="approvalDate" class="col-form-label">Approval Date</label>
+                    <input th:field="*{approvalDate}" type="date" id="approvalDate" class="form-control"/>
+                    <span role="alert" class="text-danger" th:if="${#fields.hasErrors('approvalDate')}"
+                          th:errors="*{approvalDate}">Approval Date Error
+                    </span>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>

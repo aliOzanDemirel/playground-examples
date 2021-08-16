@@ -1,0 +1,110 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 30MB
+  thymeleaf:
+      cache: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: ${app.enabled.in-memory-auth}
+      path: /h2-console
+  datasource:
+    continueOnError: false
+    username: ozan
+    password:
+    url: jdbc:h2:mem:app;
+
+server:
+  port: 8443
+  ssl:
+    key-store: classpath:keystore/localhost.p12
+    key-store-password: aliozan
+    keyStoreType: PKCS12
+    keyAlias: local
+    enabled: true
+  compression:
+    enabled: true
+  undertow:
+    accesslog:
+      enabled: true
+      dir: /workspace-link/logs/
+      prefix: "undertow_access."
+
+logging:
+  file:
+    max-size: 20MB
+  level:
+    root: INFO
+    org.hibernate: WARN
+
+app:
+  http:
+    port: 8080
+  file:
+    path: /workspace-link/UploadedFiles
+  enabled:
+    csrf: true
+    headers: false
+    security: true
+    in-memory-auth: true
+
+---
+
+spring:
+  profiles: local
+  resources:
+    static-locations: file:src/main/resources/static/
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+
+server:
+  undertow:
+    accesslog:
+      enabled: false
+
+logging:
+  level:
+    root: DEBUG
+    org.hibernate: INFO
+    org.springframework: INFO
+    org.thymeleaf: INFO
+    io.undertow: INFO
+    com.zaxxer: INFO
+
+---
+
+spring:
+  profiles: docker
+  resources:
+    static-locations: classpath:/static/
+  thymeleaf:
+    prefix: classpath:/templates/
+
+---
+
+spring:
+  profiles: production
+  datasource:
+    username: some-production-user
+    password: some-password
+    url: real-datasource-url
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+app:
+  enabled:
+    headers: true
+    in-memory-auth: false
+
+server:
+  ssl:
+    key-store: classpath:/keystore-link/some-production-keystore.p12
+    key-store-password: some-password
+  undertow:
+    accesslog:
+      dir: /some-production-path/logs/

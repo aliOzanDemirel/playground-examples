@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "7949c810-6e87-4e94-888d-689201937b0c",
+		"name": "bond-transaction-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "bond-get",
+			"item": [
+				{
+					"name": "no content returned",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": 1,\r\n  \"sellerId\": 100,\r\n  \"serviceParameterInputs\": [\r\n    {\r\n      \"id\": 5,\r\n      \"values\": [\r\n        \"12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 7,\r\n      \"values\": [\r\n        \"Online\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 8,\r\n      \"values\": [\r\n        \"eSignature\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 12,\r\n      \"values\": [\r\n        \"G12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 13,\r\n      \"values\": [\r\n        \"Zone 1\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 14,\r\n      \"values\": [\r\n        \"9999999.999999\"\r\n      ]\r\n    },\r\n        {\r\n      \"id\": 15,\r\n      \"values\": [\r\n        \"2019-05-01\"\r\n      ]\r\n    }\r\n  ]\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds?clientId=9999",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							],
+							"query": [
+								{
+									"key": "clientId",
+									"value": "9999"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list bonds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list bonds by client",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds?clientId=3",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							],
+							"query": [
+								{
+									"key": "clientId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch bond history",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds/11/history",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds",
+								"11",
+								"history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "bond-save",
+			"item": [
+				{
+					"name": "create new bond - trigger transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"value": "99.99.99.88",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"clientId\": 16,\n\t\"amount\": \"487\",\n\t\"term\": 5\n}"
+						},
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid as 5 bonds are already sold for this IP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"type": "text",
+								"value": "333.33.3.0"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"clientId\": 2,\n\t\"amount\": \"900\",\n\t\"term\": 11\n}"
+						},
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "extend bond's term",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"type": "text",
+								"value": "99.99.99.88"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"term\": 13\n}"
+						},
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds/11",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail bond creation with bad request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"forgottentClientId\": 999,\n\t\"amount\": \"1.002\",\n\t\"term\": 3\n}"
+						},
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail bond update with bad request",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"clientId\": -1,\n\t\"amount\": \"-1\",\n\t\"term\": 4\n}"
+						},
+						"url": {
+							"raw": "{{bond}}/api/v1/bonds/1",
+							"host": [
+								"{{bond}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bonds",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "transaction",
+			"item": [
+				{
+					"name": "get transactions in last 60 seconds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{transaction}}/statistics",
+							"host": [
+								"{{transaction}}"
+							],
+							"path": [
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete transactions",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{transaction}}/transactions",
+							"host": [
+								"{{transaction}}"
+							],
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

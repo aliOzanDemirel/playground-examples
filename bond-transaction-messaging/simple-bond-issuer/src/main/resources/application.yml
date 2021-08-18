@@ -1,0 +1,111 @@
+spring:
+  application:
+    name: simple-bond-issuer
+  jmx:
+    enabled: false
+  jackson:
+    default-property-inclusion: non_empty
+    mapper:
+      default_view_inclusion: true
+  datasource:
+    # url: jdbc:h2:~/bond-issuer # persisted
+    url: jdbc:h2:mem:bond-issuer # in memory
+    username: some_db_user
+    password: some_db_password
+    driverClassName: org.h2.Driver
+    initialization-mode: always
+    hikari:
+      auto-commit: false # hibernate.connection.provider_disables_autocommit is auto configured to be true when this is false
+  jpa:
+    show-sql: false
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        connection:
+          useUnicode: true
+          CharSet: utf8mb4
+          characterEncoding: utf8mb4
+          collationServer: utf8mb4_unicode_ci
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
+          import_files: "db/V0001__create_bonds.sql,
+                         db/V0002__create_history_for_bonds.sql"
+
+# tomcat access logs redirected to console output of docker containers
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /dev
+      prefix: stdout
+      buffered: true
+      suffix:
+      file-date-format:
+
+logging:
+  pattern:
+    console: "%d{DEFAULT} %-5level [%threadName] [%X{traceId}] %.30logger{2.}: %m%n"
+  level:
+    bond: DEBUG
+    jdbc.sqltiming: INFO
+    org.springframework.web: INFO
+    # ignore the integer type conversion warning log in swagger
+    io.swagger.models.parameters.AbstractSerializableParameter: ERROR
+
+log4jdbc:
+  dump:
+    sql:
+      addsemicolon: true
+      maxlinelength: 0
+    booleanastruefalse: true
+  trim:
+    sql:
+      extrablanklines: false
+  spylogdelegator:
+    name: net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator
+  sqltiming:
+    error:
+      threshold: 1000
+    warn:
+      threshold: 100
+
+app:
+  api:
+    prefix: /api/v1
+
+---
+spring:
+  profiles: production
+  datasource:
+    initialization-mode: never
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    bond: INFO
+    jdbc.sqltiming: WARN
+    org.springframework.web: WARN
+
+---
+spring:
+  profiles: docker
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+---
+spring:
+  profiles: local
+
+server:
+  tomcat:
+    accesslog:
+      enabled: false

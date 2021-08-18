@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.springframework.boot' version '2.1.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+group = 'example'
+version = '1.0'
+description = 'Simple Bond Issuer'
+mainClassName = 'bond.Main'
+
+springBoot {
+    // spring boot plugin injects the version and build information into actuator /info endpoint
+    buildInfo()
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+wrapper {
+    gradleVersion = '5.6.2'
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    implementation {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+dependencies {
+
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    testCompileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.10'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-log4j2',
+            'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-amqp',
+            'io.springfox:springfox-swagger-ui:2.9.2',
+            'io.springfox:springfox-swagger2:2.9.2',
+            'com.integralblue:log4jdbc-spring-boot-starter:2.0.0',
+            'org.hibernate:hibernate-core:5.4.8.Final',
+            'com.h2database:h2:1.4.200'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+// so that gradle:clean task removes the out folder
+clean {
+    delete 'out'
+}
+
+// final name of jar without version
+bootJar {
+    archiveFileName = 'bond-app.jar'
+}

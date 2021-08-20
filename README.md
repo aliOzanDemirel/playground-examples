@@ -11,3 +11,4 @@
 5. [simple-aws-infrastructure](simple-aws-infrastructure/README.md), 2019 &#8594; Terraform, AWS, CloudCraft
 6. [simple-disk-viewer](simple-disk-viewer/README.md), 2019 &#8594; Kotlin/Ktor, Gradle, Cucumber, Docker, React/MobX/AntDesign
 7. [bond-transaction-messaging](bond-transaction-messaging/README.md), 2018/2019 &#8594; Spring Boot/AMQP, RabbitMQ, Docker Compose
+8. [jfr-stream-monitoring](jfr-stream-monitoring/README.md), 2019/2021 &#8594; Spring Boot, Gradle, Docker Compose, InfluxDB, Grafana, JFR Agent

@@ -1,0 +1,329 @@
+{
+	"info": {
+		"_postman_id": "5f18cd6f-2728-464f-9a42-582ba8e97700",
+		"name": "clothing-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "no content returned",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"serviceId\": 1,\r\n  \"sellerId\": 100,\r\n  \"serviceParameterInputs\": [\r\n    {\r\n      \"id\": 5,\r\n      \"values\": [\r\n        \"12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 7,\r\n      \"values\": [\r\n        \"Online\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 8,\r\n      \"values\": [\r\n        \"eSignature\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 12,\r\n      \"values\": [\r\n        \"G12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 13,\r\n      \"values\": [\r\n        \"Zone 1\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 14,\r\n      \"values\": [\r\n        \"9999999.999999\"\r\n      ]\r\n    },\r\n        {\r\n      \"id\": 15,\r\n      \"values\": [\r\n        \"2019-05-01\"\r\n      ]\r\n    }\r\n  ]\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing?clColor=6",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing"
+					],
+					"query": [
+						{
+							"key": "clColor",
+							"value": "6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list all clothing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filter clothing by only size",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing?clSize=SMALL",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing"
+					],
+					"query": [
+						{
+							"key": "clSize",
+							"value": "SMALL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filter clothing by size and color",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing?clColor=4&clSize=MEDIUM",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing"
+					],
+					"query": [
+						{
+							"key": "clColor",
+							"value": "4"
+						},
+						{
+							"key": "clSize",
+							"value": "MEDIUM"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filter by rating and hotness",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing?rating=4&isHot=false",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing"
+					],
+					"query": [
+						{
+							"key": "rating",
+							"value": "4"
+						},
+						{
+							"key": "isHot",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filter by description and brand",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing?description=Easy&brand=Some Brand B",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing"
+					],
+					"query": [
+						{
+							"key": "description",
+							"value": "Easy"
+						},
+						{
+							"key": "brand",
+							"value": "Some Brand B"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list reviews of clothing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing/3/reviews",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing",
+						"3",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert a new review",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-Forwarded-For",
+						"type": "text",
+						"value": "99.99.99.88"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\": \"Some New Review\",\n\t\"rating\": 1\n}"
+				},
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing/3/reviews",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing",
+						"3",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clothing is closed for review",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-Forwarded-For",
+						"type": "text",
+						"value": "99.99.99.88"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\": \"Some New Review\",\n\t\"rating\": 1\n}"
+				},
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing/1/reviews",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing",
+						"1",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bad request when adding review",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\": \"MoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000Characters\",\n\t\"rating\": 0\n}"
+				},
+				"url": {
+					"raw": "{{local_8080}}/api/v1/clothing/3/reviews",
+					"host": [
+						"{{local_8080}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clothing",
+						"3",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b6bf4f2a-9ef0-4b39-b11c-4aadf3185111",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "30896d52-d569-45c0-b912-62395b33832a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

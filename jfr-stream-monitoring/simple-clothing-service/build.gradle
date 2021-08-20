@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+
+    // provides utility function gitVersion(), used to set version of project which is used as tag of the docker image
+    id 'com.palantir.git-version' version '0.12.2'
+}
+
+version = gitVersion()
+description = 'Basic API to save/list clothing'
+
+dependencies {
+
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    testCompileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-validation',
+            'io.springfox:springfox-swagger-ui:2.9.2',
+            'io.springfox:springfox-swagger2:2.9.2',
+            'com.integralblue:log4jdbc-spring-boot-starter:2.0.0',
+            'org.hibernate:hibernate-core:5.4.8.Final',
+            'com.h2database:h2:1.4.200'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+}
+
+bootJar {
+    // final name of jar without version
+    archiveFileName = 'clothing-service.jar'
+    mainClassName 'clothing.service.Main'
+    manifest {
+        attributes 'Start-Class': 'clothing.service.Main'
+    }
+    doLast {
+        println "Built $archiveFileName ${project(':simple-clothing-service').version}"
+    }
+}

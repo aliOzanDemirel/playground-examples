@@ -1,0 +1,3 @@
+rootProject.name = 'jfr-stream-monitoring'
+include 'jfr-agent'
+include 'simple-clothing-service'

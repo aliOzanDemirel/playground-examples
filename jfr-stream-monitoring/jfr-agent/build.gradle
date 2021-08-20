@@ -1,0 +1,20 @@
+version = '1.0'
+description = 'JFR monitoring agent to listen to JFR events'
+
+dependencies {
+    implementation group: 'org.influxdb', name: 'influxdb-java', version: '2.21'
+}
+
+jar {
+    archiveFileName.set('jfr-monitoring-agent.jar')
+    exclude '**/module-info.class'
+    manifest {
+        attributes 'Premain-Class': 'agent.JfrAgent'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    doLast {
+        println "Built $archiveFileName"
+    }
+}

@@ -1,0 +1,42 @@
+version: '3.6'
+
+volumes:
+  influxdb-storage:
+  grafana-storage:
+
+services:
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb-storage:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=grafana_exposed_metrics
+      - INFLUXDB_ADMIN_USER=root
+      - INFLUXDB_ADMIN_PASSWORD=root
+  grafana:
+    image: grafana/grafana:7.5.5
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=root
+      - GF_SECURITY_ADMIN_PASSWORD=root
+  clothing-service:
+    build:
+      context: .
+    image: clothing-service:latest
+    environment:
+      INFLUX_HOST: "influxdb"
+      INFLUX_PORT: "8086"
+      INFLUX_USER: "root"
+      INFLUX_PASS: "root"
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - influxdb

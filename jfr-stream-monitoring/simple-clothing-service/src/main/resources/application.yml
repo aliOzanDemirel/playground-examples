@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: simple-clothing-service
+  jmx:
+    enabled: false
+  jackson:
+    default-property-inclusion: non_empty
+    mapper:
+      default_view_inclusion: true
+  datasource:
+    # url=${DATABASE_SERVER:jdbc:h2:file:h2db/}
+    url: jdbc:h2:mem:clothingdb
+    username: some_db_user
+    password: some_db_password
+    driverClassName: org.h2.Driver
+    initialization-mode: always
+    hikari:
+      auto-commit: false # hibernate.connection.provider_disables_autocommit is auto configured to be true when this is false
+  jpa:
+    show-sql: false
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        connection:
+          useUnicode: true
+          CharSet: utf8mb4
+          characterEncoding: utf8mb4
+          collationServer: utf8mb4_unicode_ci
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
+          import_files: "db/lookup_data.sql,
+                         db/clothing.sql,
+                         db/reviews.sql"
+
+# tomcat access logs redirected to console output of docker containers
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      enabled: false
+
+log4jdbc:
+  dump:
+    sql:
+      addsemicolon: true
+      maxlinelength: 0
+    booleanastruefalse: true
+  trim:
+    sql:
+      extrablanklines: false
+  spylogdelegator:
+    name: net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator
+  sqltiming:
+    error:
+      threshold: 1000
+    warn:
+      threshold: 100
+
+app:
+  api:
+    prefix: /api/v1
+
+---
+spring:
+  profiles: local
+
+server:
+  tomcat:
+    accesslog:
+      enabled: false
+
+logging:
+  level:
+    clothing.service: DEBUG
+    jdbc.sqltiming: INFO
+    org.springframework.web: INFO
+
+---
+spring:
+  profiles: production
+  datasource:
+    initialization-mode: never
+  jpa:
+    hibernate:
+      ddl-auto: none

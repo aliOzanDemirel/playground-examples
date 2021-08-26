@@ -12,3 +12,4 @@
 6. [simple-disk-viewer](simple-disk-viewer/README.md), 2019 &#8594; Kotlin/Ktor, Gradle, Cucumber, Docker, React/MobX/AntDesign
 7. [bond-transaction-messaging](bond-transaction-messaging/README.md), 2018/2019 &#8594; Spring Boot/AMQP, RabbitMQ, Docker Compose
 8. [jfr-stream-monitoring](jfr-stream-monitoring/README.md), 2019/2021 &#8594; Spring Boot, Gradle, Docker Compose, InfluxDB, Grafana, JFR Agent
+9. [hexagonal-app-load-testing](hexagonal-app-load-testing/README.md), 2021 &#8594; Spring/Kotlin, Ratpack/Groovy, Javalin, Gatling, Ports and Adapters

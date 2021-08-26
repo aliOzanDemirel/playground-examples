@@ -1,0 +1,24 @@
+wrapper {
+    gradleVersion = '7.2'
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+subprojects {
+
+    group "example.${rootProject.name}"
+
+    if (it.name != 'gatling-runner') {
+        apply plugin: 'java'
+        compileJava {
+            sourceCompatibility = JavaVersion.VERSION_16
+            targetCompatibility = JavaVersion.VERSION_16
+        }
+    }
+}

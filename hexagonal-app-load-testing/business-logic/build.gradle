@@ -1,0 +1,22 @@
+description 'Reusable business logic module that is framework/library independent.'
+
+// java 11 is used because app-ratpack-groovy is not compatible with java 16, can upgrade later
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+
+    // depending modules should provide binding as fit
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
+
+    testImplementation 'org.mockito:mockito-core:3.12.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}

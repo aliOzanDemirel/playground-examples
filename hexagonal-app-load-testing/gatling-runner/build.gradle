@@ -1,0 +1,17 @@
+plugins {
+    id "io.gatling.gradle" version "3.6.1"
+}
+
+gatling {
+    toolVersion = '3.6.1'
+    jvmArgs = ['-server', '-Xms512M', '-Xmx512M']
+    simulations = {
+        include "**/test/IoBoundSimulation.scala"
+        include "**/test/CpuBoundSimulation.scala"
+    }
+}
+
+dependencies {
+    implementation 'io.gatling.highcharts:gatling-charts-highcharts:3.6.1'
+    implementation 'io.gatling:gatling-app:3.6.1'
+}

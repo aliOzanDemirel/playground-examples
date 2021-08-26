@@ -1,0 +1,6 @@
+rootProject.name = 'hexagonal-app-load-testing'
+include 'gatling-runner'
+include 'business-logic'
+include 'app-spring-kotlin'
+include 'app-ratpack-groovy'
+include 'app-javalin-kotlin'

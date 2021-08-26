@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: simple-business-client
+  main:
+    banner-mode: "off"
+
+server:
+  tomcat:
+    max-swallow-size: 2MB
+    accept-count: 1000
+    # reduced capacity to simulate failing requests
+    threads:
+      max: 100
+
+logging.pattern.console: "%d{HH:mm:ss.SSS} [%.50t] %-5level %logger{36} - %msg%n"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: webmvc
+  main:
+    web-application-type: servlet
+  mvc:
+    async:
+      request-timeout: 30000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: webflux
+  main:
+    web-application-type: reactive
+  codec:
+    max-in-memory-size: 2MB
+
+---
+spring:
+  config:
+    activate:
+      on-profile: coroutine
+  main:
+    web-application-type: reactive
+  codec:
+    max-in-memory-size: 2MB
+
+---
+spring:
+  config:
+    activate:
+      on-profile: debug
+
+logging:
+  level:
+    app: DEBUG
+    business: DEBUG

@@ -2,11 +2,12 @@ package app
 
 import app.api.RequestHandler
 import app.config.javalinAppConfigurer
-import app.service.BusinessLogicClient
+import app.service.AppJavalinService
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import common.MonitoringServiceAdapter
-import common.PersistenceRepositoryAdapter
+import common.KafkaAdapter
+import common.MongoDbAdapter
+import common.PrometheusAdapter
 import io.javalin.Javalin
 import org.eclipse.jetty.util.log.Log
 import org.eclipse.jetty.util.thread.QueuedThreadPool
@@ -32,13 +33,14 @@ fun main() {
 
 val businessModule = module {
 
-    single { PersistenceRepositoryAdapter() }
-    single { MonitoringServiceAdapter() }
-    single { CpuBoundUseCase(get(MonitoringServiceAdapter::class)) }
-    single { IoBoundUseCase(get(MonitoringServiceAdapter::class), get(PersistenceRepositoryAdapter::class)) }
+    single { KafkaAdapter() }
+    single { MongoDbAdapter() }
+    single { PrometheusAdapter() }
+    single { CpuBoundUseCase(get(PrometheusAdapter::class), get(KafkaAdapter::class)) }
+    single { IoBoundUseCase(get(PrometheusAdapter::class), get(MongoDbAdapter::class)) }
 }
 
 val appModule = module {
 
-    single { BusinessLogicClient(get(IoBoundUseCase::class), get(CpuBoundUseCase::class)) }
+    single { AppJavalinService(get(IoBoundUseCase::class), get(CpuBoundUseCase::class)) }
 }

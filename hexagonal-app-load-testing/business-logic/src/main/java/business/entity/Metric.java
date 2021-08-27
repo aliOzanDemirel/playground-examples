@@ -13,7 +13,7 @@ public class Metric {
     private final String value;
 
     public enum Category {
-        BLOCKING, CPU_WORK
+        IO, CPU
     }
 
     public Category getCategory() {

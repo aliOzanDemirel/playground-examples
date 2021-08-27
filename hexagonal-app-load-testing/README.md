@@ -31,10 +31,23 @@ through gradle wrapper, to have some primitive comparison between application mo
 application is wrong anyway).
 
 - Run some server on `localhost:8080` as target application, and then execute gatling scenarios with `gatlingRun`:
-    - Only CPU scenario: `gradlew gatling-runner:clean gatlingRun-test.CpuBoundSimulation`
-    - Only IO scenario: `gradlew gatling-runner:clean gatlingRun-test.IoBoundSimulation`
+    - Only CPU scenario: `gradlew --rerun-tasks gatlingRun-test.CpuBoundSimulation`
+    - Only IO scenario: `gradlew --rerun-tasks gatlingRun-test.IoBoundSimulation`
 
 ### Applications
+
+##### app-ratpack-groovy
+
+This example is built by Ratpack/Guice/Groovy. [Ratpack](https://ratpack.io/manual/current/async.html) is non-blocking framework with its own
+constructs (guaranteed ordering in execution model) for async handling and request processing, framework runs on netty server.
+
+- Running this application requires Java 11 runtime because groovy compilation fails with Java 16 and upgrading groovy version (3+) is not supported
+  by configured ratpack version.
+    - Configure separate java runtime when running app: `gradlew -Dorg.gradle.java.home="%JAVA_11%" app-ratpack-groovy:run`
+- Run the application directly through gradle, enable debug too: `gradlew app-ratpack-groovy:run -Dapp.log.debugEnabled=true`
+- Run with main class by creating fat jar first:
+    - `gradlew app-ratpack-groovy:clean app-ratpack-groovy:jar`
+    - `java -Dapp.log.debugEnabled=true -Dapp.log.httpRequest=true -jar app.jar`
 
 ##### app-spring-kotlin
 
@@ -46,19 +59,6 @@ This example is built by spring boot and kotlin, there are API handlers for both
     - [WebmvcApi](app-spring-kotlin/src/main/kotlin/app/api/WebmvcApi.kt) is enabled by spring profile `webmvc`
 - Build executable jar: `gradlew app-spring-kotlin:clean app-spring-kotlin:bootJar`
 
-##### app-ratpack-groovy
-
-This example is built by Ratpack/Guice/Groovy. [Ratpack](https://ratpack.io/manual/current/async.html) is non-blocking framework with its own
-constructs (guaranteed ordering in execution model) for async handling and request processing, framework runs on netty server.
-
-- Running this application requires Java 11 runtime because groovy compilation fails with Java 16 and upgrading groovy version (3+) is not supported
-  by configured ratpack version.
-    - Configure separate java runtime when running app: `gradlew -Dorg.gradle.java.home="%JAVA_11%" app-ratpack-groovy:run`
-- Run the application directly through gradle wrapper: `gradlew app-ratpack-groovy:run -Dapp.log.debugEnabled=true`
-- Run with main class by creating fat jar first:
-    - `gradlew app-ratpack-groovy:clean app-ratpack-groovy:jar`
-    - `java -Dapp.log.debugEnabled=true -Dapp.log.httpRequest=true -jar app.jar`
-
 ##### app-javalin-kotlin
 
 Built by kotlin, [javalin](https://javalin.io/documentation) and [koin](https://insert-koin.io/), it is running on embedded jetty server, default
@@ -67,3 +67,7 @@ configuration is thread-per-request model.
 - Run by creating fat jar:
     - `gradlew app-javalin-kotlin:clean app-javalin-kotlin:jar`
     - `java -jar app.jar`
+
+##### app-micronaut-kotlin
+
+TODO

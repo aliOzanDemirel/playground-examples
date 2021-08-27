@@ -9,30 +9,30 @@ import business.service.dto.WorkCpuCommand
 import org.slf4j.LoggerFactory
 import java.util.*
 
-class BusinessLogicClient(
+class AppJavalinService(
     private val ioBoundUseCase: IoBoundUseCase,
     private val cpuBoundUseCase: CpuBoundUseCase
 ) {
 
     companion object {
-        private val log = LoggerFactory.getLogger(BusinessLogicClient::class.java)
+        private val log = LoggerFactory.getLogger(AppJavalinService::class.java)
     }
 
-    fun workCpu(inputs: List<String>): WorkCpuResponse {
+    fun compute(inputs: List<String>): WorkCpuResponse {
 
-        log.info("Computing with {} inputs", inputs.size)
+        log.debug("CPU task with {} inputs", inputs.size)
 
         val command = WorkCpuCommand(inputs)
         val durationInNanos = cpuBoundUseCase.workCpu(command)
         return WorkCpuResponse(durationInNanos)
     }
 
-    fun blockingIo(duration: Int): BlockingResponse {
+    fun io(duration: Long): BlockingResponse {
 
-        log.info("IO with simulated duration {}", duration)
+        log.debug("IO task with blocked thread, duration: {}", duration)
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id).duration(duration).build()
-        return BlockingResponse(ioBoundUseCase.block(task))
+        val task = IoTask.IoTaskBuilder(id, IoTask.defaultBlockingBehaviour()).duration(duration).build()
+        return BlockingResponse(ioBoundUseCase.run(task))
     }
 }

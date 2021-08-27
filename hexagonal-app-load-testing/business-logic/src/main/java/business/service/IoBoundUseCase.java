@@ -21,21 +21,19 @@ public class IoBoundUseCase {
         this.persistenceRepository = persistenceRepository;
     }
 
-    // can pass around DTO rather than domain entity
-    public boolean block(IoTask task) {
+    // complicated with generic because of different upstream caller needs
+    public <R> R run(IoTask<R> task) {
 
         try {
-            // block the thread to simulate IO bound task
-            log.debug("Waiting for {}", task);
-            Thread.sleep(task.getDurationInMillis());
-
-            persistenceRepository.persist(task);
             monitoringService.push(task.getMetric());
-            return true;
+            persistenceRepository.persist(task);
 
+            log.info("Waiting for {}", task);
+            return task.execute();
         } catch (Exception e) {
-            log.error("Error occurred while executing io task!", e);
-            return false;
+
+            log.error("Error caught in use case!", e);
+            return null;
         }
     }
 }

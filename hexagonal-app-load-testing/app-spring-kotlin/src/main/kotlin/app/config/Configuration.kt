@@ -2,10 +2,12 @@ package app.config
 
 import business.external.MonitoringService
 import business.external.PersistenceRepository
+import business.external.StreamService
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import common.MonitoringServiceAdapter
-import common.PersistenceRepositoryAdapter
+import common.KafkaAdapter
+import common.MongoDbAdapter
+import common.PrometheusAdapter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -13,18 +15,23 @@ import org.springframework.context.annotation.Configuration
 class Configuration {
 
     @Bean
-    fun persistentRepository(): PersistenceRepository {
-        return PersistenceRepositoryAdapter()
+    fun kafkaAdapter(): StreamService {
+        return KafkaAdapter()
     }
 
     @Bean
-    fun monitoringService(): MonitoringService {
-        return MonitoringServiceAdapter()
+    fun mongoDbAdapter(): PersistenceRepository {
+        return MongoDbAdapter()
     }
 
     @Bean
-    fun cpuUseCase(monitoringService: MonitoringService): CpuBoundUseCase {
-        return CpuBoundUseCase(monitoringService)
+    fun prometheusAdapter(): MonitoringService {
+        return PrometheusAdapter()
+    }
+
+    @Bean
+    fun cpuUseCase(monitoringService: MonitoringService, streamService: StreamService): CpuBoundUseCase {
+        return CpuBoundUseCase(monitoringService, streamService)
     }
 
     @Bean

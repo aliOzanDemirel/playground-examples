@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 
 // normally this adapter should be created in outer layer as application itself will be implementing adapter,
 // but for the sake of this example common default implementations are created here for all outer layers to use
-public class PersistenceRepositoryAdapter implements PersistenceRepository {
+public class MongoDbAdapter implements PersistenceRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(PersistenceRepositoryAdapter.class);
+    private static final Logger log = LoggerFactory.getLogger(MongoDbAdapter.class);
 
     @Override
     public void persist(IoTask ioTask) {
-        log.debug("Persisted blocking task UUID: {}", ioTask.getId());
+        log.debug("Persisted io task UUID: {}", ioTask.getId());
     }
 }

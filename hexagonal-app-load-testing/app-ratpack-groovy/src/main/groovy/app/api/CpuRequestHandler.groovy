@@ -2,7 +2,7 @@ package app.api
 
 import app.api.error.BadRequest
 import app.dto.WorkCpuRequest
-import app.service.BusinessLogicClient
+import app.service.AppRatpackService
 import com.google.inject.Inject
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyContext
@@ -14,11 +14,11 @@ import ratpack.parse.ParseException
 @Slf4j
 class CpuRequestHandler extends GroovyHandler {
 
-    private BusinessLogicClient businessLogicClient;
+    private AppRatpackService appRatpackService;
 
     @Inject
-    CpuRequestHandler(BusinessLogicClient businessLogicClient) {
-        this.businessLogicClient = businessLogicClient;
+    CpuRequestHandler(AppRatpackService appRatpackService) {
+        this.appRatpackService = appRatpackService;
     }
 
     @Override
@@ -32,7 +32,7 @@ class CpuRequestHandler extends GroovyHandler {
                     }
                 }
                 .map { request -> request.internalStateValidation.call() }
-                .flatMap { request -> businessLogicClient.workCpu(request.inputs) }
+                .flatMap { request -> appRatpackService.compute(request.inputs) }
                 .then { response ->
                     context.response.status(Status.ACCEPTED)
                     context.render Jackson.json(response)

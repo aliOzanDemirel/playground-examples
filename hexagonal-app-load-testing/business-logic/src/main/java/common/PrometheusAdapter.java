@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 // normally this adapter should lie in outer layer code as application itself will be implementing adapter,
 // but for the sake of this example common implementations are created here for all outer layers to use
-public class MonitoringServiceAdapter implements MonitoringService {
+public class PrometheusAdapter implements MonitoringService {
 
-    private static final Logger log = LoggerFactory.getLogger(MonitoringServiceAdapter.class);
+    private static final Logger log = LoggerFactory.getLogger(PrometheusAdapter.class);
 
     @Override
     public void push(Metric metric) {

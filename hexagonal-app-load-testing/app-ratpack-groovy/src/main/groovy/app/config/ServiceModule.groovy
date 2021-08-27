@@ -2,16 +2,18 @@ package app.config
 
 import app.api.CpuRequestHandler
 import app.api.IoRequestHandler
-import app.service.BusinessLogicClient
+import app.service.AppRatpackService
 import business.external.MonitoringService
 import business.external.PersistenceRepository
+import business.external.StreamService
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import com.google.inject.Scopes
-import common.MonitoringServiceAdapter
-import common.PersistenceRepositoryAdapter
+import common.KafkaAdapter
+import common.MongoDbAdapter
+import common.PrometheusAdapter
 
 class ServiceModule extends AbstractModule {
 
@@ -21,24 +23,29 @@ class ServiceModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        bind(BusinessLogicClient.class).asEagerSingleton()
+        bind(AppRatpackService.class).asEagerSingleton()
         bind(CpuRequestHandler.class).in(Scopes.SINGLETON)
         bind(IoRequestHandler.class).in(Scopes.SINGLETON)
     }
 
     @Provides
-    PersistenceRepository persistentRepository() {
-        new PersistenceRepositoryAdapter()
+    StreamService kafkaAdapter() {
+        new KafkaAdapter()
     }
 
     @Provides
-    MonitoringService monitoringService() {
-        new MonitoringServiceAdapter()
+    PersistenceRepository mongoDbAdapter() {
+        new MongoDbAdapter()
     }
 
     @Provides
-    CpuBoundUseCase cpuUseCase(MonitoringService monitoringService) {
-        new CpuBoundUseCase(monitoringService)
+    MonitoringService prometheusAdapter() {
+        new PrometheusAdapter()
+    }
+
+    @Provides
+    CpuBoundUseCase cpuUseCase(MonitoringService monitoringService, StreamService streamService) {
+        new CpuBoundUseCase(monitoringService, streamService)
     }
 
     @Provides

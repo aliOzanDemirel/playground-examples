@@ -15,7 +15,7 @@ class IoBoundSimulation extends Simulation {
 
   val scn = scenario("IO Bound Scenario")
     .exec(
-      http("io_bound_wait_1")
+      http("io_bound_wait_1_seconds")
         .get("/io")
         .headers(Configuration.JSON_HEADER)
         .check(jsonPath("$.success").exists)
@@ -23,8 +23,8 @@ class IoBoundSimulation extends Simulation {
     )
     .pause(FiniteDuration.apply(1, TimeUnit.SECONDS))
     .exec(
-      http("io_bound_wait_2")
-        .get("/io?duration=2000")
+      http("io_bound_wait_3_seconds")
+        .get("/io?duration=3000")
         .headers(Configuration.JSON_HEADER)
         .check(jsonPath("$.success").exists)
         .check(status.is(200))
@@ -33,11 +33,11 @@ class IoBoundSimulation extends Simulation {
   val scnInjection = scn.inject(
     atOnceUsers(10),
     nothingFor(2),
-    rampUsers(200) during 5,
+    rampUsers(400) during 5,
     nothingFor(2),
-    constantUsersPerSec(100) during 10,
-    nothingFor(1),
-    constantUsersPerSec(160) during 10
+    constantUsersPerSec(200) during 15,
+    nothingFor(2),
+    constantUsersPerSec(100) during 10
   )
   setUp(scnInjection).protocols(httpProtocol)
 }

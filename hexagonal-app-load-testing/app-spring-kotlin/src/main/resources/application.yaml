@@ -55,3 +55,4 @@ logging:
   level:
     app: DEBUG
     business: DEBUG
+    org.springframework.web: DEBUG

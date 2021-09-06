@@ -68,6 +68,25 @@ configuration is thread-per-request model.
     - `gradlew app-javalin-kotlin:clean app-javalin-kotlin:jar`
     - `java -jar app.jar`
 
+##### app-jooby-kotlin
+
+Built by kotlin, [jooby](https://jooby.io/#introduction) and [koin](https://insert-koin.io/), embedded jetty is used in classpath, 'worker' execution
+mode is configured while running the application.
+
+- Run by creating fat jar:
+    - `gradlew app-jooby-kotlin:clean app-jooby-kotlin:jar`
+    - Run with non-blocking io processing with coroutines: `java -DthreadPerRequest=false -jar app.jar`
+    - Run with thread-per-request jetty workers: `java -jar app.jar`
+
+##### app-dropwizard-java
+
+TODO
+
 ##### app-micronaut-kotlin
 
 TODO
+
+##### app-quarkus-kotlin
+
+TODO
+

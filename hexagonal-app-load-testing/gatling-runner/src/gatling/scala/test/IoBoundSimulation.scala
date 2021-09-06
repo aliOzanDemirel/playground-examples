@@ -37,7 +37,7 @@ class IoBoundSimulation extends Simulation {
     nothingFor(2),
     constantUsersPerSec(200) during 15,
     nothingFor(2),
-    constantUsersPerSec(100) during 10
+    constantUsersPerSec(200) during 10
   )
   setUp(scnInjection).protocols(httpProtocol)
 }

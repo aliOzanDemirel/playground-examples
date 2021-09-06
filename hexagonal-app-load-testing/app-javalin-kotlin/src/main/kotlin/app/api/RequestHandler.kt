@@ -7,13 +7,13 @@ import org.koin.java.KoinJavaComponent.inject
 
 object RequestHandler {
 
-    private val businessLogicClient by inject<AppJavalinService>(AppJavalinService::class.java)
+    private val appJavalinService by inject<AppJavalinService>(AppJavalinService::class.java)
 
     val io: Handler = Handler { ctx ->
 
         // assert non null with !!
         val duration = ctx.queryParam("duration", "1000")!!
-        val response = businessLogicClient.io(duration.toLong())
+        val response = appJavalinService.io(duration.toLong())
         ctx.json(response)
     }
 
@@ -22,7 +22,7 @@ object RequestHandler {
         val requestBody = ctx.bodyValidator<WorkCpuRequest>().check(
             { it.inputs.isNotEmpty() }, "CPU work inputs cannot be empty!"
         ).get()
-        val response = businessLogicClient.compute(requestBody.inputs)
+        val response = appJavalinService.compute(requestBody.inputs)
 
         ctx.res.status = HttpStatus.ACCEPTED_202
         ctx.json(response)

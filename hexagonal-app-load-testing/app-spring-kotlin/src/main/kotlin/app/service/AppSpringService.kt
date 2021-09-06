@@ -40,7 +40,9 @@ class AppSpringService(
         log.debug("IO task with blocked thread, duration: {}", duration)
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id, IoTask.defaultBlockingBehaviour()).duration(duration).build()
+        val task = IoTask.IoTaskBuilder(id, IoTask.defaultBlockingBehaviour())
+            .duration(duration)
+            .build()
         return BlockingResponse(ioBoundUseCase.run(task))
     }
 
@@ -77,7 +79,7 @@ class AppSpringService(
         val nonBlockingCoroutineBehaviour = Function<Long, Boolean> {
             try {
                 CoroutineScope(context = currentCoroutineContext).launch(Dispatchers.IO) {
-                    delay(duration.toLong())
+                    delay(it)
                 }
                 true
             } catch (e: Exception) {

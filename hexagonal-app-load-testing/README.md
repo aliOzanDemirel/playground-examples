@@ -80,7 +80,9 @@ mode is configured while running the application.
 
 ##### app-dropwizard-java
 
-TODO
+Built by java and [dropwizard](https://www.dropwizard.io/en/latest/manual/core.html), jetty server is used within dropwizard-core.
+
+- Run with gradle wrapper: `gradlew app-dropwizard-java:clean app-dropwizard-java:run`
 
 ##### app-micronaut-kotlin
 

@@ -1,0 +1,14 @@
+apply plugin: 'application'
+
+run {
+    mainClassName = 'app.Main'
+    args = ['server', '/config.yml']
+}
+
+dependencies {
+
+    implementation(project(":business-logic"))
+
+    // comes with logback
+    implementation("io.dropwizard:dropwizard-core:2.0.25")
+}

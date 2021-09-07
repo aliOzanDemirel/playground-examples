@@ -5,4 +5,4 @@ include 'app-spring-kotlin'
 include 'app-ratpack-groovy'
 include 'app-javalin-kotlin'
 include 'app-jooby-kotlin'
-
+include 'app-dropwizard-java'

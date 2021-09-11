@@ -84,6 +84,23 @@ Built by java and [dropwizard](https://www.dropwizard.io/en/latest/manual/core.h
 
 - Run with gradle wrapper: `gradlew app-dropwizard-java:clean app-dropwizard-java:run`
 
+##### app-play-scala
+
+Built by scala and [play framework](https://www.playframework.com/documentation/2.8.x/Home), this version of play uses akka-http as web server, serves
+incoming requests in non-blocking fashion.
+
+- Run with gradle wrapper: `gradlew app-play-scala:clean app-play-scala:runPlay`
+
+##### app-vertx-java
+
+Built by java and [vertx-web](https://vertx.io/docs/vertx-web/java/#_basic_vert_x_web_concepts), running on netty server with event loop responding
+requests by default. It is possible to use [vertx-sync](https://vertx.io/docs/vertx-sync/java/) to write non-blocking code synchronously, it uses
+[quasar fibers](https://docs.paralleluniverse.co/quasar) (coroutine) but quasar is abandoned so this integration library is deprecated and ultimately
+unnecessary considering the upcoming [project loom](https://wiki.openjdk.java.net/display/loom).
+
+- _enableBlockingIo_ parameter configures worker thread per request instead of event loop, run with gradle wrapper:
+  `gradlew app-vertx-java:clean app-vertx-java:vertxRun -DenableBlockingIo=false`
+
 ##### app-micronaut-kotlin
 
 TODO
@@ -91,4 +108,4 @@ TODO
 ##### app-quarkus-kotlin
 
 TODO
-
+`

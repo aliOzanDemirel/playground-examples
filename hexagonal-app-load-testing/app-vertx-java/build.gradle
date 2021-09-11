@@ -1,0 +1,27 @@
+plugins {
+    id 'io.vertx.vertx-plugin' version '1.3.0'
+}
+
+dependencies {
+
+    implementation(project(":business-logic"))
+
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.5")
+
+    implementation("io.vertx:vertx-web")
+}
+
+vertx {
+    launcher = "app.Main"
+    mainVerticle = "app.AppVerticle"
+    vertxVersion = "4.1.3"
+    redeploy = false
+
+    def blockingIoParam = System.getProperty("enableBlockingIo") ?: false
+    jvmArgs = [
+            "-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory",
+            "-Dlogback.configurationFile=logback.xml",
+            "-DenableBlockingIo=$blockingIoParam"
+    ]
+}

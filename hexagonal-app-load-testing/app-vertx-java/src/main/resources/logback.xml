@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%.50t] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>1024</queueSize>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="STDOUT"/>
+    </appender>
+
+    <logger name="io.vertx.core" level="DEBUG"/>
+    <logger name="app" level="DEBUG"/>
+    <logger name="business" level="DEBUG"/>
+    <logger name="common" level="DEBUG"/>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNCSTDOUT"/>
+    </root>
+</configuration>

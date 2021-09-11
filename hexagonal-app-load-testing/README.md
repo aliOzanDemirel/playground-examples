@@ -98,14 +98,17 @@ requests by default. It is possible to use [vertx-sync](https://vertx.io/docs/ve
 [quasar fibers](https://docs.paralleluniverse.co/quasar) (coroutine) but quasar is abandoned so this integration library is deprecated and ultimately
 unnecessary considering the upcoming [project loom](https://wiki.openjdk.java.net/display/loom).
 
-- _enableBlockingIo_ parameter configures worker thread per request instead of event loop, run with gradle wrapper:
-  `gradlew app-vertx-java:clean app-vertx-java:vertxRun -DenableBlockingIo=false`
+- `enableBlockingIo` parameter configures worker thread per request instead of event loop, run with gradle wrapper:
+  `gradlew app-vertx-java:clean app-vertx-java:vertxRun -DenableBlockingIo=true`
 
 ##### app-micronaut-kotlin
 
-TODO
+Built with kotlin and [micronaut](https://docs.micronaut.io/latest/guide/#reactiveServer), uses netty server by default, with classic golden rule _do
+not block event loop_. Kotlin coroutine integration is used to simulate non-blocking execution in synchronous fashion.
+
+- Run with gradle wrapper: `gradlew app-micronaut-kotlin:run --args="-kotlinx.coroutines.debug=on"`
+- Build executable fat jar: `gradlew app-micronaut-kotlin:shadowJar`
 
 ##### app-quarkus-kotlin
 
-TODO
-`
+TODO gradlew app-micronaut-kotlin:run --args="-deneme=on"

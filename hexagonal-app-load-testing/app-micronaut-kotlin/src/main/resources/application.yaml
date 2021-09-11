@@ -1,0 +1,18 @@
+logger:
+  levels:
+    app: DEBUG
+    business: DEBUG
+    common: DEBUG
+    io.micronaut: INFO
+    io.netty: INFO
+
+micronaut:
+  server:
+    maxRequestSize: 2MB
+  executors:
+    io:
+      type: fixed
+      nThreads: 4
+    worker:
+      type: fixed
+      nThreads: 100

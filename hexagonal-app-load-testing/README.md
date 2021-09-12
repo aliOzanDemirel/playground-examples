@@ -4,7 +4,8 @@ This is a demonstration project for trying out different web frameworks while ke
 any domain logic in the module, it is an example of how this concern can be isolated from application/framework binding code.
 
 Modules prefixed with `app-` are applications that use common `business-logic`, all these _apps_ have same API (HTTP carrying JSON bodies) contract
-and validation rules, they are only built by using different web frameworks around same common logic module.
+and validation rules, they are only built by using different web frameworks around same common logic module. There are probably countless other
+frameworks to try (like http4k, lagom, spark, ninja, blade etc.) than the ones in this project, these are merely selected out of curiosity.
 
 - GET /io endpoint, to simulate IO bound task
     - non-mandatory query parameter `duration`, defaults to `1000` if not provided
@@ -59,47 +60,23 @@ This example is built by spring boot and kotlin, there are API handlers for both
     - [WebmvcApi](app-spring-kotlin/src/main/kotlin/app/api/WebmvcApi.kt) is enabled by spring profile `webmvc`
 - Build executable jar: `gradlew app-spring-kotlin:clean app-spring-kotlin:bootJar`
 
-##### app-javalin-kotlin
-
-Built by kotlin, [javalin](https://javalin.io/documentation) and [koin](https://insert-koin.io/), it is running on embedded jetty server, default
-configuration is thread-per-request model.
-
-- Run by creating fat jar:
-    - `gradlew app-javalin-kotlin:clean app-javalin-kotlin:jar`
-    - `java -jar app.jar`
-
 ##### app-jooby-kotlin
 
 Built by kotlin, [jooby](https://jooby.io/#introduction) and [koin](https://insert-koin.io/), embedded jetty is used in classpath, 'worker' execution
 mode is configured while running the application.
 
-- Run by creating fat jar:
-    - `gradlew app-jooby-kotlin:clean app-jooby-kotlin:jar`
+- Generate and run fat jar: `gradlew app-jooby-kotlin:clean app-jooby-kotlin:jar`
     - Run with non-blocking io processing with coroutines: `java -DthreadPerRequest=false -jar app.jar`
     - Run with thread-per-request jetty workers: `java -jar app.jar`
 
-##### app-dropwizard-java
+##### app-ktor-kotlin
 
-Built by java and [dropwizard](https://www.dropwizard.io/en/latest/manual/core.html), jetty server is used within dropwizard-core.
+Built with kotlin and [ktor](https://ktor.io/docs/a-ktor-application.html), by using coroutine io (CIO) engine within ktor. Ktor is native kotlin
+framework with superb coroutine support, to the level of reading&writing http bodies.
 
-- Run with gradle wrapper: `gradlew app-dropwizard-java:clean app-dropwizard-java:run`
-
-##### app-play-scala
-
-Built by scala and [play framework](https://www.playframework.com/documentation/2.8.x/Home), this version of play uses akka-http as web server, serves
-incoming requests in non-blocking fashion.
-
-- Run with gradle wrapper: `gradlew app-play-scala:clean app-play-scala:runPlay`
-
-##### app-vertx-java
-
-Built by java and [vertx-web](https://vertx.io/docs/vertx-web/java/#_basic_vert_x_web_concepts), running on netty server with event loop responding
-requests by default. It is possible to use [vertx-sync](https://vertx.io/docs/vertx-sync/java/) to write non-blocking code synchronously, it uses
-[quasar fibers](https://docs.paralleluniverse.co/quasar) (coroutine) but quasar is abandoned so this integration library is deprecated and ultimately
-unnecessary considering the upcoming [project loom](https://wiki.openjdk.java.net/display/loom).
-
-- `enableBlockingIo` parameter configures worker thread per request instead of event loop, run with gradle wrapper:
-  `gradlew app-vertx-java:clean app-vertx-java:vertxRun -DenableBlockingIo=true`
+- Generate and run fat jar:
+    - `gradlew app-ktor-kotlin:clean app-ktor-kotlin:jar`
+    - `java -jar app.jar`
 
 ##### app-micronaut-kotlin
 
@@ -123,3 +100,35 @@ executor to event loop pool. Quarkus -just like Micronaut- uses AoT for fast sta
 - Generate jar as production build and run it:
     - `gradlew app-quarkus-kotlin:clean app-quarkus-kotlin:quarkusBuild`
     - `java -jar build/quarkus-app/quarkus-run.jar`
+
+##### app-javalin-kotlin
+
+Built by kotlin, [javalin](https://javalin.io/documentation) and [koin](https://insert-koin.io/), it is running on embedded jetty server, default
+configuration is thread-per-request model.
+
+- Run by creating fat jar:
+    - `gradlew app-javalin-kotlin:clean app-javalin-kotlin:jar`
+    - `java -jar app.jar`
+
+##### app-vertx-java
+
+Built by java and [vertx-web](https://vertx.io/docs/vertx-web/java/#_basic_vert_x_web_concepts), running on netty server with event loop responding
+requests by default. It is possible to use [vertx-sync](https://vertx.io/docs/vertx-sync/java/) to write non-blocking code synchronously, it uses
+[quasar fibers](https://docs.paralleluniverse.co/quasar) (coroutine) but quasar is abandoned so this integration library is deprecated and ultimately
+unnecessary considering the upcoming [project loom](https://wiki.openjdk.java.net/display/loom).
+
+- `enableBlockingIo` parameter configures worker thread per request instead of event loop, run with gradle wrapper:
+  `gradlew app-vertx-java:clean app-vertx-java:vertxRun -DenableBlockingIo=true`
+
+##### app-dropwizard-java
+
+Built by java and [dropwizard](https://www.dropwizard.io/en/latest/manual/core.html), jetty server is used within dropwizard-core.
+
+- Run with gradle wrapper: `gradlew app-dropwizard-java:clean app-dropwizard-java:run`
+
+##### app-play-scala
+
+Built by scala and [play framework](https://www.playframework.com/documentation/2.8.x/Home), this version of play uses akka-http as web server, serves
+incoming requests in non-blocking fashion.
+
+- Run with gradle wrapper: `gradlew app-play-scala:clean app-play-scala:runPlay`

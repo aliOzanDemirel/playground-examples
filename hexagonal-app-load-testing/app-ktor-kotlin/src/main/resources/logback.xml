@@ -13,7 +13,7 @@
         <appender-ref ref="STDOUT"/>
     </appender>
 
-    <logger name="io.vertx.core" level="INFO"/>
+    <logger name="io.netty" level="INFO"/>
 
     <logger name="app" level="DEBUG"/>
     <logger name="business" level="DEBUG"/>

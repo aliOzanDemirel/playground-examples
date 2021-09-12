@@ -6,13 +6,17 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.validation.Validated
 import jakarta.inject.Named
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.function.Function
+import javax.validation.constraints.Min
 
+// so that kotlin plugin makes methods public if they have argument validations
+@Validated
 @Controller
 class IoController(
     private val ioBoundUseCase: IoBoundUseCase,
@@ -24,10 +28,7 @@ class IoController(
     }
 
     @Get("/io")
-    suspend fun io(@QueryValue(defaultValue = "1000") duration: Long): IoResponse = withContext(ioExecutors.asCoroutineDispatcher()) {
-
-        log.info("PROP: {}", System.getProperty("kotlinx.coroutines.debug"))
-        log.info("PROP 2: {}", System.getProperty("deneme"))
+    suspend fun io(@QueryValue(defaultValue = "1000") @Min(1000) duration: Long): IoResponse = withContext(ioExecutors.asCoroutineDispatcher()) {
 
         nonBlockingIo(duration)
     }

@@ -104,11 +104,22 @@ unnecessary considering the upcoming [project loom](https://wiki.openjdk.java.ne
 ##### app-micronaut-kotlin
 
 Built with kotlin and [micronaut](https://docs.micronaut.io/latest/guide/#reactiveServer), uses netty server by default, with classic golden rule _do
-not block event loop_. Kotlin coroutine integration is used to simulate non-blocking execution in synchronous fashion.
+not block event loop_. Kotlin coroutine integration is used to simulate non-blocking execution in synchronous fashion. DI and AOP concerns (
+transaction, validation etc.) are resolved at compile time with AoT, so the startup is faster and less memory intensive thanks to not having
+reflection scanning, plus this can be further improved by native compilation.
 
-- Run with gradle wrapper: `gradlew app-micronaut-kotlin:run --args="-kotlinx.coroutines.debug=on"`
-- Build executable fat jar: `gradlew app-micronaut-kotlin:shadowJar`
+- Run with gradle wrapper: `gradlew -Dorg.gradle.jvmargs=--illegal-access=permit app-micronaut-kotlin:run`
+- Build executable fat jar: `gradlew -Dorg.gradle.jvmargs=--illegal-access=permit app-micronaut-kotlin:clean app-micronaut-kotlin:shadowJar`
 
 ##### app-quarkus-kotlin
 
-TODO gradlew app-micronaut-kotlin:run --args="-deneme=on"
+Built with kotlin and [quarkus](https://quarkus.io/get-started/), uses vertx for underlying reactive implementation and has its own reactive streams
+implementation: [mutiny](https://smallrye.io/smallrye-mutiny/). Default configuration has worker thread pool for request replying executor. There is
+also newer [resteasy-reactive](https://quarkus.io/guides/resteasy-reactive) implementation that replaces the classic one, changing the default
+executor to event loop pool. Quarkus -just like Micronaut- uses AoT for fast startup and supports native compilation through its plugin.
+
+- Property `enableCoroutine` configures IO endpoint to execute non-blocking sequential code, default behaviour is async reactive stream that delays.
+- Run with gradle wrapper: `gradlew app-quarkus-kotlin:quarkusDev -DenableCoroutine=true`
+- Generate jar as production build and run it:
+    - `gradlew app-quarkus-kotlin:clean app-quarkus-kotlin:quarkusBuild`
+    - `java -jar build/quarkus-app/quarkus-run.jar`

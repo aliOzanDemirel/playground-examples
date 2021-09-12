@@ -14,7 +14,7 @@ import javax.validation.Valid
 
 // equivalent of spring's async dispatching as netty's event loop threads delegate work to this fixed worker pool
 @ExecuteOn("worker")
-// so that kotlin plugin automatically makes methods with argument validations public
+// so that kotlin plugin makes methods public if they have argument validations
 @Validated
 @Controller
 class CpuController(

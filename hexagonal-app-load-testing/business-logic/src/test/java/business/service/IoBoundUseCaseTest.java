@@ -12,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 
@@ -31,7 +29,7 @@ public class IoBoundUseCaseTest {
     public void ioTaskDefaultBehaviourBlocks_atLeastGivenDuration() {
 
         long duration = 2000;
-        IoTask<Boolean> ioTask = new IoTask.IoTaskBuilder<>(UUID.randomUUID(), IoTask.defaultBlockingBehaviour())
+        IoTask<Boolean> ioTask = new IoTask.Builder<>(IoTask.defaultBlockingBehaviour())
                 .duration(duration)
                 .build();
 

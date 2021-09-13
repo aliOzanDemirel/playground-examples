@@ -2,10 +2,11 @@ package app.service
 
 import app.api.BlockingResponse
 import app.api.WorkCpuResponse
+import business.dto.CpuWorkInputResponse
+import business.entity.CpuTask
 import business.entity.IoTask
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import business.service.dto.WorkCpuCommand
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -22,8 +23,9 @@ class AppJavalinService(
 
         log.debug("CPU task with {} inputs", inputs.size)
 
-        val command = WorkCpuCommand(inputs)
-        val durationInNanos = cpuBoundUseCase.workCpu(command)
+        val task = CpuTask.Builder(inputs).build()
+        val responses = cpuBoundUseCase.compute(task)
+        val durationInNanos = responses.stream().mapToLong { it: CpuWorkInputResponse -> it.inputProcessingDuration }.sum()
         return WorkCpuResponse(durationInNanos)
     }
 
@@ -32,7 +34,7 @@ class AppJavalinService(
         log.debug("IO task with blocked thread, duration: {}", duration)
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id, IoTask.defaultBlockingBehaviour()).duration(duration).build()
+        val task = IoTask.Builder(id, IoTask.defaultBlockingBehaviour()).duration(duration).build()
         return BlockingResponse(ioBoundUseCase.run(task))
     }
 }

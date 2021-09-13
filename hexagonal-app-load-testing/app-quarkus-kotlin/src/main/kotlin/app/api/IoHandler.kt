@@ -76,7 +76,7 @@ class IoHandler {
 
         return Uni.createFrom()
             .item {
-                IoTask.IoTaskBuilder(UUID.randomUUID(), behaviour)
+                IoTask.Builder(UUID.randomUUID(), behaviour)
                     .duration(duration)
                     .build()
             }.flatMap { task ->

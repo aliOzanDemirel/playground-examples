@@ -3,10 +3,11 @@ package app.service
 import app.api.BlockingResponse
 import app.api.WorkCpuResponse
 import app.api.withNanos
+import business.dto.CpuWorkInputResponse
+import business.entity.CpuTask
 import business.entity.IoTask
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import business.service.dto.WorkCpuCommand
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -30,8 +31,9 @@ class AppSpringService(
 
         log.debug("CPU task with {} inputs", inputs.size)
 
-        val command = WorkCpuCommand(inputs)
-        val durationInNanos = cpuBoundUseCase.workCpu(command)
+        val task = CpuTask.Builder(inputs).build()
+        val responses = cpuBoundUseCase.compute(task)
+        val durationInNanos = responses.stream().mapToLong { it: CpuWorkInputResponse -> it.inputProcessingDuration }.sum()
         return WorkCpuResponse().withNanos(durationInNanos)
     }
 
@@ -40,7 +42,7 @@ class AppSpringService(
         log.debug("IO task with blocked thread, duration: {}", duration)
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id, IoTask.defaultBlockingBehaviour())
+        val task = IoTask.Builder(id, IoTask.defaultBlockingBehaviour())
             .duration(duration)
             .build()
         return BlockingResponse(ioBoundUseCase.run(task))
@@ -58,7 +60,7 @@ class AppSpringService(
         }
 
         val id = UUID.randomUUID()
-        val task: IoTask<Mono<Boolean>> = IoTask.IoTaskBuilder(id, lazyMonoDelayingBehaviour)
+        val task: IoTask<Mono<Boolean>> = IoTask.Builder(id, lazyMonoDelayingBehaviour)
             .duration(duration)
             .build()
 
@@ -88,7 +90,7 @@ class AppSpringService(
         }
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id, nonBlockingCoroutineBehaviour)
+        val task = IoTask.Builder(id, nonBlockingCoroutineBehaviour)
             .duration(duration)
             .build()
         return BlockingResponse(ioBoundUseCase.run(task))

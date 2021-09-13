@@ -1,7 +1,7 @@
 import business.external.{MonitoringService, PersistenceRepository, StreamService}
 import business.service.{CpuBoundUseCase, IoBoundUseCase}
 import com.google.inject.{AbstractModule, Provides}
-import common.{KafkaAdapter, MongoDbAdapter, PrometheusAdapter}
+import business.common.{KafkaAdapter, MongoDbAdapter, PrometheusAdapter}
 
 class DependencyConfiguration extends AbstractModule {
 

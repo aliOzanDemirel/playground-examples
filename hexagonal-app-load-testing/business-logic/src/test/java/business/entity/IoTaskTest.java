@@ -1,5 +1,6 @@
 package business.entity;
 
+import business.error.InvariantViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,41 +13,43 @@ public class IoTaskTest {
     @Test
     void failWithNoId() {
 
-        Assertions.assertThrows(IllegalStateException.class,
+        Assertions.assertThrows(InvariantViolationException.class,
                 () -> {
-                    IoTask<Boolean> task = new IoTask.IoTaskBuilder<>(null, defaultBlockingBehaviour()).build();
+                    IoTask<Boolean> task = new IoTask.Builder<>(null, defaultBlockingBehaviour()).build();
                 },
-                "Cannot build BlockingTask as internal state is invalid!"
+                "ID of io task is not provided!"
         );
     }
 
     @Test
     void failWithNoBehaviour() {
 
-        Assertions.assertThrows(IllegalStateException.class,
+        Assertions.assertThrows(InvariantViolationException.class,
                 () -> {
-                    IoTask<Object> task = new IoTask.IoTaskBuilder<>(UUID.randomUUID(), null).build();
+                    IoTask<Object> task = new IoTask.Builder<>(UUID.randomUUID(), null).build();
                 },
-                "Cannot build BlockingTask as internal state is invalid!"
+                "Behaviour of io task is not defined!"
         );
     }
 
     @Test
     void failWithInvalidDuration() {
 
-        Assertions.assertThrows(IllegalStateException.class,
+        Assertions.assertThrows(InvariantViolationException.class,
                 () -> {
-                    IoTask<Boolean> task = new IoTask.IoTaskBuilder<>(UUID.randomUUID(), defaultBlockingBehaviour()).duration(50).build();
+                    IoTask<Boolean> task = new IoTask.Builder<>(UUID.randomUUID(), defaultBlockingBehaviour()).duration(50).build();
                 },
-                "Cannot build BlockingTask as internal state is invalid!"
+                "Duration should be between 1000 and 120.000!"
         );
     }
 
     @Test
     void checkConstructedMetric() {
 
-        IoTask<Boolean> task = new IoTask.IoTaskBuilder<>(UUID.randomUUID(), defaultBlockingBehaviour()).duration(1000).build();
+        var id = UUID.randomUUID();
+        var task = new IoTask.Builder<>(id, defaultBlockingBehaviour()).duration(1000).build();
         Assertions.assertNotNull(task);
+        Assertions.assertEquals(id, task.getId());
 
         Metric metric = task.getMetric();
         Assertions.assertNotNull(metric);

@@ -15,7 +15,7 @@ dependencies {
     ratpack.dependency 'ratpack-core'
     ratpack.dependency 'ratpack-guice'
 
-    // slf4j-api comes from common business-logic, explicitly defining binding here
+    // slf4j-api comes from business.common business-logic, explicitly defining binding here
     runtimeOnly "org.slf4j:slf4j-api:1.7.32"
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
 

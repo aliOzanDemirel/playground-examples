@@ -3,9 +3,9 @@ package app.config
 import app.service.AppJoobyService
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import common.KafkaAdapter
-import common.MongoDbAdapter
-import common.PrometheusAdapter
+import business.common.KafkaAdapter
+import business.common.MongoDbAdapter
+import business.common.PrometheusAdapter
 import org.koin.dsl.module
 
 val businessModule = module {

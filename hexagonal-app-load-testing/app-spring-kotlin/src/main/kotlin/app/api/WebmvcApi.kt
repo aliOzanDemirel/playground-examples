@@ -13,7 +13,7 @@ class WebmvcApi(private val appSpringService: AppSpringService) {
     /**
      * these handler methods can return async type (CompletableFuture etc.) for spring to register them with async dispatch to delegate
      * processing to another thread to release tomcat worker thread. ideally there should also be async executor pool configured to
-     * delegate work (like tomcat worker pool), using common fork join pool does not make sense for blocking/long running operations.
+     * delegate work (like tomcat worker pool), using business.common fork join pool does not make sense for blocking/long running operations.
      *
      * alternatively these methods can be made suspendable so that incoming requests are dispatched by launching coroutines.
      */

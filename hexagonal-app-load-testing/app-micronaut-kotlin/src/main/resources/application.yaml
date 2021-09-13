@@ -1,11 +1,3 @@
-logger:
-  levels:
-    app: DEBUG
-    business: DEBUG
-    common: DEBUG
-    io.micronaut: INFO
-    io.netty: INFO
-
 micronaut:
   server:
     maxRequestSize: 2MB

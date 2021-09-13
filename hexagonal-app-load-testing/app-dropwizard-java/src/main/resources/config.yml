@@ -4,10 +4,9 @@ logging:
     - type: console
       target: stdout
       logFormat: "%d{HH:mm:ss.SSS} [%.50t] %-5level %logger{36} - %msg%n"
-  loggers:
-    business: DEBUG
-    common: DEBUG
-    app: DEBUG
+#  loggers:
+#    business: DEBUG
+#    app: DEBUG
 
 server:
   maxThreads: 100

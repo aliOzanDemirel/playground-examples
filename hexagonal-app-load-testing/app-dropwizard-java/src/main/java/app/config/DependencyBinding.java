@@ -5,9 +5,9 @@ import business.external.PersistenceRepository;
 import business.external.StreamService;
 import business.service.CpuBoundUseCase;
 import business.service.IoBoundUseCase;
-import common.KafkaAdapter;
-import common.MongoDbAdapter;
-import common.PrometheusAdapter;
+import business.common.KafkaAdapter;
+import business.common.MongoDbAdapter;
+import business.common.PrometheusAdapter;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 public class DependencyBinding extends AbstractBinder {
@@ -15,7 +15,7 @@ public class DependencyBinding extends AbstractBinder {
     @Override
     protected void configure() {
 
-        // common module dependencies injected manually
+        // business.common module dependencies injected manually
         var mongoDbAdapter = new MongoDbAdapter();
         bind(mongoDbAdapter).to(PersistenceRepository.class);
 

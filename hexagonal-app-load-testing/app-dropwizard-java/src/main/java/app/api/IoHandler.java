@@ -3,6 +3,8 @@ package app.api;
 import app.dto.BlockingResponse;
 import business.entity.IoTask;
 import business.service.IoBoundUseCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -17,6 +19,8 @@ import java.util.UUID;
 @Produces(MediaType.APPLICATION_JSON)
 public class IoHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(IoHandler.class);
+
     private final IoBoundUseCase ioBoundUseCase;
 
     @Inject
@@ -29,7 +33,9 @@ public class IoHandler {
 
         Long durationInt = duration.orElse(1000L);
 
-        var ioTask = new IoTask.IoTaskBuilder<>(UUID.randomUUID(), IoTask.defaultBlockingBehaviour())
+        log.debug("IO task with blocking thread, duration {}", durationInt);
+
+        var ioTask = new IoTask.Builder<>(UUID.randomUUID(), IoTask.defaultBlockingBehaviour())
                 .duration(durationInt)
                 .build();
         return new BlockingResponse(ioBoundUseCase.run(ioTask));

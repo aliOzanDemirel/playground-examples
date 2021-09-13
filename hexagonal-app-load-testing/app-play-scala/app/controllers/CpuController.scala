@@ -1,8 +1,9 @@
 package controllers
 
 import akka.actor.ActorSystem
+import business.dto.CpuWorkInputResponse
+import business.entity.CpuTask
 import business.service.CpuBoundUseCase
-import business.service.dto.WorkCpuCommand
 import org.slf4j.{Logger, LoggerFactory}
 import play.api.libs.json.{JsObject, JsValue, Json, Reads, Writes}
 import play.api.mvc._
@@ -62,11 +63,11 @@ class CpuController @Inject()(cc: ControllerComponents, actorSystem: ActorSystem
 
     log.debug("CPU task with {} inputs", inputs.size)
 
-    val command = new WorkCpuCommand(inputs)
-    val durationInNanos = cpuBoundUseCase.workCpu(command)
+    val task = new CpuTask.Builder(inputs).build
+    val responses = cpuBoundUseCase.compute(task)
 
-    if (durationInNanos != null) {
-
+    if (!responses.isEmpty) {
+      val durationInNanos = responses.stream.mapToLong((it: CpuWorkInputResponse) => it.inputProcessingDuration).sum
       val milliseconds = durationInNanos / 1_000_000
       val seconds = (milliseconds / 1_000).toInt
       return WorkCpuResponse(Option(durationInNanos), Option(milliseconds), Option(seconds))

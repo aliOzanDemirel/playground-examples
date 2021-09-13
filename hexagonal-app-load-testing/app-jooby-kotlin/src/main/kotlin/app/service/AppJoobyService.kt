@@ -2,10 +2,11 @@ package app.service
 
 import BlockingResponse
 import WorkCpuResponse
+import business.dto.CpuWorkInputResponse
+import business.entity.CpuTask
 import business.entity.IoTask
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import business.service.dto.WorkCpuCommand
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -27,8 +28,9 @@ class AppJoobyService(
 
         log.debug("CPU task with {} inputs", inputs.size)
 
-        val command = WorkCpuCommand(inputs)
-        val durationInNanos = cpuBoundUseCase.workCpu(command)
+        val task = CpuTask.Builder(inputs).build()
+        val responses = cpuBoundUseCase.compute(task)
+        val durationInNanos = responses.stream().mapToLong { it: CpuWorkInputResponse -> it.inputProcessingDuration }.sum()
         return WorkCpuResponse(durationInNanos)
     }
 
@@ -37,7 +39,7 @@ class AppJoobyService(
         log.debug("IO task with blocked thread, duration: {}", duration)
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id, IoTask.defaultBlockingBehaviour())
+        val task = IoTask.Builder(id, IoTask.defaultBlockingBehaviour())
             .duration(duration)
             .build()
         return BlockingResponse(ioBoundUseCase.run(task))
@@ -59,7 +61,7 @@ class AppJoobyService(
         }
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id, nonBlockingCoroutineBehaviour)
+        val task = IoTask.Builder(id, nonBlockingCoroutineBehaviour)
             .duration(duration)
             .build()
 

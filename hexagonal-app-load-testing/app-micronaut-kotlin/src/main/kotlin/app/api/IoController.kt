@@ -50,7 +50,7 @@ class IoController(
         }
 
         val id = UUID.randomUUID()
-        val task = IoTask.IoTaskBuilder(id, nonBlockingCoroutineBehaviour)
+        val task = IoTask.Builder(id, nonBlockingCoroutineBehaviour)
             .duration(duration)
             .build()
         return IoResponse(ioBoundUseCase.run(task))

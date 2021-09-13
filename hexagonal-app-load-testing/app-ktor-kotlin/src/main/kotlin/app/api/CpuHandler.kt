@@ -3,8 +3,9 @@ package app.api
 import WorkCpuRequest
 import WorkCpuResponse
 import app.DependencyFactory
+import business.dto.CpuWorkInputResponse
+import business.entity.CpuTask
 import business.service.CpuBoundUseCase
-import business.service.dto.WorkCpuCommand
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -32,9 +33,10 @@ internal fun Routing.cpuHandler() {
 
             log.debug("CPU task with {} inputs", requestBody.inputs.size)
 
-            val command = WorkCpuCommand(requestBody.inputs)
-            val duration = cpuBoundUseCase.workCpu(command)
-            call.respond(HttpStatusCode.Accepted, WorkCpuResponse(duration))
+            val task = CpuTask.Builder(requestBody.inputs).build()
+            val responses = cpuBoundUseCase.compute(task)
+            val durationInNanos = responses.stream().mapToLong { it: CpuWorkInputResponse -> it.inputProcessingDuration }.sum()
+            call.respond(HttpStatusCode.Accepted, WorkCpuResponse(durationInNanos))
         }
     }
 }

@@ -32,7 +32,7 @@ internal fun Routing.ioHandler() {
             log.debug("IO task with suspended coroutine, duration: {}", duration)
 
             val id = UUID.randomUUID()
-            val task = IoTask.IoTaskBuilder(id, nonBlockingAsyncBehaviour)
+            val task = IoTask.Builder(id, nonBlockingAsyncBehaviour)
                 .duration(duration)
                 .build()
 

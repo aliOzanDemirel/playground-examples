@@ -1,7 +1,8 @@
 package app.api
 
+import business.dto.CpuWorkInputResponse
+import business.entity.CpuTask
 import business.service.CpuBoundUseCase
-import business.service.dto.WorkCpuCommand
 import org.slf4j.LoggerFactory
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -32,8 +33,9 @@ class CpuHandler {
 
         log.debug("CPU task with {} inputs", inputs.size)
 
-        val command = WorkCpuCommand(inputs)
-        val durationInNanos = cpuBoundUseCase.workCpu(command)
+        val task = CpuTask.Builder(inputs).build()
+        val responses = cpuBoundUseCase.compute(task)
+        val durationInNanos = responses.stream().mapToLong { it: CpuWorkInputResponse -> it.inputProcessingDuration }.sum()
         return WorkCpuResponse(durationInNanos)
     }
 }

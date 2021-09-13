@@ -49,7 +49,7 @@ public class NonBlockingIoHandler implements Handler<RoutingContext> {
                     durationInMillis, TimeUnit.MILLISECONDS);
             return booleanFuture;
         };
-        var task = new IoTask.IoTaskBuilder<>(UUID.randomUUID(), nonBlockingIoBehaviour)
+        var task = new IoTask.Builder<>(UUID.randomUUID(), nonBlockingIoBehaviour)
                 .duration(duration)
                 .build();
 

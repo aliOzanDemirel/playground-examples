@@ -51,7 +51,7 @@ class IoController @Inject()(cc: ControllerComponents, actorSystem: ActorSystem,
     }
 
     val id = UUID.randomUUID()
-    val task = new IoTask.IoTaskBuilder[Promise[Boolean]](id, behaviour)
+    val task = new IoTask.Builder[Promise[Boolean]](id, behaviour)
       .duration(duration)
       .build()
 

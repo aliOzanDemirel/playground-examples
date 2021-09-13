@@ -2,8 +2,8 @@ package app.api;
 
 import app.dto.WorkCpuRequest;
 import app.dto.WorkCpuResponse;
+import business.entity.CpuTask;
 import business.service.CpuBoundUseCase;
-import business.service.dto.WorkCpuCommand;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
 import io.vertx.ext.web.RoutingContext;
@@ -25,8 +25,8 @@ public class CpuHandler implements Function<RoutingContext, Future<WorkCpuRespon
     @Override
     public Future<WorkCpuResponse> apply(RoutingContext routingContext) {
 
-        var workCpuRequest = routingContext.getBodyAsJson().mapTo(WorkCpuRequest.class);
-        if (workCpuRequest == null || workCpuRequest.getInputs() == null || workCpuRequest.getInputs().isEmpty()) {
+        var request = routingContext.getBodyAsJson().mapTo(WorkCpuRequest.class);
+        if (request == null || request.getInputs() == null || request.getInputs().isEmpty()) {
 
             routingContext.response()
                     .setStatusCode(HttpResponseStatus.BAD_REQUEST.code())
@@ -34,8 +34,10 @@ public class CpuHandler implements Function<RoutingContext, Future<WorkCpuRespon
             return Future.succeededFuture();
         }
 
-        log.debug("CPU task with {} inputs", workCpuRequest.getInputs().size());
-        var durationInNanos = cpuBoundUseCase.workCpu(new WorkCpuCommand(workCpuRequest.getInputs()));
+        log.debug("CPU task with {} inputs", request.getInputs().size());
+        var task = new CpuTask.Builder(request.getInputs()).build();
+        var responses = cpuBoundUseCase.compute(task);
+        long durationInNanos = responses.stream().mapToLong(it -> it.inputProcessingDuration).sum();
 
         routingContext.response().setStatusCode(HttpResponseStatus.ACCEPTED.code());
         return Future.succeededFuture(new WorkCpuResponse(durationInNanos));

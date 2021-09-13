@@ -5,9 +5,9 @@ import business.external.PersistenceRepository
 import business.external.StreamService
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import common.KafkaAdapter
-import common.MongoDbAdapter
-import common.PrometheusAdapter
+import business.common.KafkaAdapter
+import business.common.MongoDbAdapter
+import business.common.PrometheusAdapter
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Named
 import jakarta.inject.Singleton

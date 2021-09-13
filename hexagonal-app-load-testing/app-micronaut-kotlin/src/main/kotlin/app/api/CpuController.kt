@@ -1,7 +1,8 @@
 package app.api
 
+import business.dto.CpuWorkInputResponse
+import business.entity.CpuTask
 import business.service.CpuBoundUseCase
-import business.service.dto.WorkCpuCommand
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -36,8 +37,9 @@ class CpuController(
 
         log.debug("CPU task with {} inputs", inputs.size)
 
-        val command = WorkCpuCommand(inputs)
-        val durationInNanos = cpuBoundUseCase.workCpu(command)
+        val task = CpuTask.Builder(inputs).build()
+        val responses = cpuBoundUseCase.compute(task)
+        val durationInNanos = responses.stream().mapToLong { it: CpuWorkInputResponse -> it.inputProcessingDuration }.sum()
         return WorkCpuResponse(durationInNanos)
     }
 }

@@ -35,7 +35,7 @@ public class BlockingIoHandler implements Handler<RoutingContext> {
 
         var id = UUID.randomUUID();
         var ioBehaviour = IoTask.defaultBlockingBehaviour();
-        var task = new IoTask.IoTaskBuilder<>(id, ioBehaviour)
+        var task = new IoTask.Builder<>(id, ioBehaviour)
                 .duration(duration)
                 .build();
 

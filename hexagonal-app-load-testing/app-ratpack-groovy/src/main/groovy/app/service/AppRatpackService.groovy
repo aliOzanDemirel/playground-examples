@@ -1,10 +1,10 @@
 package app.service
 
 import app.dto.WorkCpuResponse
+import business.entity.CpuTask
 import business.entity.IoTask
 import business.service.CpuBoundUseCase
 import business.service.IoBoundUseCase
-import business.service.dto.WorkCpuCommand
 import groovy.util.logging.Slf4j
 import ratpack.exec.Blocking
 import ratpack.exec.Promise
@@ -29,8 +29,10 @@ class AppRatpackService {
 
         // promise is lazy, will be resolved later once some thread subscribes to it
         Promise.sync {
-            def command = new WorkCpuCommand(inputs)
-            def durationInNanos = cpuBoundUseCase.workCpu(command)
+
+            def task = new CpuTask.Builder(inputs).build()
+            def responses = cpuBoundUseCase.compute(task)
+            def durationInNanos = responses.sum { it.inputProcessingDuration }
             new WorkCpuResponse(durationInNanos)
         }
     }
@@ -40,7 +42,7 @@ class AppRatpackService {
         log.debug("IO task with delegated blocking thread, duration {}", duration)
 
         UUID id = UUID.randomUUID()
-        IoTask<Boolean> task = new IoTask.IoTaskBuilder<Boolean>(id, IoTask.defaultBlockingBehaviour()).duration(duration).build()
+        IoTask<Boolean> task = new IoTask.Builder<Boolean>(id, IoTask.defaultBlockingBehaviour()).duration(duration).build()
 
         // very simple to delegate blocking call in ratpack, because of its execution flow
         // it is important to not keep this separate blocking thread busy with computation

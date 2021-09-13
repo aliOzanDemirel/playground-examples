@@ -1,6 +1,7 @@
 package business.entity;
 
-import business.entity.value.CpuWorkInput;
+import business.Util;
+import business.error.InvariantViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,33 +13,70 @@ import java.util.stream.Stream;
 public class CpuTaskTest {
 
     @Test
+    void failWithNoId() {
+
+        Assertions.assertThrows(InvariantViolationException.class,
+                () -> {
+                    var task = new CpuTask.Builder(null, List.of("1")).build();
+                },
+                "ID of cpu task is not provided!"
+        );
+    }
+
+    @Test
     void failWithNullInput() {
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(InvariantViolationException.class,
                 () -> {
-                    CpuTask job = new CpuTask(null);
+                    var task = new CpuTask.Builder(null).build();
                 },
-                "Work inputs cannot be null or empty!"
+                "Work input for cpu task is not provided!"
         );
     }
 
     @Test
     void failWithEmptyInput() {
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(InvariantViolationException.class,
                 () -> {
-                    CpuTask job = new CpuTask(Collections.emptyList());
+                    var task = new CpuTask.Builder(Collections.emptyList()).build();
                 },
-                "Work inputs cannot be null or empty!"
+                "Work input for cpu task is not provided!"
+        );
+    }
+
+    @Test
+    void failWithEmptyInputData() {
+
+        Assertions.assertThrows(InvariantViolationException.class,
+                () -> {
+                    var task = new CpuTask.Builder(List.of("1", "")).build();
+                },
+                "Data of work input is invalid!"
+        );
+    }
+
+    @Test
+    void failWithTooBigInputData() {
+
+        Assertions.assertThrows(InvariantViolationException.class,
+                () -> {
+                    String param = Util.prepareHugeString(200_000);
+                    var task = new CpuTask.Builder(List.of(param)).build();
+                },
+                "Data of work input is invalid!"
         );
     }
 
     @Test
     void checkInvariant() {
 
-        List<CpuWorkInput> inputs = Stream.of("1", "2").map(CpuWorkInput::new).collect(Collectors.toList());
-        CpuTask job = new CpuTask(inputs);
-        Assertions.assertNotNull(job);
-        Assertions.assertEquals(2, job.getInputCount());
+        var task = new CpuTask.Builder(Stream.of("1", "2").collect(Collectors.toList())).build();
+        Assertions.assertNotNull(task);
+        Assertions.assertNotNull(task.getId());
+        Assertions.assertNotSame(task.getWorkInputs(), task.getWorkInputs());
+
+        Assertions.assertEquals(2, task.getWorkInputs().size());
+        Assertions.assertEquals(2, task.getInputCount());
     }
 }

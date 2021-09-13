@@ -6,9 +6,9 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger level="debug" name="app"/>
-        <Logger level="debug" name="business"/>
-        <Logger level="debug" name="common"/>
+
+        <!--        <Logger name="app" level="debug"/>-->
+        <!--        <Logger name="business" level="debug"/>-->
 
         <Root level="info">
             <AppenderRef ref="Console"/>

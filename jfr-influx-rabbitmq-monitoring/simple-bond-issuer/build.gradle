@@ -1,14 +1,7 @@
 plugins {
-    id 'java'
-    id 'application'
     id 'org.springframework.boot' version '2.1.8.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 }
-
-group = 'example'
-version = '1.0'
-description = 'Simple Bond Issuer'
-mainClassName = 'bond.Main'
 
 springBoot {
     // spring boot plugin injects the version and build information into actuator /info endpoint
@@ -18,16 +11,6 @@ springBoot {
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-}
-
-wrapper {
-    gradleVersion = '5.6.2'
-    distributionType = Wrapper.DistributionType.BIN
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
 }
 
 configurations {
@@ -56,12 +39,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-// so that gradle:clean task removes the out folder
-clean {
-    delete 'out'
-}
-
-// final name of jar without version
 bootJar {
-    archiveFileName = 'bond-app.jar'
+    archiveFileName = 'bond-issuer.jar'
+    mainClassName 'bond.Main'
+    manifest {
+        attributes 'Start-Class': 'bond.Main'
+    }
+    doLast {
+        println "Built $archiveFileName ${project(':simple-bond-issuer').version}"
+    }
 }

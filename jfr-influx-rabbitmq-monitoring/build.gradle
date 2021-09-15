@@ -1,0 +1,60 @@
+wrapper {
+    gradleVersion = "7.2"
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+subprojects {
+
+    group "example.${rootProject.name}"
+    version = "1.0"
+    description = "Spring Boot-RabbitMQ-JFR Streaming-InfluxDB-Grafana example project"
+
+    apply plugin: 'java'
+    compileJava {
+        sourceCompatibility = JavaVersion.VERSION_16
+        targetCompatibility = JavaVersion.VERSION_16
+    }
+}
+
+task buildClothingService(type: Copy) {
+
+    dependsOn subprojects.build
+
+    from "${project(':simple-jfr-agent').buildDir}/libs/jfr-monitoring-agent.jar",
+            "${project(':simple-clothing-service').buildDir}/libs/clothing-service.jar"
+
+    into "build"
+}
+
+task runClothingService(type: Exec) {
+
+    dependsOn buildClothingService
+    group = "runClothingService"
+    workingDir "/build"
+    commandLine "java", "-javaagent:jfr-monitoring-agent.jar", "-jar", "clothing-service.jar"
+}
+
+task buildBondIssuer(type: Copy) {
+
+    dependsOn subprojects.build
+
+    from "${project(':simple-jfr-agent').buildDir}/libs/jfr-monitoring-agent.jar",
+            "${project(':simple-bond-issuer').buildDir}/libs/bond-issuer.jar"
+
+    into "build"
+}
+
+task runBondIssuer(type: Exec) {
+
+    dependsOn buildBondIssuer
+    group = "runBondIssuer"
+    workingDir "/build"
+    commandLine "java", "-javaagent:jfr-monitoring-agent.jar", "-jar", "bond-issuer.jar"
+}

@@ -1,14 +1,7 @@
 plugins {
-    id 'java'
     id 'org.springframework.boot' version '2.4.5'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-
-    // provides utility function gitVersion(), used to set version of project which is used as tag of the docker image
-    id 'com.palantir.git-version' version '0.12.2'
 }
-
-version = gitVersion()
-description = 'Basic API to save/list clothing'
 
 dependencies {
 
@@ -31,7 +24,6 @@ dependencies {
 }
 
 bootJar {
-    // final name of jar without version
     archiveFileName = 'clothing-service.jar'
     mainClassName 'clothing.service.Main'
     manifest {

@@ -2,7 +2,7 @@
 
 These transaction-processor and bond-issuer services are simple assignment projects (created at 2018 and 2019
 respectively), that are now integrated through **a direct exchange with single queue** to demonstrate a basic example of
-async communication between two remote processes with [RabbitMQ] (https://www.rabbitmq.com/tutorials/amqp-concepts.html)
+async communication between two remote processes with [RabbitMQ](https://www.rabbitmq.com/tutorials/amqp-concepts.html)
 as middleware.
 
 When a new bond is created, bond service will send an AMQP message to the configured queue. Then transaction service (

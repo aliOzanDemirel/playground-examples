@@ -59,8 +59,8 @@ can be configured to visualize metric data points recorded in InfluxDB.
   rounded up to the nearest whole number (e.g. an article with an average review of 2.1 would be found when searching for items with 3 stars).
 * The API does not need to allow creation of new brands or articles of clothing.
 
-[birdview]: resources/jfr_to_grafana.jpg "Birdview"
+[birdview]: resources/readme/jfr_to_grafana.jpg "Birdview"
 
-[dashboard_1]: resources/dashboard_1.jpg
+[dashboard_1]: resources/readme/dashboard_1.jpg
 
-[dashboard_2]: resources/dashboard_2.jpg
+[dashboard_2]: resources/readme/dashboard_2.jpg

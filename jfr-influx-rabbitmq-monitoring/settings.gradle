@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'jfr-influx-rabbitmq-monitoring'
+include 'simple-jfr-agent'
+include 'simple-bond-issuer'
+include 'simple-clothing-service'

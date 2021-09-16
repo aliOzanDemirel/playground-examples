@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import transaction.controller.response.StatisticsResponse;
 import transaction.service.TransactionService;
 
-@RestController(value = StatisticsController.STATISTICS_ENDPOINT)
+@RestController
 @Slf4j
 public class StatisticsController {
 
@@ -19,7 +19,7 @@ public class StatisticsController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping
+    @GetMapping(StatisticsController.STATISTICS_ENDPOINT)
     public StatisticsResponse getStatistics() {
 
         log.info("GET request to {}", STATISTICS_ENDPOINT);

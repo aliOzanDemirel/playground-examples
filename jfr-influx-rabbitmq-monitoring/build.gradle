@@ -1,3 +1,7 @@
+plugins {
+    id "io.github.http-builder-ng.http-plugin" version "0.1.1"
+}
+
 wrapper {
     gradleVersion = "7.2"
     distributionType = Wrapper.DistributionType.BIN
@@ -23,38 +27,65 @@ subprojects {
     }
 }
 
+// build clothing-service and jfr agent, copy artifacts to project root
 task buildClothingService(type: Copy) {
+    group = "clothing"
 
-    dependsOn subprojects.build
+    def jfrProjectName = "simple-jfr-agent"
+    def clothingProjectName = "simple-clothing-service"
 
-    from "${project(':simple-jfr-agent').buildDir}/libs/jfr-monitoring-agent.jar",
-            "${project(':simple-clothing-service').buildDir}/libs/clothing-service.jar"
+    dependsOn project(":$jfrProjectName").build
+    dependsOn project(":$clothingProjectName").build
+
+    from "${project(":$jfrProjectName").buildDir}/libs/jfr-monitoring-agent.jar",
+            "${project(":$clothingProjectName").buildDir}/libs/clothing-service.jar"
 
     into "build"
 }
 
 task runClothingService(type: Exec) {
+    group = "clothing"
 
     dependsOn buildClothingService
-    group = "runClothingService"
     workingDir "/build"
-    commandLine "java", "-javaagent:jfr-monitoring-agent.jar", "-jar", "clothing-service.jar"
+    commandLine "java", "-Djfr.enabled.clothing=true", "-javaagent:jfr-monitoring-agent.jar", "-jar", "clothing-service.jar"
 }
 
+// build bond-issuer and jfr agent, copy artifacts to project root
 task buildBondIssuer(type: Copy) {
+    group = "bond"
 
-    dependsOn subprojects.build
+    def jfrProjectName = "simple-jfr-agent"
+    def bondProjectName = "simple-bond-issuer"
 
-    from "${project(':simple-jfr-agent').buildDir}/libs/jfr-monitoring-agent.jar",
-            "${project(':simple-bond-issuer').buildDir}/libs/bond-issuer.jar"
+    dependsOn project(":$jfrProjectName").build
+    dependsOn project(":$bondProjectName").build
+
+    from "${project(":$jfrProjectName").buildDir}/libs/jfr-monitoring-agent.jar",
+            "${project(":$bondProjectName").buildDir}/libs/bond-issuer.jar"
 
     into "build"
 }
 
 task runBondIssuer(type: Exec) {
+    group = "bond"
 
     dependsOn buildBondIssuer
-    group = "runBondIssuer"
     workingDir "/build"
-    commandLine "java", "-javaagent:jfr-monitoring-agent.jar", "-jar", "bond-issuer.jar"
+    commandLine "java", "-Djfr.enabled.bond=true", "-javaagent:jfr-monitoring-agent.jar", "-jar", "bond-issuer.jar"
+}
+
+task buildAndAssembleAll(type: Copy) {
+
+    dependsOn subprojects.build
+
+    def jfrProjectName = "simple-jfr-agent"
+    def clothingProjectName = "simple-clothing-service"
+    def bondProjectName = "simple-bond-issuer"
+
+    from "${project(":$jfrProjectName").buildDir}/libs/jfr-monitoring-agent.jar",
+            "${project(":$clothingProjectName").buildDir}/libs/clothing-service.jar",
+            "${project(":$bondProjectName").buildDir}/libs/bond-issuer.jar"
+
+    into "build"
 }

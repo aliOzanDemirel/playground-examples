@@ -1,12 +1,12 @@
-package clothing.service.event;
+package clothing.service.jfr;
 
 import jdk.jfr.*;
 
-@Name("service.ReviewAdded")
+@Name("clothing.ClothingReviewAdded")
 @Label("Review Added Event")
 @Description("Tracks when a new review is made for clothing")
 @StackTrace(false)
-public class ReviewAddedEvent extends Event {
+public class ReviewAddedJfrEvent extends Event {
 
     @Label("Success Flag")
     private boolean isSuccess = false;

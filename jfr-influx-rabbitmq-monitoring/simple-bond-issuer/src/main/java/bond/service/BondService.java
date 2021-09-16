@@ -1,7 +1,8 @@
 package bond.service;
 
 import bond.domain.Bond;
-import bond.messaging.BondIssuedEventProducer;
+import bond.jfr.BondIssuedJfrEvent;
+import bond.messaging.event.BondIssuedTransactionProducer;
 import bond.repository.BondRepository;
 import bond.validator.BondSaleValidation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +24,13 @@ public class BondService {
 
     private final BondRepository bondRepository;
     private final BondHistoryService bondHistoryService;
-
-    @Autowired(required = false)
-    private BondIssuedEventProducer bondIssuedEventProducer;
+    private final BondIssuedTransactionProducer bondIssuedTransactionProducer;
 
     @Autowired
-    public BondService(BondRepository bondRepository, BondHistoryService bondHistoryService) {
+    public BondService(BondRepository bondRepository, BondHistoryService bondHistoryService, BondIssuedTransactionProducer bondIssuedTransactionProducer) {
         this.bondRepository = bondRepository;
         this.bondHistoryService = bondHistoryService;
+        this.bondIssuedTransactionProducer = bondIssuedTransactionProducer;
     }
 
     private Bond getBond(Long bondId) {
@@ -59,6 +59,25 @@ public class BondService {
 
         log.debug("Creating new bond for client: {} with IP: {}, term: {} and amount: {}", clientId, sourceIp, term, amount);
 
+        var jfrEvent = new BondIssuedJfrEvent();
+        jfrEvent.begin();
+
+        try {
+            Bond bond = issueBond(clientId, term, amount, sourceIp);
+            bondIssuedTransactionProducer.sendMessage(bond);
+
+            jfrEvent.setAmount(amount);
+            jfrEvent.setClientId(clientId);
+            return bond;
+
+        } finally {
+            jfrEvent.setTimestampInUtc(System.currentTimeMillis());
+            jfrEvent.commit();
+        }
+    }
+
+    private Bond issueBond(Long clientId, Integer term, BigDecimal amount, String sourceIp) {
+
         var bond = new Bond();
         bond.setClientId(clientId);
         bond.setSourceIp(sourceIp);
@@ -72,9 +91,6 @@ public class BondService {
         bond = saveBond(bond);
         log.debug("New bond is sold, ID: {}", bond.getId());
 
-        if (bondIssuedEventProducer != null) {
-            bondIssuedEventProducer.sendMessage(bond);
-        }
         return bond;
     }
 

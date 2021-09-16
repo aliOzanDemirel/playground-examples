@@ -1,0 +1,688 @@
+{
+	"info": {
+		"_postman_id": "a22196d1-8b82-4f95-bc47-9b50756f47c3",
+		"name": "api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "transaction",
+			"item": [
+				{
+					"name": "get transactions in last 60 seconds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/statistics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete transactions",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "bond",
+			"item": [
+				{
+					"name": "no content returned",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": 1,\r\n  \"sellerId\": 100,\r\n  \"serviceParameterInputs\": [\r\n    {\r\n      \"id\": 5,\r\n      \"values\": [\r\n        \"12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 7,\r\n      \"values\": [\r\n        \"Online\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 8,\r\n      \"values\": [\r\n        \"eSignature\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 12,\r\n      \"values\": [\r\n        \"G12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 13,\r\n      \"values\": [\r\n        \"Zone 1\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 14,\r\n      \"values\": [\r\n        \"9999999.999999\"\r\n      ]\r\n    },\r\n        {\r\n      \"id\": 15,\r\n      \"values\": [\r\n        \"2019-05-01\"\r\n      ]\r\n    }\r\n  ]\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds?clientId=9999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							],
+							"query": [
+								{
+									"key": "clientId",
+									"value": "9999"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list bonds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list bonds by client",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds?clientId=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							],
+							"query": [
+								{
+									"key": "clientId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch bond history",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds/11/history",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds",
+								"11",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create new bond - trigger transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"value": "99.99.99.88",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"clientId\": 16,\n\t\"amount\": \"487\",\n\t\"term\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid as 5 bonds are already sold for this IP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"type": "text",
+								"value": "333.33.3.0"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"clientId\": 2,\n\t\"amount\": \"900\",\n\t\"term\": 11\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "extend bond's term",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"type": "text",
+								"value": "99.99.99.88"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"term\": 13\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail bond creation with bad request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"forgottentClientId\": 999,\n\t\"amount\": \"1.002\",\n\t\"term\": 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail bond update with bad request",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"clientId\": -1,\n\t\"amount\": \"-1\",\n\t\"term\": 4\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/bonds/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"bonds",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "clothing",
+			"item": [
+				{
+					"name": "no content returned",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": 1,\r\n  \"sellerId\": 100,\r\n  \"serviceParameterInputs\": [\r\n    {\r\n      \"id\": 5,\r\n      \"values\": [\r\n        \"12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 7,\r\n      \"values\": [\r\n        \"Online\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 8,\r\n      \"values\": [\r\n        \"eSignature\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 12,\r\n      \"values\": [\r\n        \"G12\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 13,\r\n      \"values\": [\r\n        \"Zone 1\"\r\n      ]\r\n    },\r\n    {\r\n      \"id\": 14,\r\n      \"values\": [\r\n        \"9999999.999999\"\r\n      ]\r\n    },\r\n        {\r\n      \"id\": 15,\r\n      \"values\": [\r\n        \"2019-05-01\"\r\n      ]\r\n    }\r\n  ]\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing?clColor=6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing"
+							],
+							"query": [
+								{
+									"key": "clColor",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter clothing by only size",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing?clSize=SMALL",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing"
+							],
+							"query": [
+								{
+									"key": "clSize",
+									"value": "SMALL"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list reviews of clothing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing/3/reviews",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing",
+								"3",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list all clothing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter clothing by size and color",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing?clColor=4&clSize=MEDIUM",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing"
+							],
+							"query": [
+								{
+									"key": "clColor",
+									"value": "4"
+								},
+								{
+									"key": "clSize",
+									"value": "MEDIUM"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter by description and brand",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing?description=Easy&brand=Some Brand B",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing"
+							],
+							"query": [
+								{
+									"key": "description",
+									"value": "Easy"
+								},
+								{
+									"key": "brand",
+									"value": "Some Brand B"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter by rating and hotness",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing?rating=4&isHot=false",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing"
+							],
+							"query": [
+								{
+									"key": "rating",
+									"value": "4"
+								},
+								{
+									"key": "isHot",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "insert a new review - trigger transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"type": "text",
+								"value": "99.99.99.88"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"Some New Review\",\n\t\"rating\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing/3/reviews",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing",
+								"3",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clothing is closed for review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Forwarded-For",
+								"type": "text",
+								"value": "99.99.99.88"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"Some New Review\",\n\t\"rating\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing/1/reviews",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing",
+								"1",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bad request when adding review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"MoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000CharactersMoreThan2000Characters\",\n\t\"rating\": 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/v1/clothing/3/reviews",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"clothing",
+								"3",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

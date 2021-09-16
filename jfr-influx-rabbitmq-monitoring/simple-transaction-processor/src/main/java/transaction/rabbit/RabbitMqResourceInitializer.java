@@ -5,12 +5,11 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-@Profile("docker")
 @Component
 public class RabbitMqResourceInitializer {
 
@@ -23,16 +22,28 @@ public class RabbitMqResourceInitializer {
     private Exchange exchange;
 
     @Autowired
-    private Queue queue;
+    @Qualifier("bondQueue")
+    private Queue bondQueue;
 
     @Autowired
-    private Binding binding;
+    @Qualifier("bondQueueBinding")
+    private Binding bondQueueBinding;
+
+    @Autowired
+    @Qualifier("clothingQueue")
+    private Queue clothingQueue;
+
+    @Autowired
+    @Qualifier("clothingQueueBinding")
+    private Binding clothingQueueBinding;
 
     @PostConstruct
     public void create() {
 
         amqpAdmin.declareExchange(exchange);
-        amqpAdmin.declareQueue(queue);
-        amqpAdmin.declareBinding(binding);
+        amqpAdmin.declareQueue(bondQueue);
+        amqpAdmin.declareBinding(bondQueueBinding);
+        amqpAdmin.declareQueue(clothingQueue);
+        amqpAdmin.declareBinding(clothingQueueBinding);
     }
 }

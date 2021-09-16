@@ -1,12 +1,22 @@
 dependencies {
+
+    implementation("org.slf4j:slf4j-api:1.7.32")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
+
     implementation group: 'org.influxdb', name: 'influxdb-java', version: '2.21'
 }
 
 jar {
     archiveFileName.set('jfr-monitoring-agent.jar')
     exclude '**/module-info.class'
+    duplicatesStrategy = DuplicatesStrategy.WARN
     manifest {
-        attributes 'Premain-Class': 'agent.JfrAgent'
+        attributes "Premain-Class": "agent.Premain"
+        attributes "Agent-Class": "agent.Premain"
+        // attributes "Boot-Class-Path": ""
+        // attributes "Can-Set-Native-Method-Prefix": "true"
+        // attributes "Can-Retransform-Classes": "true"
+        // attributes "Can-Redefine-Classes": "true"
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }

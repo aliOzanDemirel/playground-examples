@@ -3,16 +3,9 @@ app:
     validity-timeout: 60000
     roundingScale: 2
 
-logging:
-  level:
-    transaction: DEBUG
-    org.springframework.web: INFO
-
----
 spring:
-  profiles: docker
   rabbitmq:
-    host: rabbitmq
+    host: localhost
     port: 5672
     username: guest
     password: guest
@@ -20,11 +13,26 @@ spring:
       direct:
         consumers-per-queue: 2
 
+logging:
+  level:
+    transaction: DEBUG
+    org.springframework.web: DEBUG
+
 ---
 spring:
-  profiles: test
+  config:
+    activate:
+      on-profile: docker
+  rabbitmq:
+    host: rabbitmq
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
 
 logging:
   level:
     transaction: INFO
-    org.springframework.web: WARN
+    org.springframework.web: INFO

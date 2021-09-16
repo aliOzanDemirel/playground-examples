@@ -2,7 +2,8 @@ package clothing.service.service;
 
 import clothing.service.domain.Clothing;
 import clothing.service.domain.Review;
-import clothing.service.event.ReviewAddedEvent;
+import clothing.service.jfr.ReviewAddedJfrEvent;
+import clothing.service.messaging.review.ReviewAddedTransactionProducer;
 import clothing.service.repository.ClothingRepository;
 import clothing.service.repository.ReviewRepository;
 import com.google.common.collect.Lists;
@@ -29,6 +30,7 @@ public class ReviewAddService {
 
     private final ClothingRepository clothingRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewAddedTransactionProducer reviewAddedTransactionProducer;
 
     @Transactional
     public Review addReviewToClothing(long clothingId, String description, int rating) {
@@ -36,7 +38,7 @@ public class ReviewAddService {
         log.debug("Adding review to clothing ID {}, description {} | rating {}", clothingId, description, rating);
 
         // event is enabled by the jfr agent running in same java process
-        ReviewAddedEvent event = new ReviewAddedEvent();
+        ReviewAddedJfrEvent event = new ReviewAddedJfrEvent();
         event.begin();
 
         try {
@@ -48,6 +50,8 @@ public class ReviewAddService {
             }
 
             Review review = addReviewToClothing(clothing, description, rating);
+            reviewAddedTransactionProducer.sendMessage(review);
+
             event.setRating(rating);
             event.setSuccess(true);
             return review;

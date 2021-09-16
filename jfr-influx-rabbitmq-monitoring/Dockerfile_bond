@@ -7,8 +7,8 @@ RUN addgroup -S app-runner -g 3000 && \
 USER app-runner:app-runner
 
 WORKDIR /home/app-runner
-COPY build/clothing-service.jar ./clothing-service.jar
+COPY simple-bond-issuer/build/libs/bond-issuer.jar ./bond-issuer.jar
 COPY build/jfr-monitoring-agent.jar ./jfr-monitoring-agent.jar
 
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=80"
-CMD ["java", "-javaagent:./jfr-monitoring-agent.jar", "-jar", "./clothing-service.jar"]
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=80 -Djfr.enabled.bond=true"
+CMD ["java", "-javaagent:./jfr-monitoring-agent.jar", "-jar", "./bond-issuer.jar"]

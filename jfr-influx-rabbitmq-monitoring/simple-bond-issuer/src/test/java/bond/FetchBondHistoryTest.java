@@ -1,21 +1,16 @@
 package bond;
 
-import bond.controller.BondController;
 import bond.data.TestData;
 import bond.domain.BondHistory;
 import bond.repository.BondHistoryRepository;
-import bond.service.BondHistoryService;
 import bond.service.BondService;
 import org.hamcrest.Matchers;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -27,9 +22,10 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
-@WebMvcTest(value = {BondController.class, BondHistoryService.class})
+//@RunWith(SpringRunner.class)
+//@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
+//@WebMvcTest(value = {BondController.class, BondHistoryService.class})
+@Disabled
 public class FetchBondHistoryTest {
 
     @Value("${app.api.prefix}")

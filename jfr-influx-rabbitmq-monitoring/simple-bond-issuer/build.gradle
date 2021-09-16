@@ -1,17 +1,12 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.8.RELEASE'
+    id 'org.springframework.boot' version '2.4.10'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+
+    // used to set version of project as git hash
+    id 'com.palantir.git-version' version '0.12.2'
 }
 
-springBoot {
-    // spring boot plugin injects the version and build information into actuator /info endpoint
-    buildInfo()
-}
-
-compileJava {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
+version = gitVersion()
 
 configurations {
     implementation {
@@ -19,17 +14,21 @@ configurations {
     }
 }
 
+def lombokVersion = '1.18.20'
+
 dependencies {
 
-    compileOnly 'org.projectlombok:lombok:1.18.10'
-    testCompileOnly 'org.projectlombok:lombok:1.18.10'
-    annotationProcessor 'org.projectlombok:lombok:1.18.10'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
     implementation 'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-starter-log4j2',
             'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-validation',
             'org.springframework.boot:spring-boot-starter-amqp',
+            'org.springframework.boot:spring-boot-starter-actuator',
             'io.springfox:springfox-swagger-ui:2.9.2',
             'io.springfox:springfox-swagger2:2.9.2',
             'com.integralblue:log4jdbc-spring-boot-starter:2.0.0',
@@ -46,6 +45,11 @@ bootJar {
         attributes 'Start-Class': 'bond.Main'
     }
     doLast {
-        println "Built $archiveFileName ${project(':simple-bond-issuer').version}"
+        println "Built $archiveFileName with version: ${project(':simple-bond-issuer').version}"
     }
+}
+
+springBoot {
+    // spring boot plugin injects the version and build information into actuator /info endpoint
+    buildInfo()
 }

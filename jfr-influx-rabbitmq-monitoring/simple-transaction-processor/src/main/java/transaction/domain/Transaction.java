@@ -9,5 +9,6 @@ public class Transaction {
 
     private BigDecimal amount;
     private long timestamp;
+    private TransactionSource sourceSystem = TransactionSource.DEFAULT;
 
 }

@@ -10,7 +10,8 @@ import transaction.service.TransactionService;
 
 import javax.validation.Valid;
 
-@RestController(TransactionController.TRANSACTIONS_ENDPOINT)
+@RestController
+@RequestMapping(TransactionController.TRANSACTIONS_ENDPOINT)
 @Slf4j
 public class TransactionController {
 

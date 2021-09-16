@@ -34,13 +34,31 @@ spring:
           import_files: "db/lookup_data.sql,
                          db/clothing.sql,
                          db/reviews.sql"
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 # tomcat access logs redirected to console output of docker containers
 server:
-  port: 8080
+  port: 8082
   tomcat:
     accesslog:
-      enabled: false
+      enabled: true
+      directory: /dev
+      prefix: stdout
+      buffered: true
+      suffix:
+      file-date-format:
+
+logging:
+  level:
+    clothing.service: DEBUG
+    jdbc: WARN
+    jdbc.sqltiming: INFO
+    # ignore the integer type conversion warning log in swagger
+    io.swagger.models.parameters.AbstractSerializableParameter: ERROR
 
 log4jdbc:
   dump:
@@ -65,24 +83,21 @@ app:
 
 ---
 spring:
-  profiles: local
-
-server:
-  tomcat:
-    accesslog:
-      enabled: false
-
-logging:
-  level:
-    clothing.service: DEBUG
-    jdbc.sqltiming: INFO
-    org.springframework.web: INFO
+  config.activate.on-profile: docker
+  rabbitmq.host: rabbitmq
 
 ---
 spring:
-  profiles: production
+  config:
+    activate:
+      on-profile: production
   datasource:
     initialization-mode: never
   jpa:
     hibernate:
       ddl-auto: none
+
+logging:
+  level:
+    clothing.service: INFO
+    jdbc.sqltiming: WARN

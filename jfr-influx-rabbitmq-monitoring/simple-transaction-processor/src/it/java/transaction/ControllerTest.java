@@ -12,9 +12,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import transaction.controller.StatisticsController;
 import transaction.controller.TransactionController;
-import transaction.exception.OldTransactionException;
-import transaction.domain.Transaction;
 import transaction.controller.response.StatisticsResponse;
+import transaction.domain.Transaction;
+import transaction.exception.OldTransactionException;
 import transaction.service.TransactionService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static transaction.controller.mapper.TransactionRequestMapper.convertTransactionRequestBody;
 
 @RunWith(value = SpringRunner.class)
-@WebMvcTest(controllers = {TransactionController.class, StatisticsController.class}, secure = false)
+@WebMvcTest(controllers = {TransactionController.class, StatisticsController.class})
 @ContextConfiguration(classes = {Main.class})
 public class ControllerTest {
 

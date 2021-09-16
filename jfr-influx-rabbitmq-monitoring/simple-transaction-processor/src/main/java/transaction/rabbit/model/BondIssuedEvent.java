@@ -8,6 +8,7 @@ public class BondIssuedEvent {
     private BigDecimal amount;
     private long timestamp;
 
+    // some sort of partition key
     public Long getBondId() {
         return bondId;
     }

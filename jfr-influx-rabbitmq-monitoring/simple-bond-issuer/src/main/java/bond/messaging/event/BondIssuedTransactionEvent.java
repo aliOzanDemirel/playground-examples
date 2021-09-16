@@ -1,15 +1,15 @@
-package bond.messaging;
+package bond.messaging.event;
 
 import bond.domain.Bond;
 
 import java.math.BigDecimal;
 
-public class BondIssuedEvent {
+public class BondIssuedTransactionEvent {
 
-    public BondIssuedEvent() {
+    public BondIssuedTransactionEvent() {
     }
 
-    public BondIssuedEvent(Bond bond) {
+    public BondIssuedTransactionEvent(Bond bond) {
         bondId = bond.getId();
         amount = bond.getAmount();
         timestamp = System.currentTimeMillis();

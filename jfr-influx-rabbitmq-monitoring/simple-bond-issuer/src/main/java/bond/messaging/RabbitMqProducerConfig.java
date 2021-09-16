@@ -1,27 +1,34 @@
 package bond.messaging;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import javax.annotation.PostConstruct;
 
-@Profile("docker")
 @Configuration
 public class RabbitMqProducerConfig {
 
-    public static final String EXCHANGE_NAME = "bond-transaction-exchange";
-    public static final String QUEUE_NAME = "bond-transaction-queue";
-    public static final String ROUTING_KEY = "bond.issued";
+    public static final String EXCHANGE_NAME = "transaction-exchange";
+    public static final String BOND_QUEUE_NAME = "bond-transaction-queue";
+    public static final String BOND_ROUTING_KEY = "bond.issued";
 
     @Autowired
-    private AmqpAdmin amqpAdmin;
+    private RabbitTemplate rabbitTemplate;
 
     @Bean
-    public Queue queue() {
-        return QueueBuilder.nonDurable(QUEUE_NAME).autoDelete().build();
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    @PostConstruct
+    public void configureJsonSerialization() {
+
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
     }
 
     @Bean
@@ -30,18 +37,12 @@ public class RabbitMqProducerConfig {
     }
 
     @Bean
-    public Binding binding(Queue queue, Exchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY).noargs();
+    public Queue bondQueue() {
+        return QueueBuilder.nonDurable(BOND_QUEUE_NAME).autoDelete().build();
     }
 
-    @PostConstruct
-    public void init() {
-
-        // create broker resources if they don't exist
-        var exchange = exchange();
-        amqpAdmin.declareExchange(exchange);
-        var queue = queue();
-        amqpAdmin.declareQueue(queue());
-        amqpAdmin.declareBinding(binding(queue, exchange));
+    @Bean
+    public Binding bondQueueBinding(Queue queue, Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(BOND_ROUTING_KEY).noargs();
     }
 }

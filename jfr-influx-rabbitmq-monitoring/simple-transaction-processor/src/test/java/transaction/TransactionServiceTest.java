@@ -1,8 +1,8 @@
 package transaction;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import transaction.controller.response.StatisticsResponse;
 import transaction.service.TransactionCache;
@@ -28,8 +28,8 @@ public class TransactionServiceTest {
     private BigDecimal testAmount_1;
     private BigDecimal testAmount_2;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    public void before() {
 
         int roundingScale = 2;
         long validityTimeout = 60_000;
@@ -50,17 +50,16 @@ public class TransactionServiceTest {
 
         StatisticsResponse statistics = transactionService.getTransactionStatistics();
 
-        Assert.assertEquals(TEST_AMOUNT_COUNT, statistics.getCount());
-        Assert.assertEquals(testMaxAmount, statistics.getMaxD());
-        Assert.assertEquals(testMinAmount, statistics.getMinD());
+        Assertions.assertEquals(TEST_AMOUNT_COUNT, statistics.getCount());
+        Assertions.assertEquals(testMaxAmount, statistics.getMaxD());
+        Assertions.assertEquals(testMinAmount, statistics.getMinD());
 
         BigDecimal expectedSum = testMaxAmount.add(testMinAmount).add(testAmount_1).add(testAmount_2);
-        Assert.assertEquals(expectedSum, statistics.getSumD());
+        Assertions.assertEquals(expectedSum, statistics.getSumD());
 
         BigDecimal expectedAvg = expectedSum.divide(BigDecimal.valueOf(TEST_AMOUNT_COUNT), RoundingMode.HALF_UP);
-        Assert.assertEquals(expectedAvg, statistics.getAvgD());
+        Assertions.assertEquals(expectedAvg, statistics.getAvgD());
 
         verify(cache, times(1)).getTransactionsByTimeout(anyLong());
     }
-
 }

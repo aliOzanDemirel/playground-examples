@@ -1,23 +1,30 @@
 package bond;
 
+import bond.controller.BondController;
 import bond.data.RequestBodies;
 import bond.data.TestData;
 import bond.domain.Bond;
+import bond.messaging.event.BondIssuedTransactionProducer;
 import bond.repository.BondHistoryRepository;
 import bond.repository.BondRepository;
+import bond.service.BondHistoryService;
+import bond.service.BondService;
 import bond.service.CouponProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -35,21 +42,23 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@RunWith(SpringRunner.class)
-//@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
-//@WebMvcTest(value = {BondController.class, BondService.class, BondHistoryService.class})
-@Disabled
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
+@WebMvcTest(value = {BondController.class, BondService.class, BondHistoryService.class})
 public class BondControllerTest {
 
     @Value("${app.api.prefix}")
     private String apiPrefix;
 
+    // tests web + service layer in spring terminology, so the service classes are actual instances injected into controller
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private BondRepository bondRepository;
     @MockBean
     private BondHistoryRepository bondHistoryRepository;
+    @MockBean
+    private BondIssuedTransactionProducer bondIssuedTransactionProducer;
 
     @Test
     public void testListBondsByClientId() throws Exception {
@@ -66,7 +75,7 @@ public class BondControllerTest {
 
         mockMvc.perform(get(apiPrefix + "/bonds?clientId=" + clientId + "&sort=id,desc&size=5"))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.page").isMap())
                 .andExpect(jsonPath("$.page.number").isNumber())
                 .andExpect(jsonPath("$.page.number").value(pageIndex))
@@ -109,10 +118,10 @@ public class BondControllerTest {
         var requestBodyInBytes = new ObjectMapper().writeValueAsBytes(requestBody);
 
         mockMvc.perform(post(apiPrefix + "/bonds")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBodyInBytes))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.issuedDate").exists())
                 .andExpect(jsonPath("$.issuedDate").value(bondCreated.getCreatedDate().toString()))
                 .andExpect(jsonPath("$.bondId").isNumber())
@@ -150,10 +159,10 @@ public class BondControllerTest {
         var requestBodyInBytes = new ObjectMapper().writeValueAsBytes(requestBody);
 
         mockMvc.perform(patch(apiPrefix + "/bonds/" + bondId)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBodyInBytes))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.issuedDate").exists())
                 .andExpect(jsonPath("$.issuedDate").value(bondUpdated.getCreatedDate().toString()))
                 .andExpect(jsonPath("$.bondId").isNumber())
@@ -173,5 +182,4 @@ public class BondControllerTest {
         verify(bondRepository, times(1)).findById(ArgumentMatchers.any());
         verify(bondRepository, times(1)).save(ArgumentMatchers.any());
     }
-
 }

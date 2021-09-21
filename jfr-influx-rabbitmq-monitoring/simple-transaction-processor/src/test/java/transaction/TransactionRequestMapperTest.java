@@ -1,7 +1,7 @@
 package transaction;
 
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import transaction.controller.mapper.TransactionRequestMapper;
 import transaction.controller.request.TransactionRequest;
 import transaction.domain.Transaction;
@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import static transaction.controller.mapper.TransactionRequestMapper.TRANSACTION_TIMESTAMP_INPUT_FORMATS;
-
 
 public class TransactionRequestMapperTest {
 
@@ -34,14 +33,14 @@ public class TransactionRequestMapperTest {
             try {
                 transaction = TransactionRequestMapper.convertTransactionRequestBody(new TransactionRequest(amount, formattedValidDate));
             } catch (Exception e) {
-                Assert.fail();
+                Assertions.fail();
             }
 
-            Assert.assertNotNull(transaction);
-            Assert.assertEquals(BigDecimal.valueOf(Double.parseDouble(amount)), transaction.getAmount());
+            Assertions.assertNotNull(transaction);
+            Assertions.assertEquals(BigDecimal.valueOf(Double.parseDouble(amount)), transaction.getAmount());
 
             long expected = LocalDateTime.parse(someValidDate.format(dtf), DateTimeFormatter.ofPattern(TRANSACTION_TIMESTAMP_INPUT_FORMATS.get(0))).toInstant(ZoneOffset.UTC).toEpochMilli();
-            Assert.assertEquals(expected, transaction.getTimestamp());
+            Assertions.assertEquals(expected, transaction.getTimestamp());
         });
     }
 
@@ -72,8 +71,7 @@ public class TransactionRequestMapperTest {
         Arrays.asList(testTimestamps).forEach(it -> {
             long actual = TransactionRequestMapper.timestampInputToMillis(it);
             long expected = Instant.parse(it).toEpochMilli();
-            Assert.assertEquals(expected, actual);
+            Assertions.assertEquals(expected, actual);
         });
     }
-
 }

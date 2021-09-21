@@ -1,16 +1,21 @@
 package bond;
 
+import bond.controller.BondController;
 import bond.data.TestData;
 import bond.domain.BondHistory;
 import bond.repository.BondHistoryRepository;
+import bond.service.BondHistoryService;
 import bond.service.BondService;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -22,15 +27,15 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@RunWith(SpringRunner.class)
-//@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
-//@WebMvcTest(value = {BondController.class, BondHistoryService.class})
-@Disabled
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
+@WebMvcTest(value = {BondController.class, BondHistoryService.class})
 public class FetchBondHistoryTest {
 
     @Value("${app.api.prefix}")
     private String apiPrefix;
 
+    // tests web + service layer in spring terminology, so the service classes are actual instances injected into controller
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -50,7 +55,7 @@ public class FetchBondHistoryTest {
 
         mockMvc.perform(get(apiPrefix + "/bonds/" + bondId + "/history"))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(historyRecords.size()))
                 .andExpect(jsonPath("$.content.[*].id").doesNotHaveJsonPath())
@@ -64,5 +69,4 @@ public class FetchBondHistoryTest {
                 .andExpect(jsonPath("$.content[?(@.term === 25)]").doesNotExist())
                 .andExpect(jsonPath("$.content[?(@.action === 'CREATED')]").doesNotExist());
     }
-
 }

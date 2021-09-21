@@ -38,6 +38,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+test {
+    useJUnitPlatform()
+}
+
 bootJar {
     archiveFileName = 'clothing-service.jar'
     mainClassName 'clothing.service.Main'

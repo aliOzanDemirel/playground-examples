@@ -1,6 +1,8 @@
 spring:
   application:
     name: simple-clothing-service
+  main:
+    banner-mode: "off"
   jmx:
     enabled: false
   jackson:
@@ -8,8 +10,10 @@ spring:
     mapper:
       default_view_inclusion: true
   datasource:
-    # url=${DATABASE_SERVER:jdbc:h2:file:h2db/}
-    url: jdbc:h2:mem:clothingdb
+    # persisted
+    # url: jdbc:h2:file:clothing-db
+    # in memory
+    url: jdbc:h2:mem:clothing-db
     username: some_db_user
     password: some_db_password
     driverClassName: org.h2.Driver
@@ -40,7 +44,7 @@ spring:
     username: guest
     password: guest
 
-# tomcat access logs redirected to console output of docker containers
+# tomcat access logs redirected to console output
 server:
   port: 8082
   tomcat:
@@ -49,8 +53,6 @@ server:
       directory: /dev
       prefix: stdout
       buffered: true
-      suffix:
-      file-date-format:
 
 logging:
   level:

@@ -10,6 +10,7 @@
 4. [simple-forecast-estimation](simple-forecast-estimation/README.md), 2019 &#8594; React/MobX/AntDesign, Spring Boot, Docker Compose, Websockets
 5. [simple-aws-infrastructure](simple-aws-infrastructure/README.md), 2019 &#8594; Terraform, AWS, CloudCraft
 6. [simple-disk-viewer](simple-disk-viewer/README.md), 2019 &#8594; Kotlin/Ktor, Gradle, Cucumber, Docker, React/MobX/AntDesign
-7. [bond-transaction-messaging](jfr-influx-rabbitmq-monitoring/README-bond.md), 2018/2019 &#8594; Spring Boot/AMQP, RabbitMQ, Docker Compose
-8. [jfr-stream-monitoring](jfr-influx-rabbitmq-monitoring/README.md), 2019/2021 &#8594; Spring Boot, Gradle, Docker Compose, InfluxDB, Grafana, JFR Agent
-9. [hexagonal-app-load-testing](hexagonal-app-load-testing/README.md), 2021 &#8594; Spring/Kotlin, Ratpack/Groovy, Javalin, Gatling, Ports and Adapters
+7. [jfr-influx-rabbitmq-monitoring](jfr-influx-rabbitmq-monitoring/README.md), 2021 &#8594; Spring Boot/AMQP, RabbitMQ, JFR Agent, Gradle, Docker
+   Compose, InfluxDB, Grafana
+8. [hexagonal-app-load-testing](hexagonal-app-load-testing/README.md), 2021 &#8594; Quarkus/Kotlin, Ratpack/Groovy, Vertx/Java, Spring, Dropwizard,
+   Jooby, Javalin, Ktor, Micronaut, Play/Scala, Gatling, Ports and Adapters

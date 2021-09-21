@@ -1,4 +1,6 @@
 import java.nio.charset.StandardCharsets
+import java.time.LocalDateTime
+import java.time.temporal.ChronoField
 
 wrapper {
     gradleVersion = "7.2"
@@ -81,7 +83,7 @@ tasks.register("generateLoad") {
     doLast {
         (1..20).each {
             println "Triggering services, iteration: $it"
-            triggerBondIssuer(it)
+            triggerBondIssuer()
             triggerClothingService()
         }
         printTransactionStats()
@@ -95,9 +97,10 @@ def triggerClothingService() {
     postRequest("http://localhost:8082/api/v1/clothing/3/reviews", body)
 }
 
-def triggerBondIssuer(index) {
-    def amount = (index + 3) * 100
-    def body = "{\"clientId\":$index,\"term\":6,\"amount\":\"$amount\"}"
+def triggerBondIssuer() {
+    def amount = LocalDateTime.now().get(ChronoField.MILLI_OF_SECOND)
+    def clientId = LocalDateTime.now().get(ChronoField.MILLI_OF_DAY)
+    def body = "{\"clientId\":$clientId,\"term\":6,\"amount\":\"$amount\"}"
     postRequest("http://localhost:8081/api/v1/bonds", body)
 }
 

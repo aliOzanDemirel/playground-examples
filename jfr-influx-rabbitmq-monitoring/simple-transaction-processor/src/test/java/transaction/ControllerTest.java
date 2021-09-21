@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import transaction.controller.StatisticsController;
@@ -20,34 +19,30 @@ import transaction.service.TransactionService;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static transaction.controller.mapper.TransactionRequestMapper.convertTransactionRequestBody;
 
-@RunWith(value = SpringRunner.class)
+@RunWith(SpringRunner.class)
 @WebMvcTest(controllers = {TransactionController.class, StatisticsController.class})
-@ContextConfiguration(classes = {Main.class})
 public class ControllerTest {
 
-    @Autowired
-    private ObjectMapper mapper;
+    private static final ObjectMapper mapper = new ObjectMapper();
 
+    // integration testing of web layer only, executes against real controller beans with injected mock bean
     @Autowired
     private MockMvc mvc;
-
     @MockBean
     private TransactionService transactionService;
 
     @Before
-    public void init() throws Exception {
+    public void before() throws Exception {
 
         doAnswer(i -> null).when(transactionService).deleteAllTransactions();
-
-        given(transactionService.getTransactionStatistics()).willReturn(new StatisticsResponse());
-
         doAnswer(i -> null).when(transactionService).saveTransaction(any(Transaction.class));
+        given(transactionService.getTransactionStatistics()).willReturn(new StatisticsResponse());
     }
 
     @Test
@@ -77,38 +72,37 @@ public class ControllerTest {
     public void testSaveTransaction() throws Exception {
 
         mvc.perform(post(TransactionController.TRANSACTIONS_ENDPOINT)
-                .contentType(APPLICATION_JSON_UTF8)
+                .contentType(APPLICATION_JSON)
                 .content(mapper.writeValueAsBytes(RequestBodies.REQ_VALID)))
                 .andExpect(status().isCreated());
 
         doThrow(OldTransactionException.class)
                 .when(transactionService).saveTransaction(convertTransactionRequestBody(RequestBodies.REQ_TIMESTAMP_OLD_DATE));
         mvc.perform(post(TransactionController.TRANSACTIONS_ENDPOINT)
-                .contentType(APPLICATION_JSON_UTF8)
+                .contentType(APPLICATION_JSON)
                 .content(mapper.writeValueAsBytes(RequestBodies.REQ_TIMESTAMP_OLD_DATE)))
                 .andExpect(status().isNoContent());
 
         mvc.perform(post(TransactionController.TRANSACTIONS_ENDPOINT)
-                .contentType(APPLICATION_JSON_UTF8)
+                .contentType(APPLICATION_JSON)
                 .content(mapper.writeValueAsBytes(RequestBodies.REQ_AMOUNT_INVALID)))
                 .andExpect(status().isUnprocessableEntity());
 
         mvc.perform(post(TransactionController.TRANSACTIONS_ENDPOINT)
-                .contentType(APPLICATION_JSON_UTF8)
+                .contentType(APPLICATION_JSON)
                 .content(mapper.writeValueAsBytes(RequestBodies.REQ_TIMESTAMP_INVALID_DATE)))
                 .andExpect(status().isUnprocessableEntity());
 
         mvc.perform(post(TransactionController.TRANSACTIONS_ENDPOINT)
-                .contentType(APPLICATION_JSON_UTF8)
+                .contentType(APPLICATION_JSON)
                 .content(mapper.writeValueAsBytes(RequestBodies.REQ_TIMESTAMP_INVALID_FORMAT)))
                 .andExpect(status().isUnprocessableEntity());
 
         mvc.perform(post(TransactionController.TRANSACTIONS_ENDPOINT)
-                .contentType(APPLICATION_JSON_UTF8)
+                .contentType(APPLICATION_JSON)
                 .content(mapper.writeValueAsBytes(RequestBodies.REQ_INVALID_JSON)))
                 .andExpect(status().isBadRequest());
 
         verify(transactionService, times(2)).saveTransaction(any(Transaction.class));
     }
-
 }

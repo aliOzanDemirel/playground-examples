@@ -16,3 +16,5 @@ simple-forecast-estimation/mounted/
 !simple-aws-infrastructure/network/*/init-state-bucket/.terraform
 
 simple-disk-viewer/backend/src/main/resources/static/
+
+jfr-influx-rabbitmq-monitoring/artifact

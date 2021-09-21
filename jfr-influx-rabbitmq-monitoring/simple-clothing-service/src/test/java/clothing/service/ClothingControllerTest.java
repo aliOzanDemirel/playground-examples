@@ -1,24 +1,31 @@
-package clothing.service.controller;
+package clothing.service;
 
+import clothing.service.controller.ClothingController;
 import clothing.service.data.RequestBodies;
 import clothing.service.data.TestData;
 import clothing.service.domain.Clothing;
 import clothing.service.domain.ClothingSize;
 import clothing.service.domain.Review;
+import clothing.service.messaging.review.ReviewAddedTransactionProducer;
 import clothing.service.repository.ClothingRepository;
 import clothing.service.repository.ReviewRepository;
+import clothing.service.service.ClothingSearchService;
+import clothing.service.service.ReviewAddService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -36,21 +43,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@RunWith(SpringRunner.class)
-//@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
-//@WebMvcTest(value = {ClothingController.class, ClothingSearchService.class, ReviewAddService.class})
-@Disabled
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc(webDriverEnabled = false, webClientEnabled = false)
+@WebMvcTest(value = {ClothingController.class, ClothingSearchService.class, ReviewAddService.class})
 public class ClothingControllerTest {
 
     @Value("${app.api.prefix}")
     private String apiPrefix;
 
+    // tests web + service layer in spring terminology, so the service classes are actual instances injected into controller
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private ClothingRepository clothingRepository;
     @MockBean
     private ReviewRepository reviewRepository;
+    @MockBean
+    private ReviewAddedTransactionProducer reviewAddedTransactionProducer;
 
     @Test
     public void testListClothing() throws Exception {

@@ -38,6 +38,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+test {
+    useJUnitPlatform()
+}
+
 bootJar {
     archiveFileName = 'bond-issuer.jar'
     mainClassName 'bond.Main'

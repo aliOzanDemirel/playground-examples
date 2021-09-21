@@ -1,6 +1,8 @@
 spring:
   application:
     name: simple-bond-issuer
+  main:
+    banner-mode: "off"
   jmx:
     enabled: false
   jackson:
@@ -8,8 +10,10 @@ spring:
     mapper:
       default_view_inclusion: true
   datasource:
-    # url: jdbc:h2:~/bond-issuer # persisted
-    url: jdbc:h2:mem:bond-issuer # in memory
+    # persisted
+    # url: jdbc:h2:~/bond-db
+    # in memory
+    url: jdbc:h2:mem:bond-db
     username: some_db_user
     password: some_db_password
     driverClassName: org.h2.Driver
@@ -48,8 +52,6 @@ server:
       directory: /dev
       prefix: stdout
       buffered: true
-      suffix:
-      file-date-format:
 
 logging:
   level:

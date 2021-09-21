@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:16-jre
+FROM amazoncorretto:17-alpine-jdk
 
 EXPOSE 8080
 

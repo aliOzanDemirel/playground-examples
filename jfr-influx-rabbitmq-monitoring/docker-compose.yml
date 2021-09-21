@@ -13,13 +13,13 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    volumes:
+      - rabbitmq-storage:/var/lib/rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q status
       interval: 20s
       timeout: 20s
       retries: 3
-    volumes:
-      - rabbitmq-storage:/var/lib/rabbitmq
   influxdb:
     container_name: influxdb
     image: influxdb:1.8
@@ -34,12 +34,12 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana:7.5.5
+    depends_on:
+      - influxdb
     ports:
       - 3000:3000
     volumes:
       - grafana-storage:/var/lib/grafana
-    depends_on:
-      - influxdb
     environment:
       - GF_SECURITY_ADMIN_USER=root
       - GF_SECURITY_ADMIN_PASSWORD=root

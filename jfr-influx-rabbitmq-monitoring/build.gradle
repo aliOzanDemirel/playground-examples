@@ -1,6 +1,4 @@
-plugins {
-    id "io.github.http-builder-ng.http-plugin" version "0.1.1"
-}
+import java.nio.charset.StandardCharsets
 
 wrapper {
     gradleVersion = "7.2"
@@ -22,14 +20,16 @@ subprojects {
 
     apply plugin: 'java'
     compileJava {
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
-// build clothing-service and jfr agent, copy artifacts to project root
+// where final artifacts will be copied
+def javaArtifactFolder = "artifact"
+
 task buildClothingService(type: Copy) {
-    group = "clothing"
+    group = "build"
 
     def jfrProjectName = "simple-jfr-agent"
     def clothingProjectName = "simple-clothing-service"
@@ -40,20 +40,19 @@ task buildClothingService(type: Copy) {
     from "${project(":$jfrProjectName").buildDir}/libs/jfr-monitoring-agent.jar",
             "${project(":$clothingProjectName").buildDir}/libs/clothing-service.jar"
 
-    into "build"
+    into javaArtifactFolder
 }
 
 task runClothingService(type: Exec) {
-    group = "clothing"
+    group = "application"
 
     dependsOn buildClothingService
-    workingDir "/build"
+    workingDir javaArtifactFolder
     commandLine "java", "-Djfr.enabled.clothing=true", "-javaagent:jfr-monitoring-agent.jar", "-jar", "clothing-service.jar"
 }
 
-// build bond-issuer and jfr agent, copy artifacts to project root
 task buildBondIssuer(type: Copy) {
-    group = "bond"
+    group = "build"
 
     def jfrProjectName = "simple-jfr-agent"
     def bondProjectName = "simple-bond-issuer"
@@ -64,28 +63,65 @@ task buildBondIssuer(type: Copy) {
     from "${project(":$jfrProjectName").buildDir}/libs/jfr-monitoring-agent.jar",
             "${project(":$bondProjectName").buildDir}/libs/bond-issuer.jar"
 
-    into "build"
+    into javaArtifactFolder
 }
 
 task runBondIssuer(type: Exec) {
-    group = "bond"
+    group = "application"
 
     dependsOn buildBondIssuer
-    workingDir "/build"
+    workingDir javaArtifactFolder
     commandLine "java", "-Djfr.enabled.bond=true", "-javaagent:jfr-monitoring-agent.jar", "-jar", "bond-issuer.jar"
 }
 
-task buildAndAssembleAll(type: Copy) {
+tasks.register("generateLoad") {
+    group = "application"
 
-    dependsOn subprojects.build
+    // avoid executing this part of script when gradle configures project tasks in configuration phase
+    doLast {
+        (1..20).each {
+            println "Triggering services, iteration: $it"
+            triggerBondIssuer(it)
+            triggerClothingService()
+        }
+        printTransactionStats()
+        printInfluxQueryResults("bonds")
+        printInfluxQueryResults("clothing_reviews")
+    }
+}
 
-    def jfrProjectName = "simple-jfr-agent"
-    def clothingProjectName = "simple-clothing-service"
-    def bondProjectName = "simple-bond-issuer"
+def triggerClothingService() {
+    def body = "{\"description\":\"Some New Review\",\"rating\":5}"
+    postRequest("http://localhost:8082/api/v1/clothing/3/reviews", body)
+}
 
-    from "${project(":$jfrProjectName").buildDir}/libs/jfr-monitoring-agent.jar",
-            "${project(":$clothingProjectName").buildDir}/libs/clothing-service.jar",
-            "${project(":$bondProjectName").buildDir}/libs/bond-issuer.jar"
+def triggerBondIssuer(index) {
+    def amount = (index + 3) * 100
+    def body = "{\"clientId\":$index,\"term\":6,\"amount\":\"$amount\"}"
+    postRequest("http://localhost:8081/api/v1/bonds", body)
+}
 
-    into "build"
+def printInfluxQueryResults(String measurementName) {
+    def encodedQuery = URLEncoder.encode("SELECT * FROM \"$measurementName\" ORDER BY time DESC LIMIT 5", StandardCharsets.UTF_8)
+    def conn = new URL("http://localhost:8086/query?pretty=true&db=grafana_exposed_metrics&q=$encodedQuery").openConnection()
+    conn.setRequestMethod("GET")
+    def prettyTextResponse = conn.inputStream.text
+    println "InfluxDB data, $measurementName -> $prettyTextResponse"
+}
+
+def printTransactionStats() {
+    def conn = new URL("http://localhost:8080/statistics").openConnection()
+    conn.setRequestMethod("GET")
+    def textResponse = conn.inputStream.text
+    println "Stats from transaction-processor: $textResponse"
+}
+
+def postRequest(String url, String jsonBody) {
+    def conn = new URL(url).openConnection()
+    conn.setRequestMethod("POST")
+    conn.setRequestProperty("Accept", "application/json")
+    conn.setRequestProperty("Content-Type", "application/json")
+    conn.setDoOutput(true)
+    conn.outputStream.write(jsonBody.getBytes(StandardCharsets.UTF_8))
+    conn.getResponseCode()
 }

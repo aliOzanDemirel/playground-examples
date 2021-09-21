@@ -66,7 +66,7 @@ public class BondService {
             Bond bond = issueBond(clientId, term, amount, sourceIp);
             bondIssuedTransactionProducer.sendMessage(bond);
 
-            jfrEvent.setAmount(amount);
+            jfrEvent.setAmount(amount.toString());
             jfrEvent.setClientId(clientId);
             return bond;
 

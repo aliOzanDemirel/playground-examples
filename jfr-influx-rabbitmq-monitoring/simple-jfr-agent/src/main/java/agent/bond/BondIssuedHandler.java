@@ -17,19 +17,27 @@ public class BondIssuedHandler implements Consumer<RecordedEvent> {
 
         EventUtil.logEventDuration(event, getClass());
 
-        long clientId = NUMERIC_UNKNOWN_ID;
-        if (event.hasField("clientId")) {
-            clientId = event.getValue("clientId");
-        }
-        BigDecimal amount = null;
-        if (event.hasField("amount")) {
-            amount = event.getValue("amount");
-        }
-        long timestampInUtc = NUMERIC_UNKNOWN_ID;
         if (event.hasField("timestampInUtc")) {
-            timestampInUtc = event.getValue("timestampInUtc");
-        }
 
-        writer.writeBondIssuedEvent(clientId, amount, timestampInUtc);
+            long timestampInUtc = event.getLong("timestampInUtc");
+
+            long clientId = NUMERIC_UNKNOWN_ID;
+            if (event.hasField("clientId")) {
+                clientId = event.getLong("clientId");
+            }
+
+            BigDecimal amount = null;
+            if (event.hasField("amount")) {
+                String amountText = event.getValue("amount");
+                amount = new BigDecimal(amountText);
+            }
+
+            writer.writeBondIssuedEvent(clientId, amount, timestampInUtc);
+
+        } else {
+
+            // record unknown if time is not stamped to recorded event
+            writer.writeBondIssuedEvent(NUMERIC_UNKNOWN_ID, null, NUMERIC_UNKNOWN_ID);
+        }
     }
 }

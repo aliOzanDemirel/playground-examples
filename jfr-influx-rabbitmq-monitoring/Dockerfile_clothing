@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:16-jre
+FROM amazoncorretto:17-alpine-jdk
 
 EXPOSE 8080
 
@@ -7,8 +7,8 @@ RUN addgroup -S app-runner -g 3000 && \
 USER app-runner:app-runner
 
 WORKDIR /home/app-runner
-COPY build/clothing-service.jar ./clothing-service.jar
-COPY build/jfr-monitoring-agent.jar ./jfr-monitoring-agent.jar
+COPY artifact/clothing-service.jar ./clothing-service.jar
+COPY artifact/jfr-monitoring-agent.jar ./jfr-monitoring-agent.jar
 
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=80 -Djfr.enabled.clothing=true"
 CMD ["java", "-javaagent:./jfr-monitoring-agent.jar", "-jar", "./clothing-service.jar"]

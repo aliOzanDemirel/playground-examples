@@ -1,54 +1,53 @@
 ## JFR Stream, RabbitMQ, InfluxDB, Grafana Monitoring Example
 
-This is a simple demonstration project that integrates below pieces:
+This is a simple demonstration project (**requires java 17**) that integrates below pieces:
 
 * Java/Spring applications that were created as simple assignment projects.
     * [Transaction Processor](#logic-in-simple-transaction-processor-2018) - built with maven wrapper as separate module.
     * [Bond Issuer](#logic-in-simple-bond-issuer-2019) - built with gradle wrapper as child module of root, JFR agent is attached.
     * [Clothing Service](#logic-in-simple-clothing-service-2019) - built with gradle wrapper as child module of root, JFR agent is attached.
-    * These simple applications are now integrated through **a direct exchange with two queues and a routing key for each queue** to demonstrate a
-      basic example of async communication between remote processes with message broker as middleware.
 * [JFR agent](#jfr-agent) that is to be attached to java runtime of services that directly writes to InfluxDB.
 * Message broker for async communication and async metric dump, [RabbitMQ](https://www.rabbitmq.com/tutorials/amqp-concepts.html).
 * Time series database to record metrics, [InfluxDB](https://www.influxdata.com/time-series-database/).
 * Metric visualization tool, [Grafana](https://grafana.com/docs/).
 
-When a new bond is created (bond-issuer API), or a new clothing review is created (clothing-service API):
-
-- Services will send an AMQP message to their **configured exchange with different routing keys**. Then transaction-processor, which is subscribed to
-  these separate queues, will receive the message and save a new transaction.
-
-- Services will fire up a **JFR event that will then be captured by java agent** that is attached to service process. Event will be enriched with some
-  data to be tagged and then will be pushed to InfluxDB. Grafana ([check for usage and examples](README-grafana.md)) can be configured to visualize
-  metric data points recorded in InfluxDB.
-
-- These flows can be tested by importing [postman collection](api-postman_collection.json) (has example requests) to trigger API. API of services can
-  be explored via `/swagger-ui.html` for both services. Watch the flow:
-    - create new bond: POST /bonds
-    - create new review: POST /clothing/{ID}/reviews
-    - get transaction statistics: GET /statistics
-
-#### Build and Run
-
-> Building all services and agent requires **java 16**.
-
-- Run only clothing-service with JFR agent attached: `gradlew runClothingService`
-- Run only bond-issuer with JFR agent attached: `gradlew runBondIssuer`
-- Run only transaction-processor: `cd simple-transaction-processor ; mvnw spring-boot:run`
-- Run infra resources without applications for local development: `docker-compose up -d rabbitmq influx grafana`
-    - Login to rabbit management portal with user and password `guest` to check messages, queues and bindings: `http://localhost:15672/`
-
-- Run every piece together for full integration:
-    - Build maven project simple-transaction-processor: `cd simple-transaction-processor ; mvnw clean install`
-    - Build gradle project artifacts and copy for docker image creation: `gradlew clean buildAndAssembleAll`
-    - Build and run docker images, docker-compose will wait until rabbitmq and influxdb are ready to be connected before running service
-      containers: `docker-compose up -d --build`
-
-![Birdview Architecture](resources/readme/architecture.jpg)
+[comment]: <> (no image resize for all markdown parsers)
+![High Level Architecture](resources/readme/architecture.jpg)
 
 ---
 
-### JFR agent
+* Java applications are now integrated through a direct exchange with two queues and a routing key for each queue to demonstrate a basic example of
+  async communication between remote processes with message broker as middleware.
+* When a new bond is created (bond-issuer API), or a new clothing review is created (clothing-service API):
+    * Services will send an AMQP message to their **configured exchange with different routing keys**. Then transaction-processor, which is subscribed
+      to these separate queues, will receive the message and save a new transaction.
+    * Services will fire up a **JFR event that will then be captured by java agent** that is attached to service process. Event will be enriched with
+      some data to be tagged and then will be pushed to InfluxDB. Grafana ([check for usage and examples](#grafana-with-influx-source)) can be
+      configured to visualize metric data points recorded in InfluxDB.
+    * These flows can be tested by importing [postman collection](api-postman_collection.json) and using example requests to trigger service APIs (can
+      be explored via `/swagger-ui.html`) manually:
+        * create new bond: POST /bonds
+        * create new review: POST /clothing/{ID}/reviews
+        * get transaction statistics: GET /statistics
+    * Alternatively automatic flow trigger and printing the final state can be executed with gradle task: `gradlew generateLoad`
+
+#### Build and run
+
+* Run services separately:
+    * transaction-processor (maven project): `cd simple-transaction-processor ; mvnw spring-boot:run`
+    * clothing-service (JFR agent attached): `gradlew runClothingService`
+    * bond-issuer (JFR agent attached): `gradlew runBondIssuer`
+    * Only infra resources: `docker-compose up -d rabbitmq influx grafana`
+    * Login to rabbit management portal with user and password `guest` to check messages, queues and bindings: `http://localhost:15672/`
+
+* Run every piece together for full integration:
+    * transaction-processor (maven project): `cd simple-transaction-processor ; mvnw clean install`
+    * clothing-service (with JFR agent): `gradlew buildClothingService`
+    * bond-issuer (with JFR agent): `gradlew buildBondIssuer`
+    * Build and run docker images after artifacts are built, docker-compose will wait until rabbitmq and influxdb are ready to be connected before
+      running service containers: `docker-compose up -d --build`
+
+#### JFR agent
 
 * This simple java agent is attached to application runtime statically, is used to enable&capture
   [JFR](https://docs.oracle.com/javacomponents/jmc-5-4/jfr-runtime-guide/about.htm#JFRUH170) events.
@@ -56,13 +55,28 @@ When a new bond is created (bond-issuer API), or a new clothing review is create
 * For the sake of simplicity, there is no buffering events in memory, periodically dumping to disk to be collected by some telegraf agent, or any
   other more complex flows, agent writes directly to InfluxDB to keep it simple.
 
-### Logic in simple-transaction-processor (2018)
+#### Grafana with influx source
+
+* After running grafana container with docker-compose, access to UI via `http://localhost:3000`, username and password are `root`
+* Configure InfluxDB data source:
+    * HTTP URL: `http://influxdb:8086/`
+    * Default database: `grafana_exposed_metrics`
+    * Username and password are `root`
+* Can import example graphs from `resources/grafana_json_model.json`
+
+![dashboard_1]
+
+![dashboard_2]
+
+---
+
+#### Logic in simple-transaction-processor (2018)
 
 * Save concurrent transaction requests in memory without using database.
 * Statistics of incoming transactions in last 60 seconds can be fetched.
 * All transactions can be purged from memory, while accepting new transactions.
 
-### Logic in simple-bond-issuer (2019)
+#### Logic in simple-bond-issuer (2019)
 
 * Client can apply for a bond by providing his personal data, term and amount.
 * Default bond coupon (interest rate) is 5% per year and minimal term is 5 years.
@@ -92,3 +106,7 @@ When a new bond is created (bond-issuer API), or a new clothing review is create
 * Articles of clothing should be searchable by their text description (prefix match), color, brand, size, “HOT” status, and average review stars
   rounded up to the nearest whole number (e.g. an article with an average review of 2.1 would be found when searching for items with 3 stars).
 * The API does not need to allow creation of new brands or articles of clothing.
+
+[dashboard_1]: resources/readme/dashboard_1.jpg
+
+[dashboard_2]: resources/readme/dashboard_2.jpg

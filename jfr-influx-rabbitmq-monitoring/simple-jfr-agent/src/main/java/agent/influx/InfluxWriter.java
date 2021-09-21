@@ -60,28 +60,26 @@ public class InfluxWriter {
         return writer;
     }
 
-    public static boolean isWriterConfigured() {
-        return writer.influxDbClient != null;
-    }
-
     public void writeDataPoint(Point.Builder dataPointBuilder) {
 
-        var someCloudRegion = RandomData.dummyRegion();
-        var somePartitionIdentifier = RandomData.dummyPartition();
+        if (influxDbClient != null) {
 
-        var dataPoint = dataPointBuilder
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .tag("region", someCloudRegion)
-                .tag("service_partition", somePartitionIdentifier)
-                .build();
+            var someCloudRegion = RandomData.dummyRegion();
+            var somePartitionIdentifier = RandomData.dummyPartition();
 
-        try {
-            log.info("Writing to InfluxDB: {}", dataPoint);
-            influxDbClient.write(dataPoint);
+            var dataPoint = dataPointBuilder
+                    .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                    .tag("region", someCloudRegion)
+                    .tag("service_partition", somePartitionIdentifier)
+                    .build();
+            try {
+                log.info("Writing to InfluxDB: {}", dataPoint);
+                influxDbClient.write(dataPoint);
 
-        } catch (Exception e) {
+            } catch (Exception e) {
 
-            log.error("Error occurred while writing data point to InfluxDB!", e);
+                log.error("Error occurred while writing data point to InfluxDB!", e);
+            }
         }
     }
 }

@@ -42,9 +42,9 @@ application is wrong anyway).
 This example is built by Ratpack/Guice/Groovy. [Ratpack](https://ratpack.io/manual/current/async.html) is non-blocking framework with its own
 constructs (guaranteed ordering in execution model) for async handling and request processing, framework runs on netty server.
 
-- Running this application requires Java 11 runtime because groovy compilation fails with Java 16 and upgrading groovy version (3+) is not supported
-  by configured ratpack version.
-    - Configure separate java runtime when running app: `gradlew -Dorg.gradle.java.home="%JAVA_11%" app-ratpack-groovy:run`
+- Compiling and running this application requires java runtime less than 16 because groovy compilation fails with Java 16+ and upgrading groovy
+  version (3+) is not supported within used ratpack version.
+    - Use explicit java runtime when running with gradle: `gradlew -Dorg.gradle.java.home="%JAVA_11%" app-ratpack-groovy:run`
 - Run the application directly through gradle, enable debug too: `gradlew app-ratpack-groovy:run -Dapp.log.debugEnabled=true`
 - Run with main class by creating fat jar first:
     - `gradlew app-ratpack-groovy:clean app-ratpack-groovy:jar`
@@ -85,8 +85,8 @@ not block event loop_. Kotlin coroutine integration is used to simulate non-bloc
 transaction, validation etc.) are resolved at compile time with AoT, so the startup is faster and less memory intensive thanks to not having
 reflection scanning, plus this can be further improved by native compilation.
 
-- Run with gradle wrapper: `gradlew -Dorg.gradle.jvmargs=--illegal-access=permit app-micronaut-kotlin:run`
-- Build executable fat jar: `gradlew -Dorg.gradle.jvmargs=--illegal-access=permit app-micronaut-kotlin:clean app-micronaut-kotlin:shadowJar`
+- Run with gradle wrapper: `gradlew app-micronaut-kotlin:run`
+- Build executable fat jar: `gradlew app-micronaut-kotlin:clean app-micronaut-kotlin:shadowJar`
 
 ##### app-quarkus-kotlin
 
@@ -125,6 +125,13 @@ unnecessary considering the upcoming [project loom](https://wiki.openjdk.java.ne
 Built by java and [dropwizard](https://www.dropwizard.io/en/latest/manual/core.html), jetty server is used within dropwizard-core.
 
 - Run with gradle wrapper: `gradlew app-dropwizard-java:clean app-dropwizard-java:run`
+
+##### app-helidon-java
+
+Built by java and [helidon mp](https://helidon.io/docs/v2/#/mp/introduction/02_microprofile), built on top of netty web server as an implementation of
+microprofile specification.
+
+- Run with gradle wrapper: `gradlew app-helidon-java:clean app-helidon-java:run`
 
 ##### app-play-scala
 

@@ -3,6 +3,9 @@ package app.config
 import app.api.CpuRequestHandler
 import app.api.IoRequestHandler
 import app.service.AppRatpackService
+import business.common.KafkaAdapter
+import business.common.MongoDbAdapter
+import business.common.PrometheusAdapter
 import business.external.MonitoringService
 import business.external.PersistenceRepository
 import business.external.StreamService
@@ -11,9 +14,6 @@ import business.service.IoBoundUseCase
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import com.google.inject.Scopes
-import common.KafkaAdapter
-import common.MongoDbAdapter
-import common.PrometheusAdapter
 
 class ServiceModule extends AbstractModule {
 

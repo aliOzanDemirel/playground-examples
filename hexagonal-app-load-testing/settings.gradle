@@ -11,4 +11,6 @@ include 'app-quarkus-kotlin'
 include 'app-javalin-kotlin'
 include 'app-vertx-java'
 include 'app-dropwizard-java'
+include 'app-helidon-java'
 include 'app-play-scala'
+

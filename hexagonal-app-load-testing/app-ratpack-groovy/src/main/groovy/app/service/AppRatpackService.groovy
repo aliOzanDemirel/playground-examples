@@ -44,7 +44,8 @@ class AppRatpackService {
         UUID id = UUID.randomUUID()
         IoTask<Boolean> task = new IoTask.Builder<Boolean>(id, IoTask.defaultBlockingBehaviour()).duration(duration).build()
 
-        // very simple to delegate blocking call in ratpack, because of its execution flow
+        // it is simple to delegate blocking call in ratpack, because of its execution flow
+        // ratpack event loop will assign blocking task to a thread in a special blocking executor (cached thread pool)
         // it is important to not keep this separate blocking thread busy with computation
         Blocking.get {
             ioBoundUseCase.run(task)

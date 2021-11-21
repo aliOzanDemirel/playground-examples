@@ -2,8 +2,8 @@ plugins {
     id "io.ratpack.ratpack-groovy" version "1.9.0"
 }
 
-// current ratpack version cannot run on java 16
-compileJava {
+// ratpack 1.9 and its groovy lang is not compatible with common java version (17) used in other app examples
+compileGroovy {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
@@ -22,8 +22,9 @@ dependencies {
     // using core API to programmatically modify log levels of loggers
     implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
 
-    // ratpack fails (missing field in a class) with latest language version of groovy, used version from ratpack dependency is 2.5.4
-    // implementation 'org.codehaus.groovy:groovy-all:3.0.8'
+    // ratpack fails with groovy version 3.0.9 (and some other lesser versions), reason is missing field 'verifier' in class 'CompilationUnit'
+    // ratpack 1.9.0 uses groovy language 2.5.4, it fails to compile with versions 2.5.10+
+    implementation 'org.codehaus.groovy:groovy-all:2.5.9'
 }
 
 run {

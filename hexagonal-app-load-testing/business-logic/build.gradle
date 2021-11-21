@@ -1,6 +1,6 @@
 description 'Reusable business logic module that is framework/library independent.'
 
-// java 11 is used because app-ratpack-groovy is not compatible with java 16, can upgrade later
+// java 11 is used because app-ratpack-groovy cannot use common java version (17) used in other app examples
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11

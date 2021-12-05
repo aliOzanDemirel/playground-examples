@@ -1,50 +1,8 @@
 use std::collections::{HashMap, HashSet};
-use std::time::{Duration, Instant};
 
-use actix_web::{HttpResponse, Responder, web};
-use actix_web::http::StatusCode;
-use log::{debug, error, info};
+use log::debug;
 
-use crate::graph::load_countries::Country;
-
-pub fn find_shortest_route(countries: &Vec<Country>, source: &String, destination: &String) -> (Vec<String>, Duration) {
-    let countries_graph = create_graph_as_adjacency_list(&countries);
-    let now = Instant::now();
-    let route = iterative_deepening_dfs(&countries_graph, &source, &destination);
-    (route, now.elapsed())
-}
-
-fn create_graph_as_adjacency_list(countries: &Vec<Country>) -> HashMap<&String, HashSet<&String>> {
-
-    // adjacency list is HashSet because of short circuit check to see if target is in adjacent nodes
-    let mut graph: HashMap<&String, HashSet<&String>> = HashMap::new();
-    for country in countries {
-        let country_code = &country.country_code;
-        let country_borders = country.borders.iter().collect::<HashSet<&String>>();
-        graph.insert(country_code, country_borders);
-    }
-    graph
-}
-
-fn iterative_deepening_dfs(graph: &HashMap<&String, HashSet<&String>>, start_node: &String, target_node: &String) -> Vec<String> {
-
-    // TODO: 10 is already too deep? takes too long but need even more depth, for example RUS -> ZAF or ZAF -> KHM
-    let max_depth_limit: i8 = 10;
-    for depth_limit in 0..=max_depth_limit {
-        info!("Searching target: {} with depth limit: {}, starting from: {}", target_node, depth_limit, start_node);
-        let now = Instant::now();
-        let route = depth_limited_dfs(graph, start_node, target_node, depth_limit);
-        let duration = now.elapsed();
-        info!("Finished search with depth limit: {}, took {} micros, {} millis, {} secs",
-            depth_limit, duration.as_micros(), duration.as_millis(), duration.as_secs());
-        if !route.is_empty() {
-            return route;
-        }
-    }
-    vec![]
-}
-
-fn depth_limited_dfs(graph: &HashMap<&String, HashSet<&String>>, start_node: &String, target_node: &String, depth_limit: i8) -> Vec<String> {
+pub fn depth_limited_dfs(graph: &HashMap<&String, HashSet<&String>>, start_node: &String, target_node: &String, depth_limit: i8) -> Vec<String> {
     let mut depth: i8 = 0;
     let mut route_stack: Vec<String> = vec![];
     let mut search_stack: Vec<&String> = vec![start_node];

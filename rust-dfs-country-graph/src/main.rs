@@ -2,7 +2,7 @@
 extern crate lazy_static;
 
 use actix_web::{App, HttpServer, web};
-use log::{info, LevelFilter};
+use log::{error, info, LevelFilter};
 use log4rs::append::console::ConsoleAppender;
 use log4rs::Config;
 use log4rs::config::{Appender, Root};
@@ -25,7 +25,7 @@ async fn main() -> std::io::Result<()> {
         ).service(
             web::scope("/graph")
                 .route("/inspect", web::get().to(graph::handler::list_country_borders))
-                .route("/routing/{source}/{destination}", web::get().to(graph::handler::find_shortest_route))
+                .route("/routing/{source}/{destination}/{algorithm}", web::get().to(graph::handler::find_shortest_route))
         )
     })
         // actix server will have worker thread per virtual cpu, these workers should not be blocked
@@ -41,6 +41,9 @@ fn configure_logging() {
         .appender(Appender::builder().build("stdout", Box::new(stdout)))
         .build(Root::builder().appender("stdout").build(LevelFilter::Info))
         .unwrap();
-    log4rs::init_config(config);
-    info!("Configured logging to standard output");
+    let result = log4rs::init_config(config);
+    match result {
+        Ok(_) => info!("Configured logging to standard output"),
+        Err(error) => error!("Error occurred while configuring logger: {}", error),
+    }
 }

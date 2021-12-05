@@ -1,44 +1,56 @@
-use std::collections::HashMap;
-use std::time::Instant;
+use std::collections::{HashMap, HashSet};
 
 use actix_web::{HttpResponse, Responder, web};
-use actix_web::http::StatusCode;
-use log::{debug, error, info};
+use log::{debug, error};
 
 pub async fn list_country_borders() -> impl Responder {
-    let countries_result = super::load_countries::fetch_countries().await;
+    let countries_result = super::load_country_graph::fetch_countries().await;
     let countries = match countries_result {
         Ok(c) => c,
         Err(e) => {
-            // better to use actix_web::Error
-            error!("Could not fetch the list of countries, error: {}", e);
-            return HttpResponse::new(StatusCode::INTERNAL_SERVER_ERROR);
+            error!("Could not load the list of countries with borders! Error: {}", e);
+            return HttpResponse::from(e);
         }
     };
 
     let countries_string: Vec<String> = countries.iter().map(|it| it.to_string()).collect();
-    debug!("Fetched countries: {:?}", countries_string);
+    debug!("Countries: {:?}", countries_string);
 
     HttpResponse::Ok().json(countries)
 }
 
-pub async fn find_shortest_route(web::Path((source, destination)): web::Path<(String, String)>) -> impl Responder {
-    let countries_result = super::load_countries::fetch_countries().await;
+pub async fn find_shortest_route(web::Path((source, destination, algorithm)): web::Path<(String, String, String)>) -> impl Responder {
+    let countries_result = super::load_country_graph::fetch_countries().await;
     let countries = match countries_result {
         Ok(c) => c,
         Err(e) => {
-            error!("Could not fetch the list of countries, error: {}", e);
-            return HttpResponse::InternalServerError().finish();
+            error!("Could not load the list of countries with borders! Error: {}", e);
+            return HttpResponse::from(e);
         }
     };
 
-    // let (route, dfs_duration) = super::recursive_dfs::iterative_deepening(&countries, &source, &destination);
-    let (route, dfs_duration) = super::iterative_dfs::find_shortest_route(&countries, &source, &destination);
+    // let countries_graph: HashMap<&String, &Vec<String>> = countries.iter()
+    //      .map(|it| (&it.country_code, &it.borders))
+    //      .collect();
+    let countries_graph: HashMap<&String, HashSet<&String>> = countries.iter()
+        .map(|it| (&it.country_code, it.borders.iter().collect::<HashSet<&String>>()))
+        .collect();
+
+    let (route, search_duration, found_depth) = match algorithm.as_str() {
+        "RecursiveShortest" => super::dfs::iterative_deepening_recursive_dl_dfs(&countries_graph, &source, &destination),
+        "RecursiveRandom" => super::dfs::recursive_dfs_random_path(&countries_graph, &source, &destination),
+        "IterativeShortest" => super::dfs::iterative_deepening_iterative_dl_dfs(&countries_graph, &source, &destination),
+        "IterativeRandom" => super::dfs::iterative_dfs_random_path(&countries_graph, &source, &destination),
+        _ => return HttpResponse::BadRequest().finish()
+    };
+
     let response = HashMap::from([
         ("route", route.join(" > ")),
-        ("micros", dfs_duration.as_micros().to_string()),
-        ("millis", dfs_duration.as_millis().to_string()),
-        ("secs", dfs_duration.as_secs().to_string())
+        // 0 indexed, distance of the target node from the start node
+        ("depth_limit", found_depth.to_string()),
+        ("micros", search_duration.as_micros().to_string()),
+        ("millis", search_duration.as_millis().to_string()),
+        ("secs", search_duration.as_secs().to_string())
     ]);
 
     if route.is_empty() {

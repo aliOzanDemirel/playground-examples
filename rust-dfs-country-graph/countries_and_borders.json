@@ -1,0 +1,1816 @@
+[
+  {
+    "cca3": "ABW",
+    "borders": []
+  },
+  {
+    "cca3": "AFG",
+    "borders": [
+      "IRN",
+      "PAK",
+      "TKM",
+      "UZB",
+      "TJK",
+      "CHN"
+    ]
+  },
+  {
+    "cca3": "AGO",
+    "borders": [
+      "COG",
+      "COD",
+      "ZMB",
+      "NAM"
+    ]
+  },
+  {
+    "cca3": "AIA",
+    "borders": []
+  },
+  {
+    "cca3": "ALA",
+    "borders": []
+  },
+  {
+    "cca3": "ALB",
+    "borders": [
+      "MNE",
+      "GRC",
+      "MKD",
+      "UNK"
+    ]
+  },
+  {
+    "cca3": "AND",
+    "borders": [
+      "FRA",
+      "ESP"
+    ]
+  },
+  {
+    "cca3": "ARE",
+    "borders": [
+      "OMN",
+      "SAU"
+    ]
+  },
+  {
+    "cca3": "ARG",
+    "borders": [
+      "BOL",
+      "BRA",
+      "CHL",
+      "PRY",
+      "URY"
+    ]
+  },
+  {
+    "cca3": "ARM",
+    "borders": [
+      "AZE",
+      "GEO",
+      "IRN",
+      "TUR"
+    ]
+  },
+  {
+    "cca3": "ASM",
+    "borders": []
+  },
+  {
+    "cca3": "ATA",
+    "borders": []
+  },
+  {
+    "cca3": "ATF",
+    "borders": []
+  },
+  {
+    "cca3": "ATG",
+    "borders": []
+  },
+  {
+    "cca3": "AUS",
+    "borders": []
+  },
+  {
+    "cca3": "AUT",
+    "borders": [
+      "CZE",
+      "DEU",
+      "HUN",
+      "ITA",
+      "LIE",
+      "SVK",
+      "SVN",
+      "CHE"
+    ]
+  },
+  {
+    "cca3": "AZE",
+    "borders": [
+      "ARM",
+      "GEO",
+      "IRN",
+      "RUS",
+      "TUR"
+    ]
+  },
+  {
+    "cca3": "BDI",
+    "borders": [
+      "COD",
+      "RWA",
+      "TZA"
+    ]
+  },
+  {
+    "cca3": "BEL",
+    "borders": [
+      "FRA",
+      "DEU",
+      "LUX",
+      "NLD"
+    ]
+  },
+  {
+    "cca3": "BEN",
+    "borders": [
+      "BFA",
+      "NER",
+      "NGA",
+      "TGO"
+    ]
+  },
+  {
+    "cca3": "BFA",
+    "borders": [
+      "BEN",
+      "CIV",
+      "GHA",
+      "MLI",
+      "NER",
+      "TGO"
+    ]
+  },
+  {
+    "cca3": "BGD",
+    "borders": [
+      "MMR",
+      "IND"
+    ]
+  },
+  {
+    "cca3": "BGR",
+    "borders": [
+      "GRC",
+      "MKD",
+      "ROU",
+      "SRB",
+      "TUR"
+    ]
+  },
+  {
+    "cca3": "BHR",
+    "borders": []
+  },
+  {
+    "cca3": "BHS",
+    "borders": []
+  },
+  {
+    "cca3": "BIH",
+    "borders": [
+      "HRV",
+      "MNE",
+      "SRB"
+    ]
+  },
+  {
+    "cca3": "BLM",
+    "borders": []
+  },
+  {
+    "cca3": "SHN",
+    "borders": []
+  },
+  {
+    "cca3": "BLR",
+    "borders": [
+      "LVA",
+      "LTU",
+      "POL",
+      "RUS",
+      "UKR"
+    ]
+  },
+  {
+    "cca3": "BLZ",
+    "borders": [
+      "GTM",
+      "MEX"
+    ]
+  },
+  {
+    "cca3": "BMU",
+    "borders": []
+  },
+  {
+    "cca3": "BOL",
+    "borders": [
+      "ARG",
+      "BRA",
+      "CHL",
+      "PRY",
+      "PER"
+    ]
+  },
+  {
+    "cca3": "BES",
+    "borders": []
+  },
+  {
+    "cca3": "BRA",
+    "borders": [
+      "ARG",
+      "BOL",
+      "COL",
+      "GUF",
+      "GUY",
+      "PRY",
+      "PER",
+      "SUR",
+      "URY",
+      "VEN"
+    ]
+  },
+  {
+    "cca3": "BRB",
+    "borders": []
+  },
+  {
+    "cca3": "BRN",
+    "borders": [
+      "MYS"
+    ]
+  },
+  {
+    "cca3": "BTN",
+    "borders": [
+      "CHN",
+      "IND"
+    ]
+  },
+  {
+    "cca3": "BVT",
+    "borders": []
+  },
+  {
+    "cca3": "BWA",
+    "borders": [
+      "NAM",
+      "ZAF",
+      "ZMB",
+      "ZWE"
+    ]
+  },
+  {
+    "cca3": "CAF",
+    "borders": [
+      "CMR",
+      "TCD",
+      "COD",
+      "COG",
+      "SSD",
+      "SDN"
+    ]
+  },
+  {
+    "cca3": "CAN",
+    "borders": [
+      "USA"
+    ]
+  },
+  {
+    "cca3": "CCK",
+    "borders": []
+  },
+  {
+    "cca3": "CHE",
+    "borders": [
+      "AUT",
+      "FRA",
+      "ITA",
+      "LIE",
+      "DEU"
+    ]
+  },
+  {
+    "cca3": "CHL",
+    "borders": [
+      "ARG",
+      "BOL",
+      "PER"
+    ]
+  },
+  {
+    "cca3": "CHN",
+    "borders": [
+      "AFG",
+      "BTN",
+      "MMR",
+      "HKG",
+      "IND",
+      "KAZ",
+      "NPL",
+      "PRK",
+      "KGZ",
+      "LAO",
+      "MAC",
+      "MNG",
+      "PAK",
+      "RUS",
+      "TJK",
+      "VNM"
+    ]
+  },
+  {
+    "cca3": "CIV",
+    "borders": [
+      "BFA",
+      "GHA",
+      "GIN",
+      "LBR",
+      "MLI"
+    ]
+  },
+  {
+    "cca3": "CMR",
+    "borders": [
+      "CAF",
+      "TCD",
+      "COG",
+      "GNQ",
+      "GAB",
+      "NGA"
+    ]
+  },
+  {
+    "cca3": "COD",
+    "borders": [
+      "AGO",
+      "BDI",
+      "CAF",
+      "COG",
+      "RWA",
+      "SSD",
+      "TZA",
+      "UGA",
+      "ZMB"
+    ]
+  },
+  {
+    "cca3": "COG",
+    "borders": [
+      "AGO",
+      "CMR",
+      "CAF",
+      "COD",
+      "GAB"
+    ]
+  },
+  {
+    "cca3": "COK",
+    "borders": []
+  },
+  {
+    "cca3": "COL",
+    "borders": [
+      "BRA",
+      "ECU",
+      "PAN",
+      "PER",
+      "VEN"
+    ]
+  },
+  {
+    "cca3": "COM",
+    "borders": []
+  },
+  {
+    "cca3": "CPV",
+    "borders": []
+  },
+  {
+    "cca3": "CRI",
+    "borders": [
+      "NIC",
+      "PAN"
+    ]
+  },
+  {
+    "cca3": "CUB",
+    "borders": []
+  },
+  {
+    "cca3": "CUW",
+    "borders": []
+  },
+  {
+    "cca3": "CXR",
+    "borders": []
+  },
+  {
+    "cca3": "CYM",
+    "borders": []
+  },
+  {
+    "cca3": "CYP",
+    "borders": []
+  },
+  {
+    "cca3": "CZE",
+    "borders": [
+      "AUT",
+      "DEU",
+      "POL",
+      "SVK"
+    ]
+  },
+  {
+    "cca3": "DEU",
+    "borders": [
+      "AUT",
+      "BEL",
+      "CZE",
+      "DNK",
+      "FRA",
+      "LUX",
+      "NLD",
+      "POL",
+      "CHE"
+    ]
+  },
+  {
+    "cca3": "DJI",
+    "borders": [
+      "ERI",
+      "ETH",
+      "SOM"
+    ]
+  },
+  {
+    "cca3": "DMA",
+    "borders": []
+  },
+  {
+    "cca3": "DNK",
+    "borders": [
+      "DEU"
+    ]
+  },
+  {
+    "cca3": "DOM",
+    "borders": [
+      "HTI"
+    ]
+  },
+  {
+    "cca3": "DZA",
+    "borders": [
+      "TUN",
+      "LBY",
+      "NER",
+      "ESH",
+      "MRT",
+      "MLI",
+      "MAR"
+    ]
+  },
+  {
+    "cca3": "ECU",
+    "borders": [
+      "COL",
+      "PER"
+    ]
+  },
+  {
+    "cca3": "EGY",
+    "borders": [
+      "ISR",
+      "LBY",
+      "PSE",
+      "SDN"
+    ]
+  },
+  {
+    "cca3": "ERI",
+    "borders": [
+      "DJI",
+      "ETH",
+      "SDN"
+    ]
+  },
+  {
+    "cca3": "ESH",
+    "borders": [
+      "DZA",
+      "MRT",
+      "MAR"
+    ]
+  },
+  {
+    "cca3": "ESP",
+    "borders": [
+      "AND",
+      "FRA",
+      "GIB",
+      "PRT",
+      "MAR"
+    ]
+  },
+  {
+    "cca3": "EST",
+    "borders": [
+      "LVA",
+      "RUS"
+    ]
+  },
+  {
+    "cca3": "ETH",
+    "borders": [
+      "DJI",
+      "ERI",
+      "KEN",
+      "SOM",
+      "SSD",
+      "SDN"
+    ]
+  },
+  {
+    "cca3": "FIN",
+    "borders": [
+      "NOR",
+      "SWE",
+      "RUS"
+    ]
+  },
+  {
+    "cca3": "FJI",
+    "borders": []
+  },
+  {
+    "cca3": "FLK",
+    "borders": []
+  },
+  {
+    "cca3": "FRA",
+    "borders": [
+      "AND",
+      "BEL",
+      "DEU",
+      "ITA",
+      "LUX",
+      "MCO",
+      "ESP",
+      "CHE"
+    ]
+  },
+  {
+    "cca3": "FRO",
+    "borders": []
+  },
+  {
+    "cca3": "FSM",
+    "borders": []
+  },
+  {
+    "cca3": "GAB",
+    "borders": [
+      "CMR",
+      "COG",
+      "GNQ"
+    ]
+  },
+  {
+    "cca3": "GBR",
+    "borders": [
+      "IRL"
+    ]
+  },
+  {
+    "cca3": "GEO",
+    "borders": [
+      "ARM",
+      "AZE",
+      "RUS",
+      "TUR"
+    ]
+  },
+  {
+    "cca3": "GGY",
+    "borders": []
+  },
+  {
+    "cca3": "GHA",
+    "borders": [
+      "BFA",
+      "CIV",
+      "TGO"
+    ]
+  },
+  {
+    "cca3": "GIB",
+    "borders": [
+      "ESP"
+    ]
+  },
+  {
+    "cca3": "GIN",
+    "borders": [
+      "CIV",
+      "GNB",
+      "LBR",
+      "MLI",
+      "SEN",
+      "SLE"
+    ]
+  },
+  {
+    "cca3": "GLP",
+    "borders": []
+  },
+  {
+    "cca3": "GMB",
+    "borders": [
+      "SEN"
+    ]
+  },
+  {
+    "cca3": "GNB",
+    "borders": [
+      "GIN",
+      "SEN"
+    ]
+  },
+  {
+    "cca3": "GNQ",
+    "borders": [
+      "CMR",
+      "GAB"
+    ]
+  },
+  {
+    "cca3": "GRC",
+    "borders": [
+      "ALB",
+      "BGR",
+      "TUR",
+      "MKD"
+    ]
+  },
+  {
+    "cca3": "GRD",
+    "borders": []
+  },
+  {
+    "cca3": "GRL",
+    "borders": []
+  },
+  {
+    "cca3": "GTM",
+    "borders": [
+      "BLZ",
+      "SLV",
+      "HND",
+      "MEX"
+    ]
+  },
+  {
+    "cca3": "GUF",
+    "borders": [
+      "BRA",
+      "SUR"
+    ]
+  },
+  {
+    "cca3": "GUM",
+    "borders": []
+  },
+  {
+    "cca3": "GUY",
+    "borders": [
+      "BRA",
+      "SUR",
+      "VEN"
+    ]
+  },
+  {
+    "cca3": "HKG",
+    "borders": [
+      "CHN"
+    ]
+  },
+  {
+    "cca3": "HMD",
+    "borders": []
+  },
+  {
+    "cca3": "HND",
+    "borders": [
+      "GTM",
+      "SLV",
+      "NIC"
+    ]
+  },
+  {
+    "cca3": "HRV",
+    "borders": [
+      "BIH",
+      "HUN",
+      "MNE",
+      "SRB",
+      "SVN"
+    ]
+  },
+  {
+    "cca3": "HTI",
+    "borders": [
+      "DOM"
+    ]
+  },
+  {
+    "cca3": "HUN",
+    "borders": [
+      "AUT",
+      "HRV",
+      "ROU",
+      "SRB",
+      "SVK",
+      "SVN",
+      "UKR"
+    ]
+  },
+  {
+    "cca3": "IDN",
+    "borders": [
+      "TLS",
+      "MYS",
+      "PNG"
+    ]
+  },
+  {
+    "cca3": "IMN",
+    "borders": []
+  },
+  {
+    "cca3": "IND",
+    "borders": [
+      "BGD",
+      "BTN",
+      "MMR",
+      "CHN",
+      "NPL",
+      "PAK"
+    ]
+  },
+  {
+    "cca3": "IOT",
+    "borders": []
+  },
+  {
+    "cca3": "IRL",
+    "borders": [
+      "GBR"
+    ]
+  },
+  {
+    "cca3": "IRN",
+    "borders": [
+      "AFG",
+      "ARM",
+      "AZE",
+      "IRQ",
+      "PAK",
+      "TUR",
+      "TKM"
+    ]
+  },
+  {
+    "cca3": "IRQ",
+    "borders": [
+      "IRN",
+      "JOR",
+      "KWT",
+      "SAU",
+      "SYR",
+      "TUR"
+    ]
+  },
+  {
+    "cca3": "ISL",
+    "borders": []
+  },
+  {
+    "cca3": "ISR",
+    "borders": [
+      "EGY",
+      "JOR",
+      "LBN",
+      "PSE",
+      "SYR"
+    ]
+  },
+  {
+    "cca3": "ITA",
+    "borders": [
+      "AUT",
+      "FRA",
+      "SMR",
+      "SVN",
+      "CHE",
+      "VAT"
+    ]
+  },
+  {
+    "cca3": "JAM",
+    "borders": []
+  },
+  {
+    "cca3": "JEY",
+    "borders": []
+  },
+  {
+    "cca3": "JOR",
+    "borders": [
+      "IRQ",
+      "ISR",
+      "PSE",
+      "SAU",
+      "SYR"
+    ]
+  },
+  {
+    "cca3": "JPN",
+    "borders": []
+  },
+  {
+    "cca3": "KAZ",
+    "borders": [
+      "CHN",
+      "KGZ",
+      "RUS",
+      "TKM",
+      "UZB"
+    ]
+  },
+  {
+    "cca3": "KEN",
+    "borders": [
+      "ETH",
+      "SOM",
+      "SSD",
+      "TZA",
+      "UGA"
+    ]
+  },
+  {
+    "cca3": "KGZ",
+    "borders": [
+      "CHN",
+      "KAZ",
+      "TJK",
+      "UZB"
+    ]
+  },
+  {
+    "cca3": "KHM",
+    "borders": [
+      "LAO",
+      "THA",
+      "VNM"
+    ]
+  },
+  {
+    "cca3": "KIR",
+    "borders": []
+  },
+  {
+    "cca3": "KNA",
+    "borders": []
+  },
+  {
+    "cca3": "KOR",
+    "borders": [
+      "PRK"
+    ]
+  },
+  {
+    "cca3": "UNK",
+    "borders": [
+      "ALB",
+      "MKD",
+      "MNE",
+      "SRB"
+    ]
+  },
+  {
+    "cca3": "KWT",
+    "borders": [
+      "IRQ",
+      "SAU"
+    ]
+  },
+  {
+    "cca3": "LAO",
+    "borders": [
+      "MMR",
+      "KHM",
+      "CHN",
+      "THA",
+      "VNM"
+    ]
+  },
+  {
+    "cca3": "LBN",
+    "borders": [
+      "ISR",
+      "SYR"
+    ]
+  },
+  {
+    "cca3": "LBR",
+    "borders": [
+      "GIN",
+      "CIV",
+      "SLE"
+    ]
+  },
+  {
+    "cca3": "LBY",
+    "borders": [
+      "DZA",
+      "TCD",
+      "EGY",
+      "NER",
+      "SDN",
+      "TUN"
+    ]
+  },
+  {
+    "cca3": "LCA",
+    "borders": []
+  },
+  {
+    "cca3": "LIE",
+    "borders": [
+      "AUT",
+      "CHE"
+    ]
+  },
+  {
+    "cca3": "LKA",
+    "borders": [
+      "IND"
+    ]
+  },
+  {
+    "cca3": "LSO",
+    "borders": [
+      "ZAF"
+    ]
+  },
+  {
+    "cca3": "LTU",
+    "borders": [
+      "BLR",
+      "LVA",
+      "POL",
+      "RUS"
+    ]
+  },
+  {
+    "cca3": "LUX",
+    "borders": [
+      "BEL",
+      "FRA",
+      "DEU"
+    ]
+  },
+  {
+    "cca3": "LVA",
+    "borders": [
+      "BLR",
+      "EST",
+      "LTU",
+      "RUS"
+    ]
+  },
+  {
+    "cca3": "MAC",
+    "borders": [
+      "CHN"
+    ]
+  },
+  {
+    "cca3": "MAF",
+    "borders": [
+      "SXM"
+    ]
+  },
+  {
+    "cca3": "MAR",
+    "borders": [
+      "DZA",
+      "ESH",
+      "ESP"
+    ]
+  },
+  {
+    "cca3": "MCO",
+    "borders": [
+      "FRA"
+    ]
+  },
+  {
+    "cca3": "MDA",
+    "borders": [
+      "ROU",
+      "UKR"
+    ]
+  },
+  {
+    "cca3": "MDG",
+    "borders": []
+  },
+  {
+    "cca3": "MDV",
+    "borders": []
+  },
+  {
+    "cca3": "MEX",
+    "borders": [
+      "BLZ",
+      "GTM",
+      "USA"
+    ]
+  },
+  {
+    "cca3": "MHL",
+    "borders": []
+  },
+  {
+    "cca3": "MKD",
+    "borders": [
+      "ALB",
+      "BGR",
+      "GRC",
+      "UNK",
+      "SRB"
+    ]
+  },
+  {
+    "cca3": "MLI",
+    "borders": [
+      "DZA",
+      "BFA",
+      "GIN",
+      "CIV",
+      "MRT",
+      "NER",
+      "SEN"
+    ]
+  },
+  {
+    "cca3": "MLT",
+    "borders": []
+  },
+  {
+    "cca3": "MMR",
+    "borders": [
+      "BGD",
+      "CHN",
+      "IND",
+      "LAO",
+      "THA"
+    ]
+  },
+  {
+    "cca3": "MNE",
+    "borders": [
+      "ALB",
+      "BIH",
+      "HRV",
+      "UNK",
+      "SRB"
+    ]
+  },
+  {
+    "cca3": "MNG",
+    "borders": [
+      "CHN",
+      "RUS"
+    ]
+  },
+  {
+    "cca3": "MNP",
+    "borders": []
+  },
+  {
+    "cca3": "MOZ",
+    "borders": [
+      "MWI",
+      "ZAF",
+      "SWZ",
+      "TZA",
+      "ZMB",
+      "ZWE"
+    ]
+  },
+  {
+    "cca3": "MRT",
+    "borders": [
+      "DZA",
+      "MLI",
+      "SEN",
+      "ESH"
+    ]
+  },
+  {
+    "cca3": "MSR",
+    "borders": []
+  },
+  {
+    "cca3": "MTQ",
+    "borders": []
+  },
+  {
+    "cca3": "MUS",
+    "borders": []
+  },
+  {
+    "cca3": "MWI",
+    "borders": [
+      "MOZ",
+      "TZA",
+      "ZMB"
+    ]
+  },
+  {
+    "cca3": "MYS",
+    "borders": [
+      "BRN",
+      "IDN",
+      "THA"
+    ]
+  },
+  {
+    "cca3": "MYT",
+    "borders": []
+  },
+  {
+    "cca3": "NAM",
+    "borders": [
+      "AGO",
+      "BWA",
+      "ZAF",
+      "ZMB"
+    ]
+  },
+  {
+    "cca3": "NCL",
+    "borders": []
+  },
+  {
+    "cca3": "NER",
+    "borders": [
+      "DZA",
+      "BEN",
+      "BFA",
+      "TCD",
+      "LBY",
+      "MLI",
+      "NGA"
+    ]
+  },
+  {
+    "cca3": "NFK",
+    "borders": []
+  },
+  {
+    "cca3": "NGA",
+    "borders": [
+      "BEN",
+      "CMR",
+      "TCD",
+      "NER"
+    ]
+  },
+  {
+    "cca3": "NIC",
+    "borders": [
+      "CRI",
+      "HND"
+    ]
+  },
+  {
+    "cca3": "NIU",
+    "borders": []
+  },
+  {
+    "cca3": "NLD",
+    "borders": [
+      "BEL",
+      "DEU"
+    ]
+  },
+  {
+    "cca3": "NOR",
+    "borders": [
+      "FIN",
+      "SWE",
+      "RUS"
+    ]
+  },
+  {
+    "cca3": "NPL",
+    "borders": [
+      "CHN",
+      "IND"
+    ]
+  },
+  {
+    "cca3": "NRU",
+    "borders": []
+  },
+  {
+    "cca3": "NZL",
+    "borders": []
+  },
+  {
+    "cca3": "OMN",
+    "borders": [
+      "SAU",
+      "ARE",
+      "YEM"
+    ]
+  },
+  {
+    "cca3": "PAK",
+    "borders": [
+      "AFG",
+      "CHN",
+      "IND",
+      "IRN"
+    ]
+  },
+  {
+    "cca3": "PAN",
+    "borders": [
+      "COL",
+      "CRI"
+    ]
+  },
+  {
+    "cca3": "PCN",
+    "borders": []
+  },
+  {
+    "cca3": "PER",
+    "borders": [
+      "BOL",
+      "BRA",
+      "CHL",
+      "COL",
+      "ECU"
+    ]
+  },
+  {
+    "cca3": "PHL",
+    "borders": []
+  },
+  {
+    "cca3": "PLW",
+    "borders": []
+  },
+  {
+    "cca3": "PNG",
+    "borders": [
+      "IDN"
+    ]
+  },
+  {
+    "cca3": "POL",
+    "borders": [
+      "BLR",
+      "CZE",
+      "DEU",
+      "LTU",
+      "RUS",
+      "SVK",
+      "UKR"
+    ]
+  },
+  {
+    "cca3": "PRI",
+    "borders": []
+  },
+  {
+    "cca3": "PRK",
+    "borders": [
+      "CHN",
+      "KOR",
+      "RUS"
+    ]
+  },
+  {
+    "cca3": "PRT",
+    "borders": [
+      "ESP"
+    ]
+  },
+  {
+    "cca3": "PRY",
+    "borders": [
+      "ARG",
+      "BOL",
+      "BRA"
+    ]
+  },
+  {
+    "cca3": "PSE",
+    "borders": [
+      "ISR",
+      "EGY",
+      "JOR"
+    ]
+  },
+  {
+    "cca3": "PYF",
+    "borders": []
+  },
+  {
+    "cca3": "QAT",
+    "borders": [
+      "SAU"
+    ]
+  },
+  {
+    "cca3": "REU",
+    "borders": []
+  },
+  {
+    "cca3": "ROU",
+    "borders": [
+      "BGR",
+      "HUN",
+      "MDA",
+      "SRB",
+      "UKR"
+    ]
+  },
+  {
+    "cca3": "RUS",
+    "borders": [
+      "AZE",
+      "BLR",
+      "CHN",
+      "EST",
+      "FIN",
+      "GEO",
+      "KAZ",
+      "PRK",
+      "LVA",
+      "LTU",
+      "MNG",
+      "NOR",
+      "POL",
+      "UKR"
+    ]
+  },
+  {
+    "cca3": "RWA",
+    "borders": [
+      "BDI",
+      "COD",
+      "TZA",
+      "UGA"
+    ]
+  },
+  {
+    "cca3": "SAU",
+    "borders": [
+      "IRQ",
+      "JOR",
+      "KWT",
+      "OMN",
+      "QAT",
+      "ARE",
+      "YEM"
+    ]
+  },
+  {
+    "cca3": "SDN",
+    "borders": [
+      "CAF",
+      "TCD",
+      "EGY",
+      "ERI",
+      "ETH",
+      "LBY",
+      "SSD"
+    ]
+  },
+  {
+    "cca3": "SEN",
+    "borders": [
+      "GMB",
+      "GIN",
+      "GNB",
+      "MLI",
+      "MRT"
+    ]
+  },
+  {
+    "cca3": "SGP",
+    "borders": []
+  },
+  {
+    "cca3": "SGS",
+    "borders": []
+  },
+  {
+    "cca3": "SJM",
+    "borders": []
+  },
+  {
+    "cca3": "SLB",
+    "borders": []
+  },
+  {
+    "cca3": "SLE",
+    "borders": [
+      "GIN",
+      "LBR"
+    ]
+  },
+  {
+    "cca3": "SLV",
+    "borders": [
+      "GTM",
+      "HND"
+    ]
+  },
+  {
+    "cca3": "SMR",
+    "borders": [
+      "ITA"
+    ]
+  },
+  {
+    "cca3": "SOM",
+    "borders": [
+      "DJI",
+      "ETH",
+      "KEN"
+    ]
+  },
+  {
+    "cca3": "SPM",
+    "borders": []
+  },
+  {
+    "cca3": "SRB",
+    "borders": [
+      "BIH",
+      "BGR",
+      "HRV",
+      "HUN",
+      "UNK",
+      "MKD",
+      "MNE",
+      "ROU"
+    ]
+  },
+  {
+    "cca3": "SSD",
+    "borders": [
+      "CAF",
+      "COD",
+      "ETH",
+      "KEN",
+      "SDN",
+      "UGA"
+    ]
+  },
+  {
+    "cca3": "STP",
+    "borders": []
+  },
+  {
+    "cca3": "SUR",
+    "borders": [
+      "BRA",
+      "GUF",
+      "GUY"
+    ]
+  },
+  {
+    "cca3": "SVK",
+    "borders": [
+      "AUT",
+      "CZE",
+      "HUN",
+      "POL",
+      "UKR"
+    ]
+  },
+  {
+    "cca3": "SVN",
+    "borders": [
+      "AUT",
+      "HRV",
+      "ITA",
+      "HUN"
+    ]
+  },
+  {
+    "cca3": "SWE",
+    "borders": [
+      "FIN",
+      "NOR"
+    ]
+  },
+  {
+    "cca3": "SWZ",
+    "borders": [
+      "MOZ",
+      "ZAF"
+    ]
+  },
+  {
+    "cca3": "SXM",
+    "borders": [
+      "MAF"
+    ]
+  },
+  {
+    "cca3": "SYC",
+    "borders": []
+  },
+  {
+    "cca3": "SYR",
+    "borders": [
+      "IRQ",
+      "ISR",
+      "JOR",
+      "LBN",
+      "TUR"
+    ]
+  },
+  {
+    "cca3": "TCA",
+    "borders": []
+  },
+  {
+    "cca3": "TCD",
+    "borders": [
+      "CMR",
+      "CAF",
+      "LBY",
+      "NER",
+      "NGA",
+      "SDN"
+    ]
+  },
+  {
+    "cca3": "TGO",
+    "borders": [
+      "BEN",
+      "BFA",
+      "GHA"
+    ]
+  },
+  {
+    "cca3": "THA",
+    "borders": [
+      "MMR",
+      "KHM",
+      "LAO",
+      "MYS"
+    ]
+  },
+  {
+    "cca3": "TJK",
+    "borders": [
+      "AFG",
+      "CHN",
+      "KGZ",
+      "UZB"
+    ]
+  },
+  {
+    "cca3": "TKL",
+    "borders": []
+  },
+  {
+    "cca3": "TKM",
+    "borders": [
+      "AFG",
+      "IRN",
+      "KAZ",
+      "UZB"
+    ]
+  },
+  {
+    "cca3": "TLS",
+    "borders": [
+      "IDN"
+    ]
+  },
+  {
+    "cca3": "TON",
+    "borders": []
+  },
+  {
+    "cca3": "TTO",
+    "borders": []
+  },
+  {
+    "cca3": "TUN",
+    "borders": [
+      "DZA",
+      "LBY"
+    ]
+  },
+  {
+    "cca3": "TUR",
+    "borders": [
+      "ARM",
+      "AZE",
+      "BGR",
+      "GEO",
+      "GRC",
+      "IRN",
+      "IRQ",
+      "SYR"
+    ]
+  },
+  {
+    "cca3": "TUV",
+    "borders": []
+  },
+  {
+    "cca3": "TWN",
+    "borders": []
+  },
+  {
+    "cca3": "TZA",
+    "borders": [
+      "BDI",
+      "COD",
+      "KEN",
+      "MWI",
+      "MOZ",
+      "RWA",
+      "UGA",
+      "ZMB"
+    ]
+  },
+  {
+    "cca3": "UGA",
+    "borders": [
+      "COD",
+      "KEN",
+      "RWA",
+      "SSD",
+      "TZA"
+    ]
+  },
+  {
+    "cca3": "UKR",
+    "borders": [
+      "BLR",
+      "HUN",
+      "MDA",
+      "POL",
+      "ROU",
+      "RUS",
+      "SVK"
+    ]
+  },
+  {
+    "cca3": "UMI",
+    "borders": []
+  },
+  {
+    "cca3": "URY",
+    "borders": [
+      "ARG",
+      "BRA"
+    ]
+  },
+  {
+    "cca3": "USA",
+    "borders": [
+      "CAN",
+      "MEX"
+    ]
+  },
+  {
+    "cca3": "UZB",
+    "borders": [
+      "AFG",
+      "KAZ",
+      "KGZ",
+      "TJK",
+      "TKM"
+    ]
+  },
+  {
+    "cca3": "VAT",
+    "borders": [
+      "ITA"
+    ]
+  },
+  {
+    "cca3": "VCT",
+    "borders": []
+  },
+  {
+    "cca3": "VEN",
+    "borders": [
+      "BRA",
+      "COL",
+      "GUY"
+    ]
+  },
+  {
+    "cca3": "VGB",
+    "borders": []
+  },
+  {
+    "cca3": "VIR",
+    "borders": []
+  },
+  {
+    "cca3": "VNM",
+    "borders": [
+      "KHM",
+      "CHN",
+      "LAO"
+    ]
+  },
+  {
+    "cca3": "VUT",
+    "borders": []
+  },
+  {
+    "cca3": "WLF",
+    "borders": []
+  },
+  {
+    "cca3": "WSM",
+    "borders": []
+  },
+  {
+    "cca3": "YEM",
+    "borders": [
+      "OMN",
+      "SAU"
+    ]
+  },
+  {
+    "cca3": "ZAF",
+    "borders": [
+      "BWA",
+      "LSO",
+      "MOZ",
+      "NAM",
+      "SWZ",
+      "ZWE"
+    ]
+  },
+  {
+    "cca3": "ZMB",
+    "borders": [
+      "AGO",
+      "BWA",
+      "COD",
+      "MWI",
+      "MOZ",
+      "NAM",
+      "TZA",
+      "ZWE"
+    ]
+  },
+  {
+    "cca3": "ZWE",
+    "borders": [
+      "BWA",
+      "MOZ",
+      "ZAF",
+      "ZMB"
+    ]
+  }
+]

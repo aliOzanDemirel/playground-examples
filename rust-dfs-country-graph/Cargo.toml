@@ -1,0 +1,19 @@
+[package]
+name = "rust-learning-example"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.56.1"
+#description = ""
+#readme = ""
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = { version = "3.3.2", features = ["rustls"] }
+rustls = "0.20.2"
+serde = "1.0.130"
+serde_json = "1.0.72"
+log4rs = "1.0.0"
+log = "0.4.14"
+num_cpus = "1.13.0"
+lazy_static = "1.4.0"

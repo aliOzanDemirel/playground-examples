@@ -8,6 +8,9 @@
 **/.gradle/
 **/.terraform
 
+**/_local/
+*.log
+
 **/node_modules/
 **/yarn-error.log
 

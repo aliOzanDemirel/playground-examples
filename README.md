@@ -14,3 +14,14 @@
    Compose, InfluxDB, Grafana
 8. [hexagonal-app-load-testing](hexagonal-app-load-testing/README.md), 2021 &#8594; Quarkus/Kotlin, Ratpack/Groovy, Vertx/Java, Spring, Dropwizard,
    Jooby, Javalin, Ktor, Micronaut, Play/Scala, Gatling, Ports and Adapters
+9. [word2vec-word-analogy](word2vec-word-analogy/README.md), 2017 &#8594; Word2vec and thesis research
+10. [rust-dfs-country-graph](rust-dfs-country-graph/README.md), 2021 &#8594; Rust, DFS
+11. [simple-stream-combiner](simple-stream-combiner/README.md), 2023 &#8594; Java SE, Maven
+
+#### Git
+
+```shell
+git config --local user.name "Ali Ozan Demirel"
+git config --local user.email "aliozandemirel@gmail.com"
+git config --global pull.rebase true
+```

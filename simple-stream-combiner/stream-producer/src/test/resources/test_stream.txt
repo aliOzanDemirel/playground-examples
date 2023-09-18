@@ -1,0 +1,4 @@
+<data> <timestamp>100</timestamp> <amount>3</amount> </data>
+<data> <timestamp>101</timestamp> <amount>1.001</amount> </data>
+<data> <timestamp>102</timestamp> <amount>88888.000008</amount> </data>
+<data> <timestamp>103</timestamp> <amount>7.700000</amount> </data>

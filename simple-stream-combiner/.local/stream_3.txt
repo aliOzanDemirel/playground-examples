@@ -1,0 +1,7 @@
+<data> <timestamp>33</timestamp> <amount>5555.5555</amount> </data>
+<data> <timestamp>33</timestamp> <amount>5556.5556</amount> </data>
+<data> <timestamp>33</timestamp> <amount>5557.5557</amount> </data>
+<data> <timestamp>33</timestamp> <amount>5558.5558</amount> </data>
+<data> <timestamp>33</timestamp> <amount>5559.5559</amount> </data>
+<data> <timestamp>33</timestamp> <amount>5560.5560</amount> </data>
+<data> <timestamp>34</timestamp> <amount>5561.5561</amount> </data>

@@ -2,9 +2,7 @@ package example.producer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
+import java.net.*;
 import java.util.stream.Stream;
 
 import static example.Log.logErr;
@@ -35,7 +33,7 @@ public class StreamProducer {
                 try {
                     acceptClient(serverSocket);
                 } catch (Exception e) {
-                    logErr(e, "[%s] disconnected from client, will wait for new one", name);
+                    logErr(e, "[%s] client is disconnected, will wait for new one", name);
                 }
             }
         } catch (Exception e) {
@@ -50,6 +48,7 @@ public class StreamProducer {
                 PrintWriter toClient = new PrintWriter(clientSocket.getOutputStream(), true);
         ) {
             logInfo("[%s] client is connected -> %s", name, clientSocket);
+            clientSocket.setKeepAlive(true);
 
             try (Stream<String> streamOfXmlData = xmlDataProvider.streamXmlData()) {
 
@@ -59,7 +58,7 @@ public class StreamProducer {
                     // break out of stream if client is determined to be disconnected
                     // so producer will wait for a different connection if existing one was broken
                     if (isClientEndClosed(clientSocket)) {
-                        throw new RuntimeException("client is disconnected");
+                        throw new RuntimeException("client dropped connection");
                     }
 
                     logInfo("[%s] emitting -> %s", name, xmlString);

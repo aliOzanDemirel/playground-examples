@@ -1,7 +1,10 @@
 package example;
 
 import example.producer.Config;
+import example.producer.StreamProducer;
 import example.producer.StreamProducerCluster;
+
+import java.util.Map;
 
 import static example.Log.logErr;
 
@@ -18,7 +21,8 @@ public class Main {
             System.exit(1);
         }
 
-        StreamProducerCluster producers = new StreamProducerCluster(conf);
-        producers.start();
+        Map<String, StreamProducer> producers = StreamProducerCluster.producersFromConfig(conf);
+        StreamProducerCluster producerCluster = new StreamProducerCluster(producers);
+        producerCluster.start();
     }
 }

@@ -1,9 +1,12 @@
 ### Stream Combiner
 
 * Check [homework](homework.md) for definition and requirements
-* `Makefile` and `.local` directory are used for development, can be referred for example commands
-* Running `make producer` first and then `make combiner` will start 3 producers (and consumers) with test xml data
+    * Only 3pt library used is for xml serialization: `jackson-dataformat-xml`
 * Default configuration packaged with jar will start 1 producer&consumer, emitting random xml data from infinite stream
+* `Makefile` and `.local` directory are used for development, can be referred for example commands
+    * Running `make coverage` will build runnable jar artifacts by running all tests and generating coverage report
+    * Running `make producer` first and then `make combiner` will start 3 producers (and consumers) with test xml data
+    * Can configure a specific `JAVA_HOME` in `Makefile` to be used by its commands
 
 ```shell
 git clone git@github.com:aliOzanDemirel/playground-examples.git
@@ -12,26 +15,22 @@ make producer
 make combiner # in another shell
 ```
 
-* Using library `jackson-dataformat-xml`, noticed later that this is not allowed
-* Stream combiner handles an unnecessary case when single producer emit same timestamp consecutively, which is not a
-  possible case by contract
-* Would be very useful to have test suite to run both components and assert functionality with a predictable data
-* There are some unit tests that do not cover socket connectivity, these tests can be improved upon to cover more
-
 #### producer
 
-* Multiple producers can be run with virtual threads in the same java process
+* Producer tasks are started as virtual threads, multiple can be run in the same java process (for simplicity)
 * There can be only single consumer of a single xml data producer, data is sent to only one consumer
-* Starts a new stream if an existing consumer disconnects
 * There is no backpressure handling for the consumers which the data is being pushed to
+* Checks to see if consumer client is already disconnected from producer socket
+    * Waits for another consumer to start a new stream if an existing consumer disconnects
 * Every line corresponds to single xml data, there cannot be xml data indented with multiple lines
-* Ignored capital letter in xml format example 'timeStamp'
+    * Ignored capital letter in xml format example 'timeStamp'
 
 #### combiner
 
+* Consumer tasks are started as virtual threads
 * Does not retry to connect to configured producer, simply fails startup if producer is not running
 * Timeouts if producer did not send any message for some configurable amount of time
-* There is no buffer per consumer with configurable limits, data is immediately pushed to merging buffer
-* Concurrent access to merging buffer is simply handled by a single mutex for adding to buffer
-* Merging buffer is unbounded for simplicity
-* Consumer tasks are started as virtual threads
+* Concurrent access to merging buffer is synchronized by a single mutex for all operations
+* Xml records will be dropped in cases:
+    * If merging buffer capacity is exceeded (limit is configurable)
+    * If received data could not be deserialized as expected

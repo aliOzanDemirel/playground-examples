@@ -10,7 +10,7 @@ import static example.Log.logInfo;
 
 public class StreamProducerCluster {
 
-    private final Map<String, StreamProducer> producers = new HashMap<>();
+    private final Map<String, StreamProducer> producers;
     private final List<Thread> producerTasks = new ArrayList<>();
 
     /**
@@ -18,8 +18,13 @@ public class StreamProducerCluster {
      * first producers will be configured to read xml data from file if there is any file path configured
      * remaining producers (if any) will be configured to read random xml data
      */
-    public StreamProducerCluster(Config config) {
+    public StreamProducerCluster(Map<String, StreamProducer> producers) {
+        this.producers = producers;
+    }
 
+    public static Map<String, StreamProducer> producersFromConfig(Config config) {
+
+        Map<String, StreamProducer> producers = new HashMap<>();
         int countOfHowManyProducersWithMockFile = config.getXmlDataFilePaths().size();
         for (int i = 0; i < countOfHowManyProducersWithMockFile; i++) {
             String path = config.getXmlDataFilePaths().get(i);
@@ -35,6 +40,7 @@ public class StreamProducerCluster {
             StreamProducer producer = new StreamProducer(name, port, new RandomDataProvider());
             producers.put(name, producer);
         }
+        return producers;
     }
 
     /**

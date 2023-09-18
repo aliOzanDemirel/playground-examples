@@ -15,7 +15,7 @@ public class XmlDataProviderTest {
 
         RandomDataProvider provider = new RandomDataProvider();
 
-        DoubleStream testStream = DoubleStream.of(0.5, 0.7, 0.2);
+        DoubleStream testStream = DoubleStream.of(0.1, 0.2, 0.15);
         Instant start = Instant.now();
         List<String> result = provider.streamXmlData(testStream).toList();
         Instant end = Instant.now();
@@ -25,21 +25,21 @@ public class XmlDataProviderTest {
                 "unexpected amount of xml datas read from file");
 
         Duration timeElapsed = Duration.between(start, end);
-        long expectedMinWaitMillis = (long) ((0.5 + 0.7 + 0.2) * 1000);
+        long expectedMinWaitMillis = (long) ((0.1 + 0.2 + 0.15) * 1000);
         Assertions.assertTrue(timeElapsed.toMillis() > expectedMinWaitMillis,
                 "unexpected minimum duration of consuming the stream");
 
         String[] parts_0 = result.get(0).split("<timestamp>.*</timestamp>");
         Assertions.assertEquals("<data> ", parts_0[0], "mismatching start of xml data");
-        Assertions.assertEquals(" <amount>0.500000</amount> </data>", parts_0[1], "mismatching end of xml data");
+        Assertions.assertEquals(" <amount>0.100000</amount> </data>", parts_0[1], "mismatching end of xml data");
 
         String[] parts_1 = result.get(1).split("<timestamp>.*</timestamp>");
         Assertions.assertEquals("<data> ", parts_1[0], "mismatching start of xml data");
-        Assertions.assertEquals(" <amount>0.700000</amount> </data>", parts_1[1], "mismatching end of xml data");
+        Assertions.assertEquals(" <amount>0.200000</amount> </data>", parts_1[1], "mismatching end of xml data");
 
         String[] parts_2 = result.get(2).split("<timestamp>.*</timestamp>");
         Assertions.assertEquals("<data> ", parts_2[0], "mismatching start of xml data");
-        Assertions.assertEquals(" <amount>0.200000</amount> </data>", parts_2[1], "mismatching end of xml data");
+        Assertions.assertEquals(" <amount>0.150000</amount> </data>", parts_2[1], "mismatching end of xml data");
     }
 
     @Test

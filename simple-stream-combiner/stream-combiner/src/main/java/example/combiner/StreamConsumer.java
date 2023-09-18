@@ -21,19 +21,27 @@ public class StreamConsumer {
     private final ProducerTarget producerTarget;
     private final Duration socketReceiveTimeout;
     private final XmlMapper xmlMapper;
-    private final StreamMerger3 streamMerger;
+    private final StreamMerger4 streamMerger;
     private Socket clientSocket;
 
-    public StreamConsumer(String name, ProducerTarget producerTarget, Duration socketReceiveTimeout, XmlMapper xmlMapper, StreamMerger3 streamMerger) {
+    /**
+     * NOTE: alternative implementation can be done with consumers having an internal buffer 'queue' with some configurable capacity
+     * simple backpressure can be added to drop xml data if buffer fills, and also signal this issue back to producer
+     * a combiner thread can then poll these registered queues and sort the records by merging sorted streams
+     */
+    public StreamConsumer(String name, ProducerTarget producerTarget, Duration socketReceiveTimeout, XmlMapper xmlMapper, StreamMerger4 streamMerger) {
         this.name = name;
         this.producerTarget = producerTarget;
         this.socketReceiveTimeout = socketReceiveTimeout;
         this.xmlMapper = xmlMapper;
         this.streamMerger = streamMerger;
+        this.streamMerger.registerStream(name);
     }
 
-    // disconnect clients explicitly when java process is terminated
-    // ignoring concurrent access to clientSocket reference here
+    /**
+     * disconnect clients explicitly when java process is terminated
+     * ignoring concurrent access to clientSocket reference here
+     */
     public void shutdown() throws IOException {
         if (clientSocket == null) {
             return;
@@ -45,16 +53,11 @@ public class StreamConsumer {
     }
 
     /**
-     * consumer is the receiving and of producer stream, connects to single producer and pushes xml data to configured buffer
+     * consumer is the receiving end of producer stream, connects to single producer and pushes xml data to configured buffer
      * this method starts the reading loop and caches a reference to the client socket
+     * if producer does not send anything in some configured time interval, then consumer drops the connection
      */
     public void start() {
-
-        // TODO: these consumers could have an internal buffer 'queue' with some configurable limit on its size
-        //  and if this buffer fills, producers can be signalled for some simple backpressure while the data is dropped
-        //  a different implementation of merger can then poll these registered queues in single thread
-
-        // TODO: whenever a consumer is disconnected, merger should be cleaned and should continue to work with one less consumer
         try (
                 Socket socket = new Socket(producerTarget.getHost(), producerTarget.getPort());
                 BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -76,23 +79,27 @@ public class StreamConsumer {
                 }
 
                 try {
-                    // TODO: can have a simple implementation of InputStreamReader to explicitly parse the expected xml format
                     XmlData data = xmlMapper.readValue(line, XmlData.class);
                     logInfo("[%s] received and deserialized new line -> %s", name, data);
-
                     streamMerger.add(name, data);
 
                 } catch (JsonProcessingException e) {
                     logErr(e, "[%s] could not deserialize, dropping data -> %s", name, line);
+                } catch (StreamMerger4.BufferOverCapacityException e) {
+                    // NOTE: this can somehow be signalled to producer
+                    logErr(e, "[%s] could not buffer the record, dropping data -> %s", name, line);
                 }
             }
-
         } catch (SocketTimeoutException e) {
             logErr(e, "[%s] timeout waiting for xml message, producer might have hanged", name);
         } catch (Exception e) {
             logErr(e, "[%s] disconnected -> ", name);
         } finally {
             logInfo("[%s] connection is closed", name);
+
+            // if a consumer is disconnected, its stream will be cleaned from merger
+            // so that merger will continue to work as is, with just one less stream
+            streamMerger.deregisterStream(name);
         }
     }
 

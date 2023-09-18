@@ -1,11 +1,14 @@
-package example.combiner;
+package example.combiner.deprecated;
 
+import example.combiner.JsonOutput;
+import example.combiner.XmlData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+@Deprecated
 public class StreamMerger3Test {
 
     private StreamMerger3 merger;

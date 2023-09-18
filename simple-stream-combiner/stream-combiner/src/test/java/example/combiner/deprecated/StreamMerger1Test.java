@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+@Deprecated
 public class StreamMerger1Test {
 
     private StreamMerger1 merger;

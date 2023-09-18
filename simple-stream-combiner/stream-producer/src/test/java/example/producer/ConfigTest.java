@@ -3,6 +3,8 @@ package example.producer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,26 +59,61 @@ public class ConfigTest {
     }
 
     @Test
-    void testConfig_invalid_invalidPort() throws Exception {
+    void testConfigValidate() throws Exception {
+        var socketPorts = List.of(1111, 2222);
+        var validFile = ClassLoader.getSystemResource("test_stream.txt").getPath();
+        var xmlFilePaths = List.of(validFile);
+        var conf = new Config.Builder().setSocketPorts(socketPorts).setXmlDataFilePaths(xmlFilePaths).build();
+        Assertions.assertEquals(2, conf.getSocketPorts().size());
+        Assertions.assertEquals(1, conf.getXmlDataFilePaths().size());
+    }
 
-        Properties testProps = new Properties();
-        testProps.setProperty("producer.server.ports", "33");
-        testProps.setProperty("producer.xml.data.file.paths", "/can/have/one/path");
+    @Test
+    void testConfigValidate_missingPorts() {
+        Assertions.assertThrows(Exception.class,
+                () -> new Config.Builder().setSocketPorts(Collections.emptyList()).build(),
+                "at least one stream producer port is mandatory");
+    }
 
-        Config conf = Config.load(testProps);
-        Assertions.assertThrows(Exception.class, conf::validate,
+    @Test
+    void testConfigValidate_invalidPort() {
+        Assertions.assertThrows(Exception.class,
+                () -> new Config.Builder().setSocketPorts(List.of(33)).build(),
                 "invalid port: 33");
     }
 
     @Test
-    void testConfig_invalid_tooManyXmlFilePaths() throws Exception {
-
-        Properties testProps = new Properties();
-        testProps.setProperty("producer.server.ports", "1111");
-        testProps.setProperty("producer.xml.data.file.paths", "/can/have/one/path,/cannot/have/second/path");
-
-        Config conf = Config.load(testProps);
-        Assertions.assertThrows(Exception.class, conf::validate,
+    void testConfigValidate_tooManyXmlFilePaths() {
+        Assertions.assertThrows(Exception.class,
+                () -> {
+                    var socketPorts = List.of(1111);
+                    var validFile_1 = ClassLoader.getSystemResource("test_stream.txt").getPath();
+                    var validFile_2 = ClassLoader.getSystemResource(ConfigTest.class.getName()).getPath();
+                    var xmlFilePaths = List.of(validFile_1, validFile_2);
+                    new Config.Builder().setSocketPorts(socketPorts).setXmlDataFilePaths(xmlFilePaths).build();
+                },
                 "cannot have more xml file paths configured than producer count");
+    }
+
+    @Test
+    void testConfigValidate_blankXmlFilePath() {
+        Assertions.assertThrows(Exception.class,
+                () -> {
+                    var socketPorts = List.of(1111);
+                    var xmlFilePaths = List.of(" ");
+                    new Config.Builder().setSocketPorts(socketPorts).setXmlDataFilePaths(xmlFilePaths).build();
+                },
+                "blank xml data file path is invalid");
+    }
+
+    @Test
+    void testConfigValidate_nonExistingXmlFile() {
+        Assertions.assertThrows(Exception.class,
+                () -> {
+                    var socketPorts = List.of(1111);
+                    var xmlFilePaths = List.of("/non/existing/path");
+                    new Config.Builder().setSocketPorts(socketPorts).setXmlDataFilePaths(xmlFilePaths).build();
+                },
+                "xml data file does not exist: /non/existing/path");
     }
 }

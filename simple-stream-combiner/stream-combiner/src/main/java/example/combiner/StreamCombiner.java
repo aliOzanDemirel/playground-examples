@@ -13,22 +13,28 @@ import static example.Log.logInfo;
 
 public class StreamCombiner {
 
-    private final Map<String, StreamConsumer> consumers = new HashMap<>();
+    private final Map<String, StreamConsumer> consumers;
     private final List<Thread> consumerTasks = new ArrayList<>();
-    private final StreamMerger3 streamMerger;
+    private final StreamMerger4 streamMerger;
 
     /**
      * stream combiner represents a cluster of stream consumers and a shared buffer to merge individual streams
      */
-    public StreamCombiner(Config config, XmlMapper xmlMapper, StreamMerger3 streamMerger) {
-
+    public StreamCombiner(Map<String, StreamConsumer> consumers, StreamMerger4 streamMerger) {
+        this.consumers = consumers;
         this.streamMerger = streamMerger;
+    }
+
+    public static Map<String, StreamConsumer> consumersFromConfig(Config config, XmlMapper xmlMapper, StreamMerger4 streamMerger) {
+
+        Map<String, StreamConsumer> consumers = new HashMap<>();
         for (int i = 0; i < config.getProducers().size(); i++) {
             ProducerTarget target = config.getProducers().get(i);
             String name = String.format("virtual-%d-consumer-%s", i + 1, target);
-            StreamConsumer producer = new StreamConsumer(name, target, config.getSocketReceiveTimeout(), xmlMapper, streamMerger);
-            consumers.put(name, producer);
+            StreamConsumer consumer = new StreamConsumer(name, target, config.getSocketReceiveTimeout(), xmlMapper, streamMerger);
+            consumers.put(name, consumer);
         }
+        return consumers;
     }
 
     public void shutdown() {
@@ -39,7 +45,7 @@ public class StreamCombiner {
                 logErr(e, "[combiner] failed to shutdown consumer '%s'", consumer);
             }
         }
-        streamMerger.flush();
+        streamMerger.flushAll();
     }
 
     /**

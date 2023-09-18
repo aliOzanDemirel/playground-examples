@@ -13,8 +13,8 @@ public class Config {
     private static final String CONFIG_PATH_OVERRIDE_PROPERTY_KEY = "config.path.override";
     private static final String DEFAULT_CONFIG_IN_CLASSPATH = "producer.properties";
 
-    private final List<Integer> socketPorts = new ArrayList<>();
-    private final List<String> xmlDataFilePaths = new ArrayList<>();
+    private List<Integer> socketPorts = new ArrayList<>();
+    private List<String> xmlDataFilePaths = new ArrayList<>();
 
     private Config() {
     }
@@ -91,5 +91,29 @@ public class Config {
 
     public List<String> getXmlDataFilePaths() {
         return xmlDataFilePaths;
+    }
+
+    public static class Builder {
+
+        private List<Integer> socketPorts = new ArrayList<>();
+        private List<String> xmlDataFilePaths = new ArrayList<>();
+
+        public Builder setSocketPorts(List<Integer> socketPorts) {
+            this.socketPorts = socketPorts;
+            return this;
+        }
+
+        public Builder setXmlDataFilePaths(List<String> xmlDataFilePaths) {
+            this.xmlDataFilePaths = xmlDataFilePaths;
+            return this;
+        }
+
+        public Config build() throws Exception {
+            Config conf = new Config();
+            conf.socketPorts = socketPorts;
+            conf.xmlDataFilePaths = xmlDataFilePaths;
+            conf.validate();
+            return conf;
+        }
     }
 }

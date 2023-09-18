@@ -1,14 +1,22 @@
-package example.combiner;
+package example.combiner.deprecated;
 
-import java.util.*;
+import example.combiner.JsonOutput;
+import example.combiner.XmlData;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 
 /**
- * this merger is buffer that combines multiple items to sorted stream
- * items are pushed by consumers, instead of being pulled by this merger
+ * this implementation handles an unnecessary case that is against the producer contract:
+ * - normally same producer can never generate duplicate timestamps
+ * - this merger expects that same producer can send same timestamp consecutively [3 -> 3 -> 3 ...]
  */
+@Deprecated
 public class StreamMerger3 {
 
     /**
@@ -64,7 +72,6 @@ public class StreamMerger3 {
                 return;
             }
 
-            // TODO: this is not correct, single producer can never generate duplicate timestamps
             // all events older than this are writable, but this particular timestamp is not writable
             long minLastTimestamp = Long.MAX_VALUE;
 

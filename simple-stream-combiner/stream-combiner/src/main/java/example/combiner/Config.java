@@ -12,6 +12,7 @@ public class Config {
     private static final String CONFIG_PATH_OVERRIDE_PROPERTY_KEY = "config.path.override";
     private static final String DEFAULT_CONFIG_IN_CLASSPATH = "combiner.properties";
 
+    private int combinerMergeBufferCapacity;
     private Duration socketReceiveTimeout;
     private final List<ProducerTarget> producers = new ArrayList<>();
 
@@ -60,7 +61,18 @@ public class Config {
             long seconds = Long.parseLong(timeoutStr);
             conf.socketReceiveTimeout = Duration.ofSeconds(seconds);
         } catch (NumberFormatException e) {
-            String errMsg = String.format("timeout is not a number -> %s", timeoutStr);
+            String errMsg = String.format("'combiner.socket.receive.timeout.seconds' is not a number -> %s", timeoutStr);
+            throw new Exception(errMsg, e);
+        }
+
+        String bufferCapacity = props.getProperty("combiner.buffer.capacity");
+        if (bufferCapacity == null || bufferCapacity.isBlank()) {
+            throw new Exception("missing 'combiner.buffer.capacity'");
+        }
+        try {
+            conf.combinerMergeBufferCapacity = Integer.parseInt(bufferCapacity);
+        } catch (NumberFormatException e) {
+            String errMsg = String.format("'combiner.buffer.capacity' is not a number -> %s", timeoutStr);
             throw new Exception(errMsg, e);
         }
 
@@ -76,6 +88,14 @@ public class Config {
         if (socketReceiveTimeout.toMillis() < 0) {
             throw new Exception(String.format("timeout cannot be less than 0 -> %d", socketReceiveTimeout.toMillis()));
         }
+
+        if (combinerMergeBufferCapacity < 0) {
+            throw new Exception(String.format("buffer capacity cannot be less than 0 -> %d", combinerMergeBufferCapacity));
+        }
+    }
+
+    public int getCombinerMergeBufferCapacity() {
+        return combinerMergeBufferCapacity;
     }
 
     public Duration getSocketReceiveTimeout() {

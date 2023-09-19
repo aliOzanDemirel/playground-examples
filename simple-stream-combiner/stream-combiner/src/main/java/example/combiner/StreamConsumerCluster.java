@@ -11,7 +11,7 @@ import java.util.Map;
 import static example.Log.logErr;
 import static example.Log.logInfo;
 
-public class StreamCombiner {
+public class StreamConsumerCluster {
 
     private final Map<String, StreamConsumer> consumers;
     private final List<Thread> consumerTasks = new ArrayList<>();
@@ -20,7 +20,7 @@ public class StreamCombiner {
     /**
      * stream combiner represents a cluster of stream consumers and a shared buffer to merge individual streams
      */
-    public StreamCombiner(Map<String, StreamConsumer> consumers, StreamMerger4 streamMerger) {
+    public StreamConsumerCluster(Map<String, StreamConsumer> consumers, StreamMerger4 streamMerger) {
         this.consumers = consumers;
         this.streamMerger = streamMerger;
     }
@@ -42,7 +42,7 @@ public class StreamCombiner {
             try {
                 consumer.shutdown();
             } catch (IOException e) {
-                logErr(e, "[combiner] failed to shutdown consumer '%s'", consumer);
+                logErr(e, "[consumer-cluster] failed to shutdown consumer '%s'", consumer);
             }
         }
         streamMerger.flushAll();
@@ -53,9 +53,9 @@ public class StreamCombiner {
      */
     public void start() {
 
-        logInfo("scheduling %d stream consumer tasks", consumers.size());
+        logInfo("[consumer-cluster] scheduling %d stream consumer tasks", consumers.size());
         for (String name : consumers.keySet()) {
-            logInfo("scheduling stream consumer task '%s'", name);
+            logInfo("[consumer-cluster] scheduling stream consumer task '%s'", name);
             StreamConsumer consumer = consumers.get(name);
             Thread task = Thread.ofVirtual().name(name).start(consumer::start);
             consumerTasks.add(task);
@@ -65,7 +65,7 @@ public class StreamCombiner {
             try {
                 t.join();
             } catch (InterruptedException e) {
-                logErr(e, "ignoring interrupted thread");
+                logErr(e, "[consumer-cluster] ignoring interrupted thread");
             }
         }
     }

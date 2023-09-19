@@ -11,5 +11,5 @@
 <data> <timestamp>48</timestamp> <amount>11.777777</amount> </data>
 <data> <timestamp>60</timestamp> <amount>12.777777</amount> </data>
 <data> <timestamp>70</timestamp> <amount>13.777777</amount> </data>
-<data> <timestamp>80</timestamp> <amount>14.777777</amount> </data>
-<data> <timestamp>90</timestamp> <amount>15.777777</amount> </data>
+<data> <timestamp>80</timestamp> <amount>14.001001005</amount> </data>
+<data> <timestamp>90</timestamp> <amount>15.003003009</amount> </data>

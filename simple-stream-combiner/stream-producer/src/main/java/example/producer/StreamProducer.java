@@ -2,7 +2,11 @@ package example.producer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
 
 import static example.Log.logErr;
@@ -11,6 +15,9 @@ import static example.Log.logInfo;
 public class StreamProducer {
 
     private static final String SIGNAL_END = "finish-xml-data-stream";
+
+    private ServerSocket serverSocket;
+    private final Lock socketMutex = new ReentrantLock();
 
     private final String name;
     private final int socketPort;
@@ -22,10 +29,31 @@ public class StreamProducer {
         this.xmlDataProvider = xmlDataProvider;
     }
 
+    /**
+     * closes server socket
+     */
+    public void shutdown() throws IOException {
+        try {
+            socketMutex.lock();
+            if (this.serverSocket == null) {
+                return;
+            }
+            this.serverSocket.close();
+        } finally {
+            socketMutex.unlock();
+        }
+    }
+
     public void start() {
 
         try (ServerSocket serverSocket = new ServerSocket(socketPort)) {
             logInfo("[%s] listening on server socket -> %s", name, serverSocket);
+            try {
+                socketMutex.lock();
+                this.serverSocket = serverSocket;
+            } finally {
+                socketMutex.unlock();
+            }
 
             // wait for client connections in infinite loop
             // but this is all in single thread so single client will always block single socket
@@ -90,4 +118,8 @@ public class StreamProducer {
         }
     }
 
+    @Override
+    public String toString() {
+        return "StreamProducer [" + name + "]";
+    }
 }

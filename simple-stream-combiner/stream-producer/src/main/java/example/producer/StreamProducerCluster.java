@@ -1,5 +1,6 @@
 package example.producer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,14 +44,24 @@ public class StreamProducerCluster {
         return producers;
     }
 
+    public void shutdown() {
+        producers.values().forEach(producer -> {
+            try {
+                producer.shutdown();
+            } catch (IOException e) {
+                logErr(e, "[producer-cluster] failed to shutdown producer '%s'", producer);
+            }
+        });
+    }
+
     /**
      * starts 1..N stream producers with virtual threads and blocks to wait all
      */
     public void start() {
 
-        logInfo("scheduling %d stream producer tasks", producers.size());
+        logInfo("[producer-cluster] scheduling %d stream producer tasks", producers.size());
         for (String name : producers.keySet()) {
-            logInfo("scheduling stream producer task '%s'", name);
+            logInfo("[producer-cluster] scheduling stream producer task '%s'", name);
             StreamProducer producer = producers.get(name);
             Thread task = Thread.ofVirtual().name(name).start(producer::start);
             producerTasks.add(task);
@@ -60,9 +71,8 @@ public class StreamProducerCluster {
             try {
                 t.join();
             } catch (InterruptedException e) {
-                logErr(e, "ignoring interrupted thread");
+                logErr(e, "[producer-cluster] ignoring interrupted thread");
             }
         }
     }
-
 }

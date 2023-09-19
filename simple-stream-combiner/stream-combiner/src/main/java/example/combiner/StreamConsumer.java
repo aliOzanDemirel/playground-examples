@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static example.Log.logErr;
 import static example.Log.logInfo;
@@ -17,12 +19,14 @@ public class StreamConsumer {
 
     private static final String SIGNAL_END = "finish-xml-data-stream";
 
+    private Socket clientSocket;
+    private final Lock socketMutex = new ReentrantLock();
+
     private final String name;
     private final ProducerTarget producerTarget;
     private final Duration socketReceiveTimeout;
     private final XmlMapper xmlMapper;
     private final StreamMerger4 streamMerger;
-    private Socket clientSocket;
 
     /**
      * NOTE: alternative implementation can be done with consumers having an internal buffer 'queue' with some configurable capacity
@@ -40,16 +44,20 @@ public class StreamConsumer {
 
     /**
      * disconnect clients explicitly when java process is terminated
-     * ignoring concurrent access to clientSocket reference here
      */
     public void shutdown() throws IOException {
-        if (clientSocket == null) {
-            return;
+        try {
+            socketMutex.lock();
+            if (clientSocket == null) {
+                return;
+            }
+            clientSocket.shutdownInput();
+            clientSocket.shutdownOutput();
+            clientSocket.close();
+            clientSocket = null;
+        } finally {
+            socketMutex.unlock();
         }
-        clientSocket.shutdownInput();
-        clientSocket.shutdownOutput();
-        clientSocket.close();
-        clientSocket = null;
     }
 
     /**
@@ -62,8 +70,13 @@ public class StreamConsumer {
                 Socket socket = new Socket(producerTarget.getHost(), producerTarget.getPort());
                 BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ) {
-            this.clientSocket = socket;
             logInfo("[%s] connected to producer -> %s", name, socket);
+            try {
+                socketMutex.lock();
+                this.clientSocket = socket;
+            } finally {
+                socketMutex.unlock();
+            }
 
             // close the connection and drop the producer if it did not send anything for long time
             socket.setSoTimeout((int) socketReceiveTimeout.toMillis());

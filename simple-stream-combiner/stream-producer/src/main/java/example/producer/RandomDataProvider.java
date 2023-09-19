@@ -16,14 +16,15 @@ public class RandomDataProvider implements XmlDataProvider {
     }
 
     Stream<String> streamXmlData(DoubleStream doubleStream) {
-        return doubleStream
-                .peek(UtilFunction::simulateWait)
-                .mapToObj(this::xmlData);
+        return doubleStream.mapToObj(this::xmlData);
     }
 
     // keeping it simple without passing timestamp or a non-default clock
     private String xmlData(double amount) {
         long timestamp = Instant.now().getEpochSecond();
-        return String.format(XML_FORMAT, timestamp, amount);
+        String xmlData = String.format(XML_FORMAT, timestamp, amount);
+        double waitAtLeastOneSecond = 1 + amount;
+        UtilFunction.simulateWait(waitAtLeastOneSecond);
+        return xmlData;
     }
 }

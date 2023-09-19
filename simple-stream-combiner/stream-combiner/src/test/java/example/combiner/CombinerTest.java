@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 public class CombinerTest {
 
-    private StreamCombiner testStreamCombiner(List<Integer> ports, JsonOutput.BufferWriter writer) throws Exception {
+    private StreamConsumerCluster testStreamCombiner(List<Integer> ports, JsonOutput.BufferWriter writer) throws Exception {
         var merger = new StreamMerger4(1000, writer);
         var mapper = new XmlMapper();
         Map<String, StreamConsumer> consumers = new HashMap<>();
@@ -28,7 +28,7 @@ public class CombinerTest {
             var testConsumer = new StreamConsumer(name, target, Duration.ofSeconds(10), mapper, merger);
             consumers.put(name, testConsumer);
         }
-        return new StreamCombiner(consumers, merger);
+        return new StreamConsumerCluster(consumers, merger);
     }
 
     private void startTestProducer(List<String> xmlRecords, int port) {
@@ -107,7 +107,7 @@ public class CombinerTest {
         testProps.setProperty("combiner.buffer.capacity", "1234");
         Config conf = Config.load(testProps);
 
-        Map<String, StreamConsumer> consumers = StreamCombiner.consumersFromConfig(conf, null, new StreamMerger4(1234, null));
+        Map<String, StreamConsumer> consumers = StreamConsumerCluster.consumersFromConfig(conf, null, new StreamMerger4(1234, null));
         assertEquals(2, consumers.size(), "unexpected consumer task count");
     }
 }

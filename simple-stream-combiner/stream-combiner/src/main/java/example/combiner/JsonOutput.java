@@ -17,7 +17,13 @@ public interface JsonOutput {
         @Override
         public void write(XmlData xmlData) {
             String jsonStr = toJson(xmlData);
-            System.out.println("JSON OUTPUT STREAM -> " + jsonStr);
+            String formatted = String.format("""
+                            *********************************************************************************************
+                            * JSON OUTPUT STREAM
+                            * %s
+                            *********************************************************************************************""",
+                    jsonStr);
+            System.out.println(formatted);
         }
     }
 

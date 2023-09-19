@@ -17,6 +17,6 @@ public class FileDataProvider implements XmlDataProvider {
         // alternative should be okay too, then file input stream should always be closed by caller
         return UtilFunction.linesFromFile(filePath)
                 .stream()
-                .peek(it -> UtilFunction.simulateWait(0.5));
+                .peek(it -> UtilFunction.simulateWait(0.2));
     }
 }

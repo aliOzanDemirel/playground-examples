@@ -34,3 +34,4 @@ make combiner # in another shell
 * Xml records will be dropped in cases:
     * If merging buffer capacity is exceeded (limit is configurable)
     * If received data could not be deserialized as expected
+* Json output's money amount's scale is fixed to 6 digits

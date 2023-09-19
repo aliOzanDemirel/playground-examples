@@ -66,7 +66,7 @@ public class ProducerTest {
 
         Assertions.assertEquals("<data> <timestamp>100</timestamp> <amount>3</amount> </data>",
                 receivedXmlDatas.get(0), "mismatching xml data");
-        Assertions.assertEquals("<data> <timestamp>101</timestamp> <amount>1.001</amount> </data>",
+        Assertions.assertEquals("<data> <timestamp>101</timestamp> <amount>1.001001009</amount> </data>",
                 receivedXmlDatas.get(1), "mismatching xml data");
         Assertions.assertEquals("<data> <timestamp>102</timestamp> <amount>88888.000008</amount> </data>",
                 receivedXmlDatas.get(2), "mismatching xml data");

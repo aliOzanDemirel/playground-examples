@@ -23,17 +23,16 @@ public class Main {
 
         XmlMapper xmlMapper = XmlMapper.builder().build();
         StreamMerger4 streamMerger = new StreamMerger4(conf.getCombinerMergeBufferCapacity(), new JsonOutput.StdoutWriter());
-
-        Map<String, StreamConsumer> consumers = StreamCombiner.consumersFromConfig(conf, xmlMapper, streamMerger);
-        StreamCombiner combiner = new StreamCombiner(consumers, streamMerger);
+        Map<String, StreamConsumer> consumers = StreamConsumerCluster.consumersFromConfig(conf, xmlMapper, streamMerger);
+        StreamConsumerCluster combiner = new StreamConsumerCluster(consumers, streamMerger);
         handleShutdown(combiner);
         combiner.start();
     }
 
     // handle SIGTERM and SIGINT
-    private static void handleShutdown(StreamCombiner combiner) {
+    private static void handleShutdown(StreamConsumerCluster combiner) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logInfo("[shutdown-hook] shutting down stream combiner");
+            logInfo("[shutdown-hook] shutting down consumers");
             combiner.shutdown();
         }));
     }

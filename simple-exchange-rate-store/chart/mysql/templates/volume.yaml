@@ -1,0 +1,57 @@
+---
+{{- if eq .Values.storage.usePersistentVolume true }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "fullname" . }}-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.storage.capacity }}
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ template "fullname" . }}-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  persistentVolumeReclaimPolicy: Delete
+  capacity:
+    storage: {{ .Values.storage.capacity }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.storage.hostPath }}
+{{- end }}
+
+
+{{/*---*/}}
+{{/*apiVersion: v1*/}}
+{{/*kind: PersistentVolume*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ template "fullname" . }}-pv-volume*/}}
+{{/*  labels:*/}}
+{{/*    type: local*/}}
+{{/*spec:*/}}
+{{/*  storageClassName: local-storage*/}}
+{{/*  persistentVolumeReclaimPolicy: Delete*/}}
+{{/*  capacity:*/}}
+{{/*    storage: {{ .Values.storage.capacity }}*/}}
+{{/*  accessModes:*/}}
+{{/*    - ReadWriteOnce*/}}
+{{/*  local:*/}}
+{{/*    path: {{ .Values.storage.hostPath }}*/}}
+{{/*  nodeAffinity:*/}}
+{{/*    required:*/}}
+{{/*      nodeSelectorTerms:*/}}
+{{/*        - matchExpressions:*/}}
+{{/*            - key: node-role.kubernetes.io/master*/}}
+{{/*              operator: In*/}}
+{{/*              values:*/}}
+{{/*                - "true"*/}}

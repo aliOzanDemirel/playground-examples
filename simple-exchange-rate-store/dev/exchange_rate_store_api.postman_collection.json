@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "5345b5a5-b337-48bd-a74b-390cbeefa06c",
+		"name": "currency exchange rate store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2769435"
+	},
+	"item": [
+		{
+			"name": "healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/health",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/metrics",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorized rate btc/eur",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/authorized/rates/btc/eur",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"authorized",
+						"rates",
+						"btc",
+						"eur"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorized rate btc/czk",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/authorized/rates/btc/czk",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"authorized",
+						"rates",
+						"btc",
+						"czk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorized rate averages czk 2023",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/authorized/averages?dateFrom=2023-01-01&quoteCurrency=czk",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"authorized",
+						"averages"
+					],
+					"query": [
+						{
+							"key": "dateFrom",
+							"value": "2023-01-01"
+						},
+						{
+							"key": "quoteCurrency",
+							"value": "czk"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorized rate averages czk current date",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/authorized/averages?quoteCurrency=czk",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"authorized",
+						"averages"
+					],
+					"query": [
+						{
+							"key": "quoteCurrency",
+							"value": "czk"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorized rate averages eur 2022",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/authorized/averages?dateFrom=2022-01-01&quoteCurrency=eur",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"authorized",
+						"averages"
+					],
+					"query": [
+						{
+							"key": "dateFrom",
+							"value": "2022-01-01"
+						},
+						{
+							"key": "quoteCurrency",
+							"value": "eur"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorized clean before a year ago (default)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/authorized/clean",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"authorized",
+						"clean"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authorized clean before 2022",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:31111/authorized/clean?date=2022-01-01",
+					"host": [
+						"localhost"
+					],
+					"port": "31111",
+					"path": [
+						"authorized",
+						"clean"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2022-01-01"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

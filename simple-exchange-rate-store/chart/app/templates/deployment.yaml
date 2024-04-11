@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{.Release.Namespace}}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ template "fullname" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      # use non-root app user
+      securityContext:
+        runAsUser: 3000
+        runAsGroup: 3000
+        fsGroup: 3000
+        runAsNonRoot: true
+      terminationGracePeriodSeconds: 20
+      containers:
+        - name: {{ template "fullname" . }}
+          image: {{ required "image is required" .Values.containerImage }}
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          env:
+            # all the key-value pairs under helm config 'envVars' are added here as environment variable
+            {{- range $key, $value := .Values.envVars }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            - name: CONTAINER_IMAGE
+              value: {{ required "image is required" .Values.containerImage }}
+            - name: K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: APP_BASIC_AUTH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-secrets" (include "fullname" .) }}
+                  key: basicAuthUser
+            - name: APP_BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-secrets" (include "fullname" .) }}
+                  key: basicAuthPassword
+            - name: APP_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-secrets" (include "fullname" .) }}
+                  key: dbUser
+            - name: APP_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-secrets" (include "fullname" .) }}
+                  key: dbPassword
+            - name: APP_ALPHA_VANTAGE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-secrets" (include "fullname" .) }}
+                  key: apiKey
+          resources:
+            requests:
+              cpu: {{ .Values.container.requestCpu }}
+              memory: {{ .Values.container.requestMemory }}
+              ephemeral-storage: {{ .Values.container.requestEphemeralStorage }}
+            limits:
+              memory: {{ .Values.container.requestMemory }}
+              ephemeral-storage: {{ .Values.container.requestEphemeralStorage }}
+          ports:
+            - name: healthcheck
+              containerPort: {{ .Values.envVars.APP_PORT }}
+          startupProbe:
+            httpGet:
+              path: /health
+              port: healthcheck
+              scheme: HTTP
+            initialDelaySeconds: 1
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: healthcheck
+              scheme: HTTP
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - {{ .Values.databaseResourceName }}

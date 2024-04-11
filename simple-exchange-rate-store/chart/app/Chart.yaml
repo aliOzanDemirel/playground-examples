@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.0.1
+version: 0.0.1
+type: application
+name: simple-exchange-rate-store
+description: Deploys single replica service that pulls and stores currency exchange rates

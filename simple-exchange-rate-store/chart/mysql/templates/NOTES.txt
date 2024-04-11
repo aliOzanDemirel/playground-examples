@@ -1,0 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+
+helm get values --all {{ .Release.Name }} -n {{ .Release.Namespace }}
+kubectl config set-context --current --namespace={{ .Release.Namespace }}
+kubectl logs -f $(kubectl get pod -n {{ .Release.Namespace }} -o name | grep {{ template "fullname" . }} -m 1) -n {{ .Release.Namespace }}
+kubectl exec -it $(kubectl get pod -n {{ .Release.Namespace }} -o name | grep {{ template "fullname" . }} -m 1) -n {{ .Release.Namespace }} -- bash

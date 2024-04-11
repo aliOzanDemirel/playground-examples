@@ -1,0 +1,40 @@
+container:
+  requestCpu: "1"
+  requestMemory: "1Gi"
+  requestEphemeralStorage: "256Mi"
+
+# to be configured accordingly
+containerImage: ""
+
+databaseResourceName: "none"
+
+nodePort:
+  enabled: true
+  port: 31111
+
+secret:
+  alphaVantageApiKey: H28Y4XBH28KZDTJC
+  db:
+    user: root
+    password: root
+  basicAuth:
+    user: admin
+    password: admin
+
+envVars:
+  GOMEMLIMIT: 800MiB
+  LOG_DEBUG: true
+
+  APP_DEV_MOCK_CRYPTO_API: false
+  APP_DEV_MOCK_DATA_STORE: false
+  # APP_DEV_MOCK_CRYPTO_API: true
+  # APP_DEV_MOCK_DATA_STORE: true
+
+  APP_DB_HOST: "" # NOTE: can use external service
+  APP_DB_PORT: 3306
+  APP_DB_NAME: ExchangeRateDb
+
+  APP_PORT: 9999
+  APP_RATE_PULL_INTERVAL: 3m
+
+  APP_ALPHA_VANTAGE_BASE_URL: https://www.alphavantage.co

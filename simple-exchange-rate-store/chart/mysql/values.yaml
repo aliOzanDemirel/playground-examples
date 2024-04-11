@@ -1,0 +1,19 @@
+container:
+  requestCpu: "1"
+  requestMemory: "2Gi"
+
+readinessProbeEnabled: true
+
+storage:
+  capacity: "5Gi"
+  usePersistentVolume: false
+  hostPath: ""
+
+database:
+  name: ExchangeRateDb
+  port: 3306
+  nodePort:
+    enabled: false
+    port: 32222
+  root:
+    password: root # root user

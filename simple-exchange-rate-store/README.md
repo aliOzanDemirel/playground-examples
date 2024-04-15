@@ -47,9 +47,11 @@
           query param 'dateFrom')
         - /authorized/clean -> delete ingested exchange rates before last 12 months (or query param 'date')
     - jobs that pull data from crypto API and store it
-        - runs periodically, can be configured to have at most 5 minute interval
-        - exchange rate data is ingested into mysql database, by calculating average, minimum and maximum rates
+        - runs periodically, cannot configure more than 5 minute interval
+        - exchange rate data is ingested into mysql, storing raw records in a table
+        - calculates average, minimum and maximum rates and stores them in a separate table
         - aggregations are calculated per day and previous 30 days (monthly)
+        - so raw exchange rate records (can have 5 minute precision) are downsampled to 1 day
 - Service can run in a container, can be deployed to kubernetes cluster with helm `chart/app`
     - should pass mandatory config `containerImage` when making helm release
     - should configure a valid `envVars.APP_DB_HOST`
@@ -79,12 +81,12 @@
     - mock db driver or use proper in-memory db to run tests against
     - or can use testcontainers for module wide blackbox tests
 - Observability
-    - could use a real logger library with proper log fields and tracing
+    - could use proper log fields where needed
+    - use trace id for every flow, both jobs and requests
     - can emit prometheus samples for counted metrics
     - can deploy prometheus/grafana with helm, provisioning grafana with some default dashboards
 - Others
     - ignoring possible floating number conversion errors like losing precision
-    - ignoring duplicate exchange rate pulled from crypto API
     - http server does not have tls listener for simplicity, can configure self signed cert
     - can support arbitrary currency pair with more configuration logic
     - readiness/liveness probes can be added with better health check logic

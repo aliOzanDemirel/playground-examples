@@ -3,6 +3,8 @@ package main
 import (
 	"exchange-rate-store/pkg/app"
 	"exchange-rate-store/pkg/logger"
+	"exchange-rate-store/pkg/logger/zlog"
+	"fmt"
 	"os"
 	"os/signal"
 	"runtime"
@@ -11,9 +13,16 @@ import (
 
 func main() {
 
-	_, found := os.LookupEnv("LOG_DEBUG")
-	logger.SetGlobalLogger(&logger.StdoutLogger{DebugLevel: found})
-	logger.Info(nil, "[startup] runtime -> %s - %s - %s", runtime.Version(), runtime.GOOS, runtime.GOARCH)
+	const startupFailureMsgFormat = "STARTUP FAILURE -> %v\n"
+
+	logConf := zlog.LogConfFromEnv("LOG_")
+	err := zlog.SetupGlobalLogger(logConf)
+	if err != nil {
+		errMsg := fmt.Sprintf("failed to setup logger -> %v", err)
+		fmt.Printf(startupFailureMsgFormat, errMsg)
+		os.Exit(1)
+	}
+	logger.Info(nil, "[startup] logger is ready, runtime -> %s - %s - %s", runtime.Version(), runtime.GOOS, runtime.GOARCH)
 
 	conf := app.Config{}
 	conf.ReadFromEnv("APP_")
@@ -22,14 +31,16 @@ func main() {
 
 	appInstance, err := app.NewExchangeRateStore(conf)
 	if err != nil {
-		logger.Error(nil, err, "[startup] failed to prepare app instance")
+		errMsg := fmt.Sprintf("failed to prepare app instance -> %v", err)
+		fmt.Printf(startupFailureMsgFormat, errMsg)
 		os.Exit(1)
 	}
 
 	go func() {
 		err := appInstance.Start()
 		if err != nil {
-			logger.Error(nil, err, "[startup] failed to start app")
+			errMsg := fmt.Sprintf("failed to start app -> %v", err)
+			fmt.Printf(startupFailureMsgFormat, errMsg)
 			os.Exit(1)
 		}
 	}()

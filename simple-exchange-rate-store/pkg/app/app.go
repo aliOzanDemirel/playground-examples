@@ -15,6 +15,21 @@ import (
 	"time"
 )
 
+type ExchangeRateRepository interface {
+	Close() error
+	InsertNewRate(persistence.Rate) error
+	DeleteRatesOlderThanDate(time.Time) (int64, error)
+	GetAggregatedRatesSinceRequestedDate(time.Time, string) ([]persistence.AggregatedRate, error)
+	GetAggregatedRates(time.Time) ([]persistence.AggregatedRate, error)
+	UpsertAggregatedRate(persistence.AggregatedRate) error
+}
+
+type ExchangeRateRetriever interface {
+	FetchCurrentRate(ctx context.Context, fromCurrency, toCurrency string) (alphavantage.CurrencyExchangeRateResponse, error)
+	GetFailCount() uint64
+	GetSuccessCount() uint64
+}
+
 type metrics struct {
 	pullJobSuccessCount atomic.Uint64 // cumulative counter
 	pullJobFailCount    atomic.Uint64 // cumulative counter
@@ -27,11 +42,12 @@ type ExchangeRateStore struct {
 	metrics         *metrics
 	conf            *Config
 	pullJobs        []*ExchangeRatePullJob
-	ratePersistence ExchangeRatePersistence
+	ratePersistence ExchangeRateRepository
 	rateRetriever   ExchangeRateRetriever
 	server          *http.Server
 }
 
+// NewExchangeRateStore instantiates an app instance by bootstrapping all components
 func NewExchangeRateStore(config Config) (*ExchangeRateStore, error) {
 
 	const maxPullInterval = 5 * time.Minute
@@ -56,7 +72,7 @@ func NewExchangeRateStore(config Config) (*ExchangeRateStore, error) {
 		api = &alphaApi
 	}
 
-	var db ExchangeRatePersistence
+	var db ExchangeRateRepository
 	if config.Dev.MockDataStore {
 
 		db = &InMemoryStore{
@@ -79,7 +95,7 @@ func NewExchangeRateStore(config Config) (*ExchangeRateStore, error) {
 			ctx:               sigtermCtx,
 			waitJobGroup:      waitGroup,
 			metrics:           metrics,
-			ratePersistence:   db,
+			rateRepo:          db,
 			rateRetriever:     api,
 			rateBaseCurrency:  currencyBtc,
 			rateQuoteCurrency: currency,

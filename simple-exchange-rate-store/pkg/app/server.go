@@ -33,7 +33,6 @@ func (b *ExchangeRateStore) startServerAsync() (*http.Server, error) {
 		return nil, err
 	}
 
-	gin.SetMode("debug")
 	gin.ForceConsoleColor()
 	r := gin.New()
 	r.Use(gin.Logger())

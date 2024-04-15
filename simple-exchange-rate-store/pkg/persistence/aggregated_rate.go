@@ -37,21 +37,33 @@ func (p *Persistence) GetAggregatedRatesSinceRequestedDate(date time.Time, quote
 	return readRowsToAggregatedRates(rows)
 }
 
-func (p *Persistence) getAggregatedRates(exchangeRateTimeUtc time.Time) ([]AggregatedRate, error) {
+func (p *Persistence) GetAggregatedRates(exchangeRateTimeUtc time.Time) ([]AggregatedRate, error) {
 
-	// SELECT * FROM AggregatedRate WHERE aggregated < '2024-04-12 14:24:00' AND aggregated >= DATE_SUB('2024-04-12 14:24:00', INTERVAL 30 DAY)
 	query := "SELECT * FROM AggregatedRate WHERE aggregatedDate <= ? AND aggregatedDate >= DATE_SUB(?, INTERVAL 30 DAY)"
 	rows, err := p.db.QueryContext(context.Background(), query, exchangeRateTimeUtc, exchangeRateTimeUtc)
 	if err != nil {
 		rateDate := exchangeRateTimeUtc.Format(time.RFC3339)
 		return nil, fmt.Errorf("failed to fetch aggregated rates of day '%s' -> %v", rateDate, err)
 	}
-	return readRowsToAggregatedRates(rows)
+
+	aggRates, err := readRowsToAggregatedRates(rows)
+	if err != nil {
+		return nil, err
+	}
+
+	logger.Debug(nil, "[persistence] loaded %d aggregated rate records for exchange time '%s'",
+		len(aggRates), exchangeRateTimeUtc.Format(time.RFC3339))
+	return aggRates, nil
 }
 
 func readRowsToAggregatedRates(rows *sql.Rows) ([]AggregatedRate, error) {
 
-	defer rows.Close()
+	defer func() {
+		err := rows.Close()
+		if err != nil {
+			err = fmt.Errorf("failed to close rows cursor -> %v", err)
+		}
+	}()
 
 	var aggRates []AggregatedRate
 	for rows.Next() {
@@ -80,103 +92,28 @@ func readRowsToAggregatedRates(rows *sql.Rows) ([]AggregatedRate, error) {
 	return aggRates, rows.Err()
 }
 
-func (p *Persistence) updateAverages(newRate Rate) error {
+func (p *Persistence) UpsertAggregatedRate(agg AggregatedRate) error {
 
-	aggRates, err := p.getAggregatedRates(newRate.ExchangeRateUtcTime)
-	if err != nil {
-		return err
-	}
-	logger.Debug(nil, "[persistence] loaded %d aggregated rate records for exchange time '%s'",
-		len(aggRates), newRate.ExchangeRateUtcTime.Format(time.RFC3339))
-
-	aggregated := getAggregatedRate(aggRates, newRate)
-	return p.upsertAggregatedRate(aggregated)
-}
-
-func getAggregatedRate(previousAggregations []AggregatedRate, currentRate Rate) AggregatedRate {
-
-	var aggRecordOfCurrent *AggregatedRate
-	sum, monthlyMax, monthlyMin := currentRate.ExchangeRate, currentRate.ExchangeRate, currentRate.ExchangeRate
-	for i := range previousAggregations {
-		agg := previousAggregations[i]
-
-		sum += agg.DailyAvg
-		if agg.DailyMax > monthlyMax {
-			monthlyMax = agg.DailyMax
-		}
-		if agg.DailyMin < monthlyMin {
-			monthlyMin = agg.DailyMin
-		}
-
-		// should not be necessary but make sure the currencies match
-		if agg.BaseCurrency == currentRate.BaseCurrency &&
-			agg.QuoteCurrency == currentRate.QuoteCurrency {
-
-			// make sure to select aggregated record for the exact date
-			aggYear, aggMonth, aggDay := agg.AggregatedDate.Date()
-			curYear, curMonth, curDay := currentRate.ExchangeRateUtcTime.Date()
-			if aggYear == curYear &&
-				aggMonth == curMonth &&
-				aggDay == curDay {
-
-				aggRecordOfCurrent = &agg
-			}
-		}
-	}
-
-	// if there is no previous aggregation record at new rate's date, return new one using only current rate
-	if aggRecordOfCurrent == nil {
-		return AggregatedRate{
-			BaseCurrency:   currentRate.BaseCurrency,
-			QuoteCurrency:  currentRate.QuoteCurrency,
-			AggregatedDate: currentRate.ExchangeRateUtcTime,
-			DailyAvg:       currentRate.ExchangeRate,
-			DailyMax:       currentRate.ExchangeRate,
-			DailyMin:       currentRate.ExchangeRate,
-			MonthlyAvg:     currentRate.ExchangeRate,
-			MonthlyMax:     currentRate.ExchangeRate,
-			MonthlyMin:     currentRate.ExchangeRate,
-			DataPointCount: 1,
-		}
-	}
-
-	// total sum is counted with this many rates
-	monthlySumDataPointCount := float64(len(previousAggregations) + 1)
-	monthlyAvg := sum / monthlySumDataPointCount
-	aggRecordOfCurrent.MonthlyAvg = monthlyAvg
-	aggRecordOfCurrent.MonthlyMax = monthlyMax
-	aggRecordOfCurrent.MonthlyMin = monthlyMin
-
-	aggRecordSum := aggRecordOfCurrent.DailyAvg * float64(aggRecordOfCurrent.DataPointCount)
-	newSum := aggRecordSum + currentRate.ExchangeRate
-	newTotalCount := aggRecordOfCurrent.DataPointCount + 1
-
-	// count currently added new rate (+1) by adding to average
-	aggRecordOfCurrent.DailyAvg = newSum / float64(newTotalCount)
-	aggRecordOfCurrent.DataPointCount = newTotalCount
-
-	if currentRate.ExchangeRate > aggRecordOfCurrent.DailyMax {
-		aggRecordOfCurrent.DailyMax = currentRate.ExchangeRate
-	}
-
-	if currentRate.ExchangeRate < aggRecordOfCurrent.DailyMin {
-		aggRecordOfCurrent.DailyMin = currentRate.ExchangeRate
-	}
-
-	return *aggRecordOfCurrent
-}
-
-func (p *Persistence) upsertAggregatedRate(agg AggregatedRate) error {
-
-	inTransaction, err := p.db.Begin()
+	tx, err := p.db.Begin()
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction -> %v", err)
 	}
+	defer func() {
+		switch err {
+		case nil:
+			err = tx.Commit()
+		default:
+			rollbackErr := tx.Rollback()
+			if rollbackErr != nil {
+				err = fmt.Errorf("failed to rollback transaction -> %v -> caused by -> %v", rollbackErr, err)
+			}
+		}
+	}()
 
-	var resultErr error
 	if agg.Id != 0 {
-		query := "UPDATE AggregatedRate SET dataPointCount=?, dailyAverage=?, dailyMin=?, dailyMax=?, monthlyAverage=?, monthlyMin=?, monthlyMax=? WHERE id = ?"
-		_, err = inTransaction.ExecContext(context.Background(), query,
+
+		query := "UPDATE AggregatedRate SET dataPointCount=?, dailyAverage=?, dailyMin=?, dailyMax=?, monthlyAverage=?, monthlyMin=?, monthlyMax=? WHERE id=?"
+		_, err = tx.ExecContext(context.Background(), query,
 			agg.DataPointCount,
 			agg.DailyAvg,
 			agg.DailyMin,
@@ -187,13 +124,14 @@ func (p *Persistence) upsertAggregatedRate(agg AggregatedRate) error {
 			agg.Id,
 		)
 		if err != nil {
-			resultErr = fmt.Errorf("failed to update row [Id: %d] -> %v", agg.Id, err)
+			return fmt.Errorf("failed to update row [Id: %d] -> %v", agg.Id, err)
 		} else {
 			logger.Debug(nil, "[persistence] updated aggregated rate [Id: %d] -> %v", agg.Id, agg)
 		}
 	} else {
+
 		query := "INSERT INTO AggregatedRate (baseCurrency, quoteCurrency, dataPointCount, aggregatedDate, dailyAverage, dailyMin, dailyMax, monthlyAverage, monthlyMin, monthlyMax) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-		_, err = inTransaction.ExecContext(context.Background(), query,
+		_, err = tx.ExecContext(context.Background(), query,
 			agg.BaseCurrency,
 			agg.QuoteCurrency,
 			agg.DataPointCount,
@@ -206,22 +144,10 @@ func (p *Persistence) upsertAggregatedRate(agg AggregatedRate) error {
 			agg.MonthlyMax,
 		)
 		if err != nil {
-			resultErr = fmt.Errorf("failed to insert new row -> %v", err)
+			return fmt.Errorf("failed to insert new row -> %v", err)
 		} else {
 			logger.Debug(nil, "[persistence] created new aggregated rate -> %v", agg)
 		}
-	}
-	if resultErr != nil {
-		rollbackErr := inTransaction.Rollback()
-		if rollbackErr != nil {
-			resultErr = fmt.Errorf("failed to rollback transaction -> %v -> caused by -> %v", rollbackErr, resultErr)
-		}
-		return resultErr
-	}
-
-	err = inTransaction.Commit()
-	if err != nil {
-		return fmt.Errorf("failed to commit transaction -> %v", err)
 	}
 	return nil
 }

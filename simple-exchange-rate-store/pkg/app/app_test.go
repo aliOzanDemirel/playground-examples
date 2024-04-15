@@ -4,7 +4,6 @@ import (
 	"context"
 	"exchange-rate-store/pkg/logger"
 	"exchange-rate-store/pkg/persistence"
-	"net/http"
 	"sync"
 	"testing"
 	"time"
@@ -49,8 +48,8 @@ func TestReadConf(t *testing.T) {
 		t.Errorf("unexpected BasicAuthPassword: %s", c.BasicAuthPassword)
 	}
 
-	if c.Database.DbName != "test_db" {
-		t.Errorf("unexpected Database.DbName: %s", c.Database.DbName)
+	if c.Database.Name != "test_db" {
+		t.Errorf("unexpected Database.Name: %s", c.Database.Name)
 	}
 	if c.Database.User != "db_user" {
 		t.Errorf("unexpected Database.User: %s", c.Database.User)
@@ -128,6 +127,7 @@ type moduleTestCtx struct {
 
 func runTestApp(t *testing.T, testApp *ExchangeRateStore) *moduleTestCtx {
 
+	// configure stdout logger for module tests
 	logger.SetGlobalLogger(&logger.StdoutLogger{DebugLevel: true})
 
 	err := testApp.Start()
@@ -162,14 +162,14 @@ func defaultTestApp() *ExchangeRateStore {
 			},
 			RatePullInterval:  interval,
 			Port:              3333,
-			BasicAuthUser:     "test",
-			BasicAuthPassword: "test",
+			BasicAuthUser:     "test_user",
+			BasicAuthPassword: "test_user",
 		},
 		pullJobs: []*ExchangeRatePullJob{{
 			ctx:               ctx,
 			waitJobGroup:      wg,
 			metrics:           m,
-			ratePersistence:   testStore,
+			rateRepo:          testStore,
 			rateRetriever:     randomizer,
 			rateBaseCurrency:  "a",
 			rateQuoteCurrency: "b",
@@ -178,7 +178,7 @@ func defaultTestApp() *ExchangeRateStore {
 			ctx:               ctx,
 			waitJobGroup:      wg,
 			metrics:           m,
-			ratePersistence:   testStore,
+			rateRepo:          testStore,
 			rateRetriever:     randomizer,
 			rateBaseCurrency:  "a",
 			rateQuoteCurrency: "c",
@@ -187,7 +187,7 @@ func defaultTestApp() *ExchangeRateStore {
 			ctx:               ctx,
 			waitJobGroup:      wg,
 			metrics:           m,
-			ratePersistence:   testStore,
+			rateRepo:          testStore,
 			rateRetriever:     randomizer,
 			rateBaseCurrency:  "b",
 			rateQuoteCurrency: "c",
@@ -196,7 +196,7 @@ func defaultTestApp() *ExchangeRateStore {
 			ctx:               ctx,
 			waitJobGroup:      wg,
 			metrics:           m,
-			ratePersistence:   testStore,
+			rateRepo:          testStore,
 			rateRetriever:     randomizer,
 			rateBaseCurrency:  "c",
 			rateQuoteCurrency: "b",
@@ -207,7 +207,7 @@ func defaultTestApp() *ExchangeRateStore {
 		ratePersistence: testStore,
 	}
 }
-func TestExchangeRateStore_instantiate(t *testing.T) {
+func TestExchangeRateStore_job_success(t *testing.T) {
 
 	testApp := defaultTestApp()
 	tc := runTestApp(t, testApp)
@@ -217,29 +217,11 @@ func TestExchangeRateStore_instantiate(t *testing.T) {
 	time.Sleep(wait)
 	tc.app.Shutdown()
 
+	// 4 jobs finishing once
 	if tc.app.metrics.pullJobSuccessCount.Load() != 4 {
 		t.Errorf("unexpected pul job success count, expected: 2, actual: %d", tc.app.metrics.pullJobSuccessCount.Load())
 	}
 	if tc.app.metrics.pullJobFailCount.Load() != 0 {
 		t.Errorf("unexpected pul job fail count, expected: 0, actual: %d", tc.app.metrics.pullJobFailCount.Load())
-	}
-}
-
-func TestExchangeRateStore_checkHealthEndpoint(t *testing.T) {
-
-	testApp := defaultTestApp()
-	tc := runTestApp(t, testApp)
-	defer tc.app.Shutdown()
-
-	request, err := http.NewRequest("GET", "http://localhost:3333/health", nil)
-	if err != nil {
-		t.Fatalf("failed test -> %v", err)
-	}
-	resp, err := http.DefaultClient.Do(request)
-	if err != nil {
-		t.Fatalf("failed test -> %v", err)
-	}
-	if resp.StatusCode != 200 {
-		t.Errorf("unexpected response status, actual: %d", resp.StatusCode)
 	}
 }

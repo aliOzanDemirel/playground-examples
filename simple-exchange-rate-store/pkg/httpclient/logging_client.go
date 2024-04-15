@@ -57,7 +57,7 @@ func (c *LoggingClient) Do(req *http.Request) (*http.Response, error) {
 
 func logFieldsFromRequest(req *http.Request) map[string]interface{} {
 	return map[string]interface{}{
-		LogFieldUrl:        req.URL.String(),
+		LogFieldUrl:        req.URL.RequestURI(), // TODO: log host instead of url with all params
 		KeyHeaderTraceId:   req.Header.Get(KeyHeaderTraceId),
 		KeyHeaderUserAgent: req.Header.Get(KeyHeaderUserAgent),
 	}

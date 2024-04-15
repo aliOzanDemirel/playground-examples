@@ -5,6 +5,8 @@ go 1.21
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-sql-driver/mysql v1.8.1
+	github.com/rs/zerolog v1.32.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (
@@ -21,6 +23,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

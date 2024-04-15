@@ -1,6 +1,7 @@
-package persistence
+package app
 
 import (
+	"exchange-rate-store/pkg/persistence"
 	"fmt"
 	"testing"
 	"time"
@@ -10,17 +11,17 @@ func TestGetAggregatedRate(t *testing.T) {
 
 	t.Run("no previous aggregations, new day", func(t *testing.T) {
 
-		var prevAggs []AggregatedRate
+		var prevAggs []persistence.AggregatedRate
 		rate := 44.139845
 		aggDate := time.Date(2024, 4, 13, 10, 10, 10, 0, time.UTC)
-		current := Rate{
+		current := persistence.Rate{
 			BaseCurrency:        "TBA",
 			QuoteCurrency:       "TQU",
 			ExchangeRate:        rate,
 			ExchangeRateUtcTime: aggDate,
 		}
 
-		agg := getAggregatedRate(prevAggs, current)
+		agg := calculateAggregatedRateForNewRate(prevAggs, current)
 		if agg.Id != 0 {
 			t.Errorf("unexpected Id, should be new record, expected: 0, actual: %d", agg.Id)
 		}
@@ -60,7 +61,7 @@ func TestGetAggregatedRate(t *testing.T) {
 
 		day0 := time.Date(2024, 4, 11, 0, 0, 0, 0, time.UTC)
 		day1 := day0.Add(time.Hour * 24)
-		prevAggs := []AggregatedRate{{
+		prevAggs := []persistence.AggregatedRate{{
 			Id:             888,
 			BaseCurrency:   "B",
 			QuoteCurrency:  "Q",
@@ -88,14 +89,14 @@ func TestGetAggregatedRate(t *testing.T) {
 
 		day2 := day1.Add(time.Hour * 30)
 		rate := 99.8998
-		current := Rate{
+		current := persistence.Rate{
 			BaseCurrency:        "B",
 			QuoteCurrency:       "Q",
 			ExchangeRate:        rate,
 			ExchangeRateUtcTime: day2,
 		}
 
-		agg := getAggregatedRate(prevAggs, current)
+		agg := calculateAggregatedRateForNewRate(prevAggs, current)
 		if agg.Id != 0 {
 			t.Errorf("unexpected Id, should be new record, expected: 0, actual: %d", agg.Id)
 		}
@@ -134,21 +135,21 @@ func TestGetAggregatedRate(t *testing.T) {
 	t.Run("there is previous aggregation but not matching current rate's currencies, new day", func(t *testing.T) {
 
 		day0 := time.Date(2024, 4, 11, 0, 0, 0, 0, time.UTC)
-		prevAggs := []AggregatedRate{{
+		prevAggs := []persistence.AggregatedRate{{
 			Id:             888,
 			BaseCurrency:   "B",
 			QuoteCurrency:  "Q",
 			AggregatedDate: day0,
 		}}
 
-		current := Rate{
+		current := persistence.Rate{
 			BaseCurrency:        "TBA",
 			QuoteCurrency:       "TQU",
 			ExchangeRate:        10.0,
 			ExchangeRateUtcTime: day0,
 		}
 
-		agg := getAggregatedRate(prevAggs, current)
+		agg := calculateAggregatedRateForNewRate(prevAggs, current)
 		if agg.Id != 0 {
 			t.Errorf("unexpected Id, should be new record, expected: 0, actual: %d", agg.Id)
 		}
@@ -164,7 +165,7 @@ func TestGetAggregatedRate(t *testing.T) {
 
 		day0 := time.Date(2024, 4, 11, 0, 0, 0, 0, time.UTC)
 		day1 := day0.Add(time.Hour * 24)
-		prevAggs := []AggregatedRate{{
+		prevAggs := []persistence.AggregatedRate{{
 			Id:             888,
 			BaseCurrency:   "B",
 			QuoteCurrency:  "Q",
@@ -191,14 +192,14 @@ func TestGetAggregatedRate(t *testing.T) {
 		}}
 
 		rate := 100.0
-		current := Rate{
+		current := persistence.Rate{
 			BaseCurrency:        "B",
 			QuoteCurrency:       "Q",
 			ExchangeRate:        rate,
 			ExchangeRateUtcTime: day1,
 		}
 
-		agg := getAggregatedRate(prevAggs, current)
+		agg := calculateAggregatedRateForNewRate(prevAggs, current)
 		if agg.Id != 999 {
 			t.Errorf("unexpected Id, should find existing record, expected: 0, actual: %d", agg.Id)
 		}

@@ -11,7 +11,7 @@ type Config struct {
 	Dev               Dev
 	RatePullInterval  time.Duration
 	AlphaVantageApi   alphavantage.Config
-	Database          persistence.Config
+	Database          persistence.DbConfig
 	Port              uint
 	BasicAuthUser     string
 	BasicAuthPassword string
@@ -34,10 +34,10 @@ func (c *Config) ReadFromEnv(configPrefix string) {
 	alphaVantageConf.BaseUrl = common.ReadEnvString(configPrefix+"ALPHA_VANTAGE_BASE_URL", "")
 	c.AlphaVantageApi = alphaVantageConf
 
-	dbConf := persistence.Config{}
+	dbConf := persistence.DbConfig{}
 	dbConf.Host = common.ReadEnvString(configPrefix+"DB_HOST", "")
 	dbConf.Port = common.ReadEnvUint(configPrefix+"DB_PORT", 0)
-	dbConf.DbName = common.ReadEnvString(configPrefix+"DB_NAME", "")
+	dbConf.Name = common.ReadEnvString(configPrefix+"DB_NAME", "")
 	dbConf.User = common.ReadEnvString(configPrefix+"DB_USER", "")
 	dbConf.Password = common.ReadEnvString(configPrefix+"DB_PASSWORD", "")
 	c.Database = dbConf

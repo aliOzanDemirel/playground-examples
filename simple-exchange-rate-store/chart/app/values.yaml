@@ -23,7 +23,13 @@ secret:
 
 envVars:
   GOMEMLIMIT: 800MiB
-  LOG_DEBUG: true
+  GIN_MODE: debug
+
+  # by default, logs are sent to stdout as formatted text lines (not structured json), used for development and testing
+  # multiple log output paths can be configured, for example this would log to both console and a file: '/dev/stdout|/someFile.log'
+  LOG_FILE_PATHS: ""
+  LOG_DISABLE_JSON: true
+  LOG_LEVEL: debug
 
   APP_DEV_MOCK_CRYPTO_API: false
   APP_DEV_MOCK_DATA_STORE: false

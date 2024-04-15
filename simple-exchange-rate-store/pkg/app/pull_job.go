@@ -2,9 +2,9 @@ package app
 
 import (
 	"context"
-	"exchange-rate-store/pkg/alphavantage"
 	"exchange-rate-store/pkg/logger"
 	"exchange-rate-store/pkg/persistence"
+	"strings"
 	"sync"
 	"time"
 )
@@ -15,24 +15,11 @@ const (
 	currencyCzk = "CZK"
 )
 
-type ExchangeRatePersistence interface {
-	Close() error
-	Save(persistence.Rate) error
-	GetAggregatedRatesSinceRequestedDate(time.Time, string) ([]persistence.AggregatedRate, error)
-	DeleteRatesOlderThanDate(time.Time) (int64, error)
-}
-
-type ExchangeRateRetriever interface {
-	FetchCurrentRate(ctx context.Context, fromCurrency, toCurrency string) (alphavantage.CurrencyExchangeRateResponse, error)
-	GetFailCount() uint64
-	GetSuccessCount() uint64
-}
-
 type ExchangeRatePullJob struct {
 	ctx               context.Context
 	waitJobGroup      *sync.WaitGroup
 	metrics           *metrics
-	ratePersistence   ExchangeRatePersistence
+	rateRepo          ExchangeRateRepository
 	rateRetriever     ExchangeRateRetriever
 	rateBaseCurrency  string // BTC/EUR -> BTC
 	rateQuoteCurrency string // BTC/EUR -> EUR
@@ -87,12 +74,38 @@ func (j *ExchangeRatePullJob) pullRateDataAndPersist() error {
 	}
 
 	r := rateResponse.RealtimeCurrencyExchangeRate
-	return j.ratePersistence.Save(persistence.Rate{
+	newRate := persistence.Rate{
 		BaseCurrency:        r.FromCurrencyCode,
 		QuoteCurrency:       r.ToCurrencyCode,
 		ExchangeRate:        r.ExchangeRate,
 		ExchangeRateUtcTime: r.LastRefreshedUtcTime,
 		BidPrice:            r.BidPrice,
 		AskPrice:            r.AskPrice,
-	})
+	}
+	return j.saveNewRate(newRate)
+}
+
+func (j *ExchangeRatePullJob) saveNewRate(newRate persistence.Rate) error {
+
+	err := j.rateRepo.InsertNewRate(newRate)
+	if err != nil {
+		searchMsg := "Duplicate entry"
+		ignoreErr := strings.Contains(err.Error(), searchMsg)
+		if !ignoreErr {
+			return err
+		} else {
+			// does not fail if it already exists
+			// NOTE: can count this scenario with another metric
+			logger.Info(nil, "[pull-job] rate already exists, skipping aggregation update and ignoring duplicate error -> %v", err)
+			return nil
+		}
+	}
+
+	aggRates, err := j.rateRepo.GetAggregatedRates(newRate.ExchangeRateUtcTime)
+	if err != nil {
+		return err
+	}
+
+	aggregated := calculateAggregatedRateForNewRate(aggRates, newRate)
+	return j.rateRepo.UpsertAggregatedRate(aggregated)
 }

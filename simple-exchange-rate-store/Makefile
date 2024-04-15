@@ -48,7 +48,7 @@ run: build_binary
 .PHONY: image_build
 image_build:
 	docker rmi $(DOCKER_IMAGE) || true
-	docker build --platform=linux/x86_64 --no-cache --build-arg="SKIP_GO_TEST=$(DOCKER_BUILD_SKIP_GO_TEST)" . -t $(DOCKER_IMAGE)
+	docker build --platform=linux/x86_64 --build-arg="SKIP_GO_TEST=$(DOCKER_BUILD_SKIP_GO_TEST)" . -t $(DOCKER_IMAGE)
 
 .PHONY: image_verify
 image_verify:

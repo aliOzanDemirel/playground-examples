@@ -26,20 +26,24 @@ impl fmt::Display for Country {
 pub async fn fetch_countries() -> Result<Vec<Country>, Error> {
     let http_client = Client::default();
 
-    // get response and read all response body as bytes
+    // get response from http call
     let response_body_result = http_client
         .get("https://raw.githubusercontent.com/mledoze/countries/master/countries.json")
-        .header("User-Agent", "actix-web, iterative deepening depth-first search")
+        .header("User-Agent", "actix-web, depth-first and breadth-first search")
         .send()
-        .await?
-        .body()
-        .limit(TWO_MB_IN_BYTES)
         .await;
 
+    // read response body as bytes if call is successful, or read from file
     match response_body_result {
-        Ok(response_body) => read_countries_response_body(response_body),
+        Ok(mut response_body) => {
+            let response_bytes = response_body.body()
+                .limit(TWO_MB_IN_BYTES)
+                .await
+                .unwrap();
+            read_countries_response_body(response_bytes)
+        }
         Err(error) => {
-            error!("Could not fetch the countries! Error: {:?}", error);
+            error!("Could not fetch the countries! Error: {:?} Loading from local file.", error);
             read_countries_file("countries_and_borders.json")
         }
     }
@@ -61,4 +65,17 @@ fn read_countries_file(file_name: &str) -> Result<Vec<Country>, Error> {
         .map_err(|it| Error::from(it));
     debug!("File content is tried to be deserialized, with success: {}", countries.is_ok());
     countries
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // #[actix_rt::test]
+    #[test]
+    fn read_fallback_file() {
+        let result = read_countries_file("countries_and_borders.json");
+        assert_eq!(result.is_ok(), true);
+        assert_eq!(result.unwrap().is_empty(), false);
+    }
 }

@@ -74,7 +74,7 @@ class FileService @Autowired()(private val fileRepo: FileRepo,
     finally
       bos.close()
 
-    Files.setPosixFilePermissions(ioFilePath, JavaConverters.setAsJavaSet(permissions.toSet))
+    // Files.setPosixFilePermissions(ioFilePath, JavaConverters.setAsJavaSet(permissions.toSet))
   }
 
   def pathToFile(subFolderName: String, persistedFileName: String): String = {

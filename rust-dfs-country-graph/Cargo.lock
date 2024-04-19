@@ -1340,6 +1340,7 @@ dependencies = [
 name = "rust-learning-example"
 version = "0.1.0"
 dependencies = [
+ "actix-rt",
  "actix-web",
  "lazy_static",
  "log",

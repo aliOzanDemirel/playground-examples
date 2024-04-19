@@ -1,0 +1,1 @@
+Android UI to submit word analogy tasks and to view result of analogy test

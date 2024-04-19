@@ -19,34 +19,41 @@ pub async fn list_country_borders() -> impl Responder {
     HttpResponse::Ok().json(countries)
 }
 
-pub async fn find_shortest_route(web::Path((source, destination, algorithm)): web::Path<(String, String, String)>) -> impl Responder {
+pub async fn find_shortest_route(web::Path((source, destination, algorithm)): web::Path<(String, String, String)>) -> HttpResponse {
     let countries_result = super::load_country_graph::fetch_countries().await;
     let countries = match countries_result {
         Ok(c) => c,
         Err(e) => {
             error!("Could not load the list of countries with borders! Error: {}", e);
-            return HttpResponse::from(e);
+            return HttpResponse::from(e).into();
         }
     };
 
-    // let countries_graph: HashMap<&String, &Vec<String>> = countries.iter()
-    //      .map(|it| (&it.country_code, &it.borders))
-    //      .collect();
+    // use hashset as adjacency list since it is used to check target is in borders
     let countries_graph: HashMap<&String, HashSet<&String>> = countries.iter()
         .map(|it| (&it.country_code, it.borders.iter().collect::<HashSet<&String>>()))
         .collect();
 
+    // random path is the first possible result found -> source -> A -> B -> C -> target
+    // shortest path is the path with least possible nodes, graph has no heuristics at the edges -> source -> C -> target
     let (route, search_duration, found_depth) = match algorithm.as_str() {
-        "RecursiveShortest" => super::dfs::iterative_deepening_recursive_dl_dfs(&countries_graph, &source, &destination),
-        "RecursiveRandom" => super::dfs::recursive_dfs_random_path(&countries_graph, &source, &destination),
-        "IterativeShortest" => super::dfs::iterative_deepening_iterative_dl_dfs(&countries_graph, &source, &destination),
-        "IterativeRandom" => super::dfs::iterative_dfs_random_path(&countries_graph, &source, &destination),
+        "DfsShortestRecursive" =>
+            super::dfs::iterative_deepening_dl_dfs(false, &countries_graph, &source, &destination),
+        "DfsRandomRecursive" =>
+            super::dfs::random_path_dfs(false, &countries_graph, &source, &destination),
+        "DfsShortestIterative" =>
+            super::dfs::iterative_deepening_dl_dfs(true, &countries_graph, &source, &destination),
+        "DfsRandomIterative" =>
+            super::dfs::random_path_dfs(true, &countries_graph, &source, &destination),
+        "BfsShortestIterative" =>
+            super::bfs::bfs(&countries_graph, &source, &destination),
         _ => return HttpResponse::BadRequest().finish()
     };
 
     let response = HashMap::from([
         ("route", route.join(" > ")),
-        // 0 indexed, distance of the target node from the start node
+        // depth_limit is 0 indexed, it is the distance to the target from the start node
+        // it will be -1 if not applicable to random dfs algorithms and not implemented for bfs
         ("depth_limit", found_depth.to_string()),
         ("micros", search_duration.as_micros().to_string()),
         ("millis", search_duration.as_millis().to_string()),
@@ -54,8 +61,8 @@ pub async fn find_shortest_route(web::Path((source, destination, algorithm)): we
     ]);
 
     if route.is_empty() {
-        HttpResponse::NotFound().json(response)
+        HttpResponse::NotFound().json(response).into()
     } else {
-        HttpResponse::Ok().json(response)
+        HttpResponse::Ok().json(response).into()
     }
 }
